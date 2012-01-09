@@ -1,0 +1,8 @@
+<h1> {{ student.id }} </h1>
+
+<form action="/registrationApp/searchResults/" method="post">
+{% csrf_token %}
+<input type="text" name="search"/>
+<input type="submit" value="search"/>
+</form>
+<h1> {{ student.id }} </h1>

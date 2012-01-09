@@ -5,8 +5,9 @@ admin.autodiscover()
 
 urlpatterns = patterns('registrationApp.views',
     url(r'^registrationApp/$', 'index'),
-    url(r'^registrationApp/(?P<student_id>\d+)/$', 'detail'),
-    url(r'^registrationApp/(?P<student_id>\d+)/search/$', 'search'),
+    url(r'^registrationApp/$', 'detail'),
+    url(r'^registrationApp/search/$', 'search'),
+    url(r'^registrationApp/searchResults/$', 'searchResults'),
 )
 urlpatterns += patterns('',
     url(r'^admin/', include(admin.site.urls)),

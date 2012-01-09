@@ -53,22 +53,24 @@ class Course (models.Model):
 	courseDescription = models.CharField(max_length=2048)
 	preapprovalRequired = models.BooleanField()
 	discipline = models.ForeignKey(Discipline)
-	
-	
+	grades_Offered = models.CommaSeparatedIntegerField(max_length=16)
+
 class Section (models.Model):
 	courseID = models.ForeignKey(Course)
-	grades_Offered = models.CommaSeparatedIntegerField(max_length=16)
 	semesterOne = models.BooleanField()
 	semesterTwo = models.BooleanField()
 	roomNumber = models.IntegerField()
-	POfferedMonday = models.CommaSeparatedIntegerField(max_length=3)
-	POfferedTuesday = models.CommaSeparatedIntegerField(max_length=3)
-	POfferedWednesday = models.CommaSeparatedIntegerField(max_length=3)
-	POfferedThursday = models.CommaSeparatedIntegerField(max_length=3)
-	POfferedFridayOne = models.CommaSeparatedIntegerField(max_length=3)
-	POfferedFridayTwo = models.CommaSeparatedIntegerField(max_length=3)
-	POfferedFridayThree = models.CommaSeparatedIntegerField(max_length=3)
-	POfferedFridayFour = models.CommaSeparatedIntegerField(max_length=3)
+	APeriodDays = models.CommaSeparatedIntegerField(max_length=15) 
+	BPeriodDays = models.CommaSeparatedIntegerField(max_length=15)
+	CPeriodDays = models.CommaSeparatedIntegerField(max_length=15)
+	DPeriodDays = models.CommaSeparatedIntegerField(max_length=15)
+	EPeriodDays = models.CommaSeparatedIntegerField(max_length=15)
+	FPeriodDays = models.CommaSeparatedIntegerField(max_length=15)
+	GPeriodDays = models.CommaSeparatedIntegerField(max_length=15)
+	HPeriodDays = models.CommaSeparatedIntegerField(max_length=15)
+	IPeriodDays = models.CommaSeparatedIntegerField(max_length=15)
+	KPeriodDays = models.CommaSeparatedIntegerField(max_length=15)
+	ZPeriodDays = models.CommaSeparatedIntegerField(max_length=15)
 
 class StudentSchedule (models.Model):
 	studentID= models.ForeignKey(Student)
