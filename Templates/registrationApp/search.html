@@ -1,8 +1,69 @@
-<h1> {{ student.id }} </h1>
+{% extends "registrationApp/base.html" %}
+{% block script %}
 
-<form action="/registrationApp/searchResults/" method="post">
-{% csrf_token %}
-<input type="text" name="search"/>
-<input type="submit" value="search"/>
-</form>
-<h1> {{ student.id }} </h1>
+		<script type="text/javascript">
+			$( document ).ready( function() {
+				$('#q').focus();
+
+				$('#result').load('{% url add student.id%}').hide().fadeIn('slow');
+				
+				function getSearchVal(){
+					q = $('#q').val();
+					q = q.replace(/ /g,"_");
+					$( '#results' ).html( '&nbsp;' ).load('{% url searchResults student.id%}?q=' + q).hide().fadeIn('slow');
+				}
+
+				var timer;
+				var search = ($("#q").val());
+				$('#q').keyup(function(e){
+					e.preventDefault();
+					var newLength = ($("#q").val());
+					if (newLength !== search) {
+						searchLength = newLength;
+	   					timer && clearTimeout(timer);
+	   					timer = setTimeout(getSearchVal, 400);
+	   				}
+				});
+				
+				$('#searchSubmit').click(function(){
+					getSearchVal();
+				});	
+
+				$( '#add' ).live("click", function() {
+					section = $(this).attr("name");
+					$( '#result' ).html( '&nbsp;' ).load( '{% url add student.id%}?section=' + section).hide().fadeIn('slow');
+				});
+				$( '#delete' ).live("click", function() {
+					studSched = $(this).attr("name");
+					$( '#result' ).html( '&nbsp;' ).load( '{% url delete student.id%}?studSched=' + studSched).hide().fadeIn('slow');
+				});
+				var scroll = new Boolean();
+				$('#results').scroll(function (){
+					scroll== true;
+				});
+		
+			});
+
+			$( document ).ajaxStart( function() {
+				$( '#spinner' ).show();
+			}).ajaxStop( function() {
+				$( '#spinner' ).hide();
+			});
+		</script>
+
+{% endblock %}
+{% block content %}
+
+<h1> {{ student.firstName }}'s Schedule </h1>
+
+<input type="text" name="search" id= "q" autocomplete="off" placeholder="Enter a Course, Discipline, Period, or Required to find a match"/>
+	<input type="hidden" value="search" id= "searchSubmit" style="height: 25px; width: 75px"/>
+<div>
+	<span id="spinner"><img src="{{ STATIC_URL }}spinner.gif"/></span>
+</div>
+
+<div id="results" class="span-7 prepend-9"></div>
+<hr style="height:1px">
+<div id="result"> </div>
+
+{% endblock %}

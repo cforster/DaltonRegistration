@@ -1,0 +1,89 @@
+	body {
+		text-align:center;
+		color:#1b78bb;
+		margin:auto;
+		font-family: "Warnock Pro","Palatino","Book Antiqua",serif;
+
+	}
+	#q{
+		height:30px;	
+		width:600px;
+		font-size: 18px;
+		font-family: "Warnock Pro","Palatino","Book Antiqua",serif;
+	}
+
+	table {
+	  width: 600px;
+	  border: 1px solid #DDDDB2;
+	  border-spacing: 0;
+	  border-collapse: collapse;	
+	  margin: auto;
+	}
+
+	tr {
+	  padding-bottom: 5px;
+	  border-bottom: 1px solid #CCC;
+	}
+
+	tr.odd {
+	  background: #FFF;
+	}
+
+	tr.even {
+	  background: #ECC8EC;
+	}
+
+	tr.even2 {
+	  background: #BCD2EE;
+	}
+	td {
+	  margin: 0;
+	  padding: 5px 5px 5px 3px;
+	  vertical-align: top;
+	}
+	td #enrolled {
+		padding: 3px 3px 3px 1px;
+	}
+	#delete {
+		width:15px;
+		position:relative;
+		left:45px;
+	}
+	#results{
+		overflow:auto;
+		height:250px;
+		width:620px;
+		position: relative;
+		left:10px;
+	}
+	::-webkit-scrollbar {
+		background:transparent;overflow:visible; width:15px;
+	}
+	::-webkit-scrollbar:window-inactive{
+		width:0px;
+	}
+	::-webkit-scrollbar-thumb {
+		background-color:rgba(0,0,0,0.2); border:solid #fff;
+	}
+	::-webkit-scrollbar-thumb:hover {
+		background:rgba(0,0,0,0.4);
+	}
+	::-webkit-scrollbar-thumb:horizontal {
+		border-width:4px 6px;min-width:0px;
+	}
+	::-webkit-scrollbar-thumb:vertical {
+		border-width:6px 4px;min-height:40px;
+	}
+	::-webkit-scrollbar-track-piece{ 
+		background-color:#fff; width:20px;
+	}
+	::-webkit-scrollbar-corner {
+		background:transparent;
+	}
+	::-webkit-scrollbar-thumb {
+		background-color: #DDD;
+	}
+	::-webkit-scrollbar-thumb:hover {
+		background-color: #999;
+	}
+
