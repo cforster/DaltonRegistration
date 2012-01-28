@@ -25,7 +25,8 @@ class ParentStudent (models.Model):
     
         def __unicode__(self):
 	        return u'%s' % (self.id)
-
+#extend models.User optional fields
+#make user= mod
 class Student (models.Model):
 	firstName = models.CharField(max_length=128)
 	lastName= models.CharField(max_length=128)
@@ -43,6 +44,10 @@ class DepartmentChair (models.Model):
 	lastName = models.CharField(max_length=128)	
         def __unicode__(self):
 	        return u'%s %s' %(self.firstName, self.lastName)
+# three column table
+#grade/course/disc.
+#
+#
 
 class Discipline (models.Model):
 	discipline_Choices= (
@@ -87,7 +92,8 @@ class Section (models.Model):
 	ZPeriodDays = models.CommaSeparatedIntegerField(max_length=15)
         def __unicode__(self):
 	        return u'%s' % (self.id)
-
+#default value
+#scratch column bool
 class StudentSchedule (models.Model):
 	studentID= models.ForeignKey(Student)
 	sectionID= models.ForeignKey(Section)

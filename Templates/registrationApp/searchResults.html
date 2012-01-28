@@ -1,4 +1,5 @@
 {% extends "registrationApp/base.html" %}
+
 {% block content %}
 <table>
 {% if courseOptions|length %}
@@ -8,6 +9,7 @@
 		</td>
 	</tr>
 {% for sec in allSec %}
+	
 	<tr class="{% cycle 'odd' 'even' %}">
 		<td >
 			{% for section in sec|slice:":1"%}
@@ -24,8 +26,9 @@
 
    			{% endfor %}
 
-		<td>
-	<tr>
+		</td>
+	</tr>
+
 {% endfor %}
 
 {% else %}

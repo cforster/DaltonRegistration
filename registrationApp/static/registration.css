@@ -7,17 +7,15 @@
 	}
 	#q{
 		height:30px;	
-		width:600px;
 		font-size: 18px;
 		font-family: "Warnock Pro","Palatino","Book Antiqua",serif;
 	}
 
 	table {
-	  width: 600px;
+	  width:520px;
 	  border: 1px solid #DDDDB2;
 	  border-spacing: 0;
-	  border-collapse: collapse;	
-	  margin: auto;
+	  border-collapse: collapse;
 	}
 
 	tr {
@@ -33,29 +31,40 @@
 	  background: #ECC8EC;
 	}
 
-	tr.even2 {
-	  background: #BCD2EE;
-	}
 	td {
 	  margin: 0;
 	  padding: 5px 5px 5px 3px;
 	  vertical-align: top;
 	}
 	td #enrolled {
+	
 		padding: 3px 3px 3px 1px;
 	}
 	#delete {
 		width:15px;
 		position:relative;
-		left:45px;
 	}
 	#results{
 		overflow:auto;
 		height:250px;
-		width:620px;
-		position: relative;
-		left:10px;
+		width:540px;
 	}
+	#result{
+		width:540px;
+	}
+
+	#Math, #Science, #English, #History, #Language, #Art, #P.E, #Art, #ComputerScience{
+	  	border: 1px solid #DDDDB2;
+		height:25px;
+		opacity: 0.8;
+	}
+	
+	#Math {background:#ECC8EC;}
+	#Science {background:#E1CAF9;}
+	#English {background:#A8A8FF;}
+	#History {background:#FFFFD4;}
+	#Language {background:#FFC848;}
+
 	::-webkit-scrollbar {
 		background:transparent;overflow:visible; width:15px;
 	}

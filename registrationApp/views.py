@@ -74,7 +74,7 @@ def add(request, Student_id):
 				if created == False:
 					msg = "Could not add " +Section.objects.get(pk=sec).courseID.courseName + "; you are already enrolled"
 				else:
-					msg = "Course Created"
+					msg = Section.objects.get(pk=sec).courseID.courseName+ " Added "
 	studentSchedule = StudentSchedule.objects.filter(studentID = u)
 	return render_to_response('registrationApp/add.html', {'student': u, 'studentSchedule': studentSchedule, 'section': section, 'msg' : msg},
 							    context_instance=RequestContext(request))	
@@ -86,7 +86,7 @@ def delete(request, Student_id):
 		studSchedObj = StudentSchedule.objects.get(pk = studSched)
 		if studSchedObj is not None:
 			studSchedObj.delete()
-			msg = "Section Deleted"
+			msg = studSchedObj.sectionID.courseID.courseName + " Deleted"
 			studentSchedule = StudentSchedule.objects.filter(studentID = z)
 			return render_to_response('registrationApp/add.html', {'student': z, 'studentSchedule': studentSchedule, 'msg': msg},
 							   			context_instance=RequestContext(request))	

@@ -1,11 +1,19 @@
 {% extends "registrationApp/base.html" %}
 {% block script %}
 
-		<script type="text/javascript">
+<script type="text/javascript">
 			$( document ).ready( function() {
-				$('#q').focus();
+				$('#q').focus();	
+				$('#q').focus(function() {
+					$(this).css('background','#FFFBD0');
+				});
+				$('#q').blur(function() {
+					$(this).css('background','#FFFFFF');
+				});
+				
 
-				$('#result').load('{% url add student.id%}').hide().fadeIn('slow');
+			$('#result').load('{% url add student.id%}').hide().fadeIn('slow');
+
 				
 				function getSearchVal(){
 					q = $('#q').val();
@@ -29,19 +37,17 @@
 					getSearchVal();
 				});	
 
+				
 				$( '#add' ).live("click", function() {
 					section = $(this).attr("name");
-					$( '#result' ).html( '&nbsp;' ).load( '{% url add student.id%}?section=' + section).hide().fadeIn('slow');
+					$( '#result' ).html( '&nbsp;' ).load('{% url add student.id%}?section=' + section).hide().fadeIn('slow');
 				});
+
 				$( '#delete' ).live("click", function() {
 					studSched = $(this).attr("name");
 					$( '#result' ).html( '&nbsp;' ).load( '{% url delete student.id%}?studSched=' + studSched).hide().fadeIn('slow');
 				});
-				var scroll = new Boolean();
-				$('#results').scroll(function (){
-					scroll== true;
-				});
-		
+
 			});
 
 			$( document ).ajaxStart( function() {
@@ -50,20 +56,30 @@
 				$( '#spinner' ).hide();
 			});
 		</script>
-
-{% endblock %}
+		{% endblock %}
 {% block content %}
+   <div class="container"> 
 
 <h1> {{ student.firstName }}'s Schedule </h1>
 
-<input type="text" name="search" id= "q" autocomplete="off" placeholder="Enter a Course, Discipline, Period, or Required to find a match"/>
-	<input type="hidden" value="search" id= "searchSubmit" style="height: 25px; width: 75px"/>
+<input type="text" name="search" id= "q" autocomplete="off" placeholder="Enter a Course, Discipline, Period, or Required to find a match" class = "span-10"/>
+
+<div class= "span-13">
+<br>
+<br>
+</div>
+
+
+
 <div>
 	<span id="spinner"><img src="{{ STATIC_URL }}spinner.gif"/></span>
 </div>
 
-<div id="results" class="span-7 prepend-9"></div>
-<hr style="height:1px">
-<div id="result"> </div>
+<div id="results" ></div>
+
+<hr style="height:1px; margin: 1px; width:540px">
+
+<div id="result" class="span-10"> </div>
+   </div>
 
 {% endblock %}

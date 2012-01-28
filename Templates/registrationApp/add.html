@@ -1,29 +1,23 @@
 {% extends "registrationApp/base.html" %}
 {% block content %}
-
-<h1>{{student.firstName}}'s Courses</h1>
-
+<div class = "span-10" id = "enrolledDiv">
+<h1 style="text-align:center">{{student.firstName}}'s Courses</h1>
 {%if msg != "" %}
 {{msg}}
-{% endif %}  
-
-
+{% endif %} 
+ 
 {% for studSched in studentSchedule %}
-<table>
-<tr class="{% cycle 'odd' 'even2' %}" id = "enrolled">
-		<td >
-		<div class= "span-7 prepend-4" >
+
+	<div id="{{studSched.sectionID.courseID.discipline.discipline}}">
 		{{studSched.sectionID.courseID.courseName}} 
 		|		
 		{% if not "0" in studSched.sectionID.APeriodDays %}A{% endif %}{% if not "0" in studSched.sectionID.BPeriodDays %}B{% endif %}{% if not "0" in studSched.sectionID.CPeriodDays %}C{% endif %}{% if not "0" in studSched.sectionID.DPeriodDays %}D{% endif %}{% if not "0" in studSched.sectionID.EPeriodDays %}E{% endif %}{% if not "0" in studSched.sectionID.FPeriodDays %}F{% endif %}{% if not "0" in studSched.sectionID.GPeriodDays %}G{% endif %}{% if not "0" in studSched.sectionID.HPeriodDays %}H{% endif %}{% if not "0" in studSched.sectionID.IPeriodDays %}I{% endif %}{% if not "0" in studSched.sectionID.KPeriodDays %}K{% endif %}{% if not "0" in studSched.sectionID.ZPeriodDays %}Z{% endif %} Period
+		<div style="float:right; position:relative; top:3px">
+			<input type="image" name= "{{studSched.id}}" id = "delete" src="{{STATIC_URL}}delete.png"/>
 		</div>
-		<div class="span-1 prepend-2">
-		<input type="image" name= "{{studSched.id}}" id = "delete" src="{{STATIC_URL}}delete.png"/>
-		</div>
-		</td>
-</tr>
-</table>
+
+	</div>
+
 {% endfor %}
-
+</div>
 {%endblock%}
-
