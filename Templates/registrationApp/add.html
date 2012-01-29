@@ -1,4 +1,5 @@
 {% extends "registrationApp/base.html" %}
+
 {% block content %}
 <div class = "span-10" id = "enrolledDiv">
 <h1 style="text-align:center">{{student.firstName}}'s Courses</h1>
@@ -6,18 +7,34 @@
 {{msg}}
 {% endif %} 
  
-{% for studSched in studentSchedule %}
+{% for studSched in  studentSchedule %}
+	{% with forloop.counter|cut:" " as index %}
+		<div id="{{studSched.sectionID.courseID.discipline.discipline}}" class = "p" >
+			
+			{{studSched.sectionID.courseID.courseName}} 
+			|	
+			<ul class = "period" style = "display:inline; z-index:900;"  >	
+		
+				{% if not "0" in studSched.sectionID.APeriodDays %}A{% endif %}{% if not "0" in studSched.sectionID.BPeriodDays %}B{% endif %}{% if not "0" in studSched.sectionID.CPeriodDays %}C{% endif %}{% if not "0" in studSched.sectionID.DPeriodDays %}D{% endif %}{% if not "0" in studSched.sectionID.EPeriodDays %}E{% endif %}{% if not "0" in studSched.sectionID.FPeriodDays %}F{% endif %}{% if not "0" in studSched.sectionID.GPeriodDays %}G{% endif %}{% if not "0" in studSched.sectionID.HPeriodDays %}H{% endif %}{% if not "0" in studSched.sectionID.IPeriodDays %}I{% endif %}{% if not "0" in studSched.sectionID.KPeriodDays %}K{% endif %}{% if not "0" in studSched.sectionID.ZPeriodDays %}Z{% endif %} Period
+				<span id ="{{studSched.id}}" class = "darsh"> 
 
-	<div id="{{studSched.sectionID.courseID.discipline.discipline}}">
-		{{studSched.sectionID.courseID.courseName}} 
-		|		
-		{% if not "0" in studSched.sectionID.APeriodDays %}A{% endif %}{% if not "0" in studSched.sectionID.BPeriodDays %}B{% endif %}{% if not "0" in studSched.sectionID.CPeriodDays %}C{% endif %}{% if not "0" in studSched.sectionID.DPeriodDays %}D{% endif %}{% if not "0" in studSched.sectionID.EPeriodDays %}E{% endif %}{% if not "0" in studSched.sectionID.FPeriodDays %}F{% endif %}{% if not "0" in studSched.sectionID.GPeriodDays %}G{% endif %}{% if not "0" in studSched.sectionID.HPeriodDays %}H{% endif %}{% if not "0" in studSched.sectionID.IPeriodDays %}I{% endif %}{% if not "0" in studSched.sectionID.KPeriodDays %}K{% endif %}{% if not "0" in studSched.sectionID.ZPeriodDays %}Z{% endif %} Period
+					{% for sec in secOption|slice:index|last%}
+					 
+					<input type="submit" name ="{{sec.id}}" id = "switch" value="{% if not "0" in sec.APeriodDays %}A{% endif %}{% if not "0" in sec.BPeriodDays %}B{% endif %}{% if not "0" in sec.CPeriodDays %}C{% endif %}{% if not "0" in sec.DPeriodDays %}D{% endif %}{% if not "0" in sec.EPeriodDays %}E{% endif %}{% if not "0" in sec.FPeriodDays %}F{% endif %}{% if not "0" in sec.GPeriodDays %}G{% endif %}{% if not "0" in sec.HPeriodDays %}H{% endif %}{% if not "0" in sec.IPeriodDays %}I{% endif %}{% if not "0" in sec.KPeriodDays %}K{% endif %}{% if not "0" in sec.ZPeriodDays %}Z{% endif %}"> 
+					 
+					 {% endfor %}
+			 	</span>
+
+			</ul>
+
 		<div style="float:right; position:relative; top:3px">
 			<input type="image" name= "{{studSched.id}}" id = "delete" src="{{STATIC_URL}}delete.png"/>
 		</div>
 
 	</div>
 
+{% endwith %}
 {% endfor %}
+
 </div>
 {%endblock%}

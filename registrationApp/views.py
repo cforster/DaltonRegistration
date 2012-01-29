@@ -5,6 +5,29 @@ from django.template import RequestContext
 from django.db.models import Q
 import re
 from registrationApp.models import Student, Course, Section, Discipline, StudentSchedule
+from django.contrib.auth import authenticate, login
+from django.contrib.auth.models import User
+
+def loginView(request):
+    state = "Please log in below..."
+    username = password = ''
+    if request.POST:
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        user = authenticate(username=username, password=password)
+        if user is not None:
+            if user.is_active:
+                login(request, user)
+                state = user.student.firstName
+                state += ", you're successfully logged in!"
+            	return HttpResponseRedirect(reverse('registrationApp.views.search', args=(user.student.id,)))
+            else:
+                state = "Your account is not active, please contact the site admin."
+                return HttpResponse("fail")
+        else:
+            state = "Your username and/or password were incorrect."
+    return render_to_response('registrationApp/login.html',{'state':state, 'username': username},
+    						context_instance=RequestContext(request))
 
 def index(request):
 	studentInformation= Student.objects.all()[:5]
@@ -58,8 +81,43 @@ def searchResults(request, Student_id):
 		return render_to_response('registrationApp/searchResults.html', {'courseOptions' : courseOptions,'allSec' : allSec},
 						context_instance=RequestContext(request))
 
+def daysToPeriod(s):
+	output = []
+	if not "0" in s.APeriodDays:
+		output.append("A")
+	if not "0" in s.BPeriodDays:
+		output.append("B")
+	if not "0" in s.CPeriodDays:
+		output.append("C")
+	if not "0" in s.DPeriodDays:
+		output.append("D")
+	if not "0" in s.EPeriodDays:
+		output.append("E")
+	if not "0" in s.FPeriodDays:
+		output.append("F")
+	if not "0" in s.GPeriodDays:
+		output.append("G")
+	if not "0" in s.HPeriodDays:
+		output.append("H")
+	if not "0" in s.IPeriodDays:
+		output.append("I")
+	if not "0" in s.KPeriodDays:
+		output.append("K")
+	if not "0" in s.ZPeriodDays:
+		output.append("Z")		
+	return output
 
-							
+def periodSwitch (studentSchedule):
+	secOption = []
+	sectionOptions = []
+	for studSched in studentSchedule:
+		output =[]
+		sectionOptions = Section.objects.filter(courseID = studSched.sectionID.courseID)
+		for s in sectionOptions:
+			output.append(s)
+		secOption.append(output)
+	return (secOption)
+								
 def add(request, Student_id):
 	u = get_object_or_404(Student, pk=Student_id)
 	msg = ""
@@ -72,11 +130,12 @@ def add(request, Student_id):
 				section, created= StudentSchedule.objects.get_or_create(
 				studentID = u, sectionID=section,rank=1)
 				if created == False:
-					msg = "Could not add " +Section.objects.get(pk=sec).courseID.courseName + "; you are already enrolled"
-				else:
-					msg = Section.objects.get(pk=sec).courseID.courseName+ " Added "
+					msg = "Could not add " + Section.objects.get(pk=sec).courseID.courseName  + "; you are already enrolled"
+				else: 
+					msg = Section.objects.get(pk=sec).courseID.courseName+ " Added "	 				
 	studentSchedule = StudentSchedule.objects.filter(studentID = u)
-	return render_to_response('registrationApp/add.html', {'student': u, 'studentSchedule': studentSchedule, 'section': section, 'msg' : msg},
+	secOption = periodSwitch(studentSchedule)
+	return render_to_response('registrationApp/add.html', {'student': u, 'studentSchedule': studentSchedule, 'section': section, 'msg' : msg, 'secOption' : secOption},
 							    context_instance=RequestContext(request))	
 							 
 def delete(request, Student_id):
@@ -88,7 +147,18 @@ def delete(request, Student_id):
 			studSchedObj.delete()
 			msg = studSchedObj.sectionID.courseID.courseName + " Deleted"
 			studentSchedule = StudentSchedule.objects.filter(studentID = z)
-			return render_to_response('registrationApp/add.html', {'student': z, 'studentSchedule': studentSchedule, 'msg': msg},
+			secOption = periodSwitch(studentSchedule)
+			return render_to_response('registrationApp/add.html', {'student': z, 'studentSchedule': studentSchedule, 'msg': msg,'secOption' : secOption},
 							   			context_instance=RequestContext(request))	
 		else: 
 			return HttpResponse("Could not delete; obj does not exist")
+
+def one(request, Student_id):
+	a = get_object_or_404(Student, pk=Student_id)
+	courses = Course.objects.all()
+	name = []
+	for c in courses:
+		name.append(c.courseName)
+		name.append("<br><br>")
+	return HttpResponse(name)
+

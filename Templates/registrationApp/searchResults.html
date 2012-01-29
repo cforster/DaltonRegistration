@@ -9,11 +9,10 @@
 		</td>
 	</tr>
 {% for sec in allSec %}
-	
 	<tr class="{% cycle 'odd' 'even' %}">
 		<td >
 			{% for section in sec|slice:":1"%}
-    		<div>
+    		<div id="sr">
     		<label for="course{{forloop.counter}}"> <b>{{section.courseID.courseName}} </b> 
     		{% for section in sec %}
 				<input type="submit" name ="{{section.id}}" id = "add" value="{% if not "0" in section.APeriodDays %}A{% endif %}{% if not "0" in section.BPeriodDays %}B{% endif %}{% if not "0" in section.CPeriodDays %}C{% endif %}{% if not "0" in section.DPeriodDays %}D{% endif %}{% if not "0" in section.EPeriodDays %}E{% endif %}{% if not "0" in section.FPeriodDays %}F{% endif %}{% if not "0" in section.GPeriodDays %}G{% endif %}{% if not "0" in section.HPeriodDays %}H{% endif %}{% if not "0" in section.IPeriodDays %}I{% endif %}{% if not "0" in section.KPeriodDays %}K{% endif %}{% if not "0" in section.ZPeriodDays %}Z{% endif %}" />
@@ -28,7 +27,6 @@
 
 		</td>
 	</tr>
-
 {% endfor %}
 
 {% else %}

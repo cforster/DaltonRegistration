@@ -1,4 +1,6 @@
 from django.db import models
+from django.contrib.auth.models import User
+from django.db.models.signals import post_save
 
 class House (models.Model):
 	houseAdvisorOne_firstName = models.CharField(max_length=128)
@@ -28,6 +30,7 @@ class ParentStudent (models.Model):
 #extend models.User optional fields
 #make user= mod
 class Student (models.Model):
+	user = models.OneToOneField(User)
 	firstName = models.CharField(max_length=128)
 	lastName= models.CharField(max_length=128)
 	email = models.EmailField()
@@ -106,3 +109,9 @@ class PreApproval (models.Model):
 	courseID = models.ForeignKey(Course)
         def __unicode__(self):
 	        return u'%s' % (self.id)
+
+def create_user_profile(sender, instance, created, **kwargs):
+    if created:
+        UserProfile.objects.create(user=instance)
+
+post_save.connect(create_user_profile, sender=User) 
