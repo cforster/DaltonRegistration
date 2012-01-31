@@ -7,7 +7,7 @@
 
 
 	}
-.darsh {
+	.perOptions {
 		position: absolute;
 
 		display: none;
@@ -17,6 +17,9 @@
 		padding: 5px;
 		color:#FFFFD4;
 	}
+	.selected{
+		background-color:#d1eeee;
+	}
 
 	#q{
 		height:30px;	
@@ -24,43 +27,13 @@
 		font-family: "Warnock Pro","Palatino","Book Antiqua",serif;
 	}
 
-	table {
-	  width:530px;
-	  border: 1px solid #DDDDB2;
-	  border-spacing: 0;
-	  border-collapse: collapse;
-	  margin:auto;
-	}
-
-	tr {
-	  padding-bottom: 5px;
-	  border-bottom: 1px solid #CCC;
-	}
-
-	tr{
-	  background: #FFF;
-	}
-
-	tr:hover {
-	  background: #ECC8EC;
-	}
-
-	td {
-	  margin: 0;
-	  padding: 5px 5px 5px 3px;
-	  vertical-align: top;
-	}
-	td #enrolled {
-	
-		padding: 3px 3px 3px 1px;
-	}
 	#delete {
 		width:15px;
 		position:relative;
 	}
 	#results{
 		overflow:auto;
-		height:250px;
+		height:255px;
 		width:540px;
 	}
 
@@ -77,7 +50,7 @@
 	}
 	#Math:hover, #Science:hover, #English:hover, #History:hover, #Language:hover, #Art:hover, #P.E:hover, #ComputerScience:hover{
 	    margin-right: 10px;
-}
+	}
 	#Math {background:#ECC8EC;}
 	#Science {background:#E1CAF9;}
 	#English {background:#A8A8FF;}
@@ -105,6 +78,7 @@
 	::-webkit-scrollbar-track-piece{ 
 		background:transparent; width:20px;
 	}
+
 	::-webkit-scrollbar-corner {
 		background:transparent;
 	}
@@ -113,5 +87,47 @@
 	}
 	::-webkit-scrollbar-thumb:hover {
 		background-color: #999;
+	
 	}
 
+	#add, #add:visited {
+		background: #222 url(http://zurb.com/images/alert-overlay.png) repeat-x;
+		display: inline-block;
+		padding: 4px 4px 4px;
+		background-color: #2daebf;
+		text-decoration: none;
+		line-height: 1;
+		-moz-border-radius: 5px;
+		-webkit-border-radius: 5px;
+		position: relative;
+		cursor: pointer;
+		-moz-box-shadow: 0 1px 3px rgba(0,0,0,0.5);
+		-webkit-box-shadow: 0 1px 3px rgba(0,0,0,0.5);
+		text-shadow: 0 -1px 1px rgba(0,0,0,0.25);
+		border-bottom: 1px solid rgba(0,0,0,0.25);
+		font-size: 11px;
+		color:#FFFFFF;
+		font-weight:bold;
+
+	}
+	#add:hover {
+		background-color: #007d9a; 
+	}
+	#searchElement{
+	  	border-bottom: 1px solid #CCC;
+		padding: 6px 6px 6px 6px;
+	}
+	#searchElement:hover{
+		background:#D1EEEE;
+	}
+	a:visited{
+		text-decoration: none;
+	}
+	a{
+		text-decoration:none;
+		color:#1b78bb;
+		display:block;	
+	}
+	.selectedDiv{
+		background:#FFFFD4;
+	}

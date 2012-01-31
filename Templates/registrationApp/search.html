@@ -7,13 +7,13 @@
 
 <input type="text" name="search" id= "q" autocomplete="off" placeholder="Enter a Course, Discipline, Period, or Required to find a match" class = "span-10"/>
 
-<div class = "span-12 last" id = "header" style=" float:right;">	
+<div class = "span-13 last" id = "header" style=" float:right;">	
 <input type="submit" id = "one" value = "one"/>
 <input type="submit" id = "two" value = "two"/>
 <input type="submit" id = "three" value = "three"/>
 </div>
 
-<div class= "span-12" id = "t" style ="border-top:5px;float:right;">
+<div class= "span-13" id = "t" style ="border-top:5px;float:right;">
 
 
 <br>
@@ -56,11 +56,13 @@
 
 				var timer;
 				var search = ($("#q").val());
+
 				$('#q').keyup(function(e){
 					e.preventDefault();
-					var newLength = ($("#q").val());
-					if (newLength !== search) {
-						searchLength = newLength;
+					var newVal = ($("#q").val());
+
+					if (newVal != search) {
+						search = newVal;
 	   					timer && clearTimeout(timer);
 	   					timer = setTimeout(getSearchVal, 400);
 	   				}
@@ -69,10 +71,36 @@
 				$('#searchSubmit').click(function(){
 					getSearchVal();
 				});	
+				var rank1clickcounter = 0;
+				$('#rank1').live("click", function(){
+					rank1clickcounter += 1; 
+					if ((rank1clickcounter % 2) ==1){
+					rank = $(this).val();
+					$(this).addClass("selected");
+				}
+				else {
+					rank = 0; 
+					$(this).removeClass("selected");
+				}
+								});
 
+				var rank2clickcounter = 0;
+				$('#rank2').live("click", function(){
+					rank2clickcounter += 1; 
+					if ((rank2clickcounter % 2) ==1){
+					rank = $(this).val();
+					$(this).addClass("selected");
+				}
+				else {
+					rank = 0; 
+					$(this).removeClass("selected");
+				}
+
+				});
 				
 				$( '#add' ).live("click", function() {
 					section = $(this).attr("name");
+					rank = $
 					$( '#result' ).html( '&nbsp;' ).load('{% url add student.id%}?section=' + section).hide().fadeIn('slow');
 				});
 
@@ -84,21 +112,30 @@
 				$( '#switch' ).live("click", function() {
 					section = $(this).attr("name");
 					studSched = $(this).parent().attr("id");
-					$( '#' ).html( '&nbsp;' ).load( '{% url delete student.id%}?studSched=' + studSched).hide().fadeIn('slow');
+					$( '#result' ).html( '&nbsp;' ).load( '{% url delete student.id%}?studSched=' + studSched);
 					$( '#result' ).html( '&nbsp;' ).load( '{% url add student.id%}?section=' + section).hide().fadeIn('slow');
 				});
 				$( '#one' ).live("click", function() {
 					$( '#t' ).html( '&nbsp;' ).load( '{% url one student.id%}').hide().fadeIn('slow');
 				});
-
-
-				$( '.period' ).live("mouseover", function() {
+				$('#searchElement').live("click", function(){
+					$('#sr #searchElement' ).removeClass('selectedDiv');
+					$(this).toggleClass('selectedDiv');
+				});
+				$('searchElement').click(function () {
+					$(this).toggleClass('selectedDiv');
+				});
+				$( '.period' ).live("click", function() {
 					$(this).children("span").animate({opacity: "show"}, "slow");
 				});
-				$( '.period' ).live("mouseout", function() {
-					$(this).children("span").animate({opacity: "hide"}, "slow");
+				
+				$( '#alreadyEnrolledYes' ).live("click", function() {
+					section = $(this).attr("name");
+					$( '#result' ).html( '&nbsp;' ).load('{% url addEnrolledSection student.id%}?section=' + section).hide().fadeIn('slow');
 				});
-
+				$( '#alreadyEnrolledNo' ).live("click", function() {
+					$( '#result' ).html( '&nbsp;' ).load('{% url add student.id%}').hide().fadeIn('slow');
+				});
 			
 			});
 			$( document ).ajaxStart( function() {

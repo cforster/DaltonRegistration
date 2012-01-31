@@ -1,20 +1,26 @@
-{% extends  "registrationApp/base.html" %}
- 
+{% extends "registrationApp/base.html" %}
 
 {% block content %}
 
-{{ state }}
-	<form action="/registrationApp/loginView/" method="post">
-	{% csrf_token %}
+{% if form.errors %}
+<p>Your username and password didn't match. Please try again.</p>
+{% endif %}
 
-		{% if next %}
-		<input type="hidden" name="next" value="{{ next }}" />
-		{% endif %}
-		username:
-		<input type="text" name="username" value="{{ username}}" /><br />
-		password:
-		<input type="password" name="password" value="" /><br />
+<form method="post" action="{% url django.contrib.auth.views.login %}">
+{% csrf_token %}
+<table>
+<tr>
+    <td>{{ form.username.label_tag }}</td>
+    <td>{{ form.username }}</td>
+</tr>
+<tr>
+    <td>{{ form.password.label_tag }}</td>
+    <td>{{ form.password }}</td>
+</tr>
+</table>
 
-		<input type="submit" value="Log In" />
-	</form>
+<input type="submit" value="login" />
+<input type="hidden" name="next" value="{% url search user.student.id %}" />
+</form>
+
 {% endblock %}
