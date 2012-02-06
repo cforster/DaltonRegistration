@@ -1,0 +1,9 @@
+{% extends "registrationApp/base.html" %}
+
+{% block content %}
+	<br>
+	<textarea id="comments" name="{{ courseObj.id }}" rows="30" cols="70"> </textarea>
+	<br>
+	<input type = "submit" name = "{{ courseObj.id }}" id = "preAppNames"/>
+
+{% endblock %}

@@ -12,7 +12,10 @@ urlpatterns = patterns('registrationApp.views',
     url(r'^registrationApp/(?P<Student_id>\d+)/addEnrolledSection/$', 'addEnrolledSection', name = 'addEnrolledSection'),
     url(r'^registrationApp/(?P<Student_id>\d+)/delete/$', 'delete', name = 'delete'),
     url(r'^registrationApp/(?P<Student_id>\d+)/one/$', 'one', name = 'one'),
-
+    url(r'^registrationApp/(?P<Student_id>\d+)/schedule/$', 'schedule', name = 'schedule'),
+    url(r'^registrationApp/(?P<DepartmentChair_id>\d+)/preapprovals/$', 'preapprovals', name = 'preapprovals'),
+    url(r'^registrationApp/(?P<DepartmentChair_id>\d+)/preAppContainer/$', 'preAppContainer', name = 'preAppContainer'),
+    url(r'^registrationApp/(?P<DepartmentChair_id>\d+)/preAppAdd/$', 'preAppAdd', name = 'preAppAdd'),
 
 )
 urlpatterns += patterns('',

@@ -1,0 +1,23 @@
+{% extends "registrationApp/base.html" %}
+{% block content %}
+
+	{% for course in courses %}
+		<div id = "{{course.courseName|slugify}}" class = "courseCatalogDiv" >
+			<br>
+			{{course.courseName}}
+			<br> 
+			{{course.courseDescription}}
+			<br> <br> <br>
+			<br> <br> <br>
+			<br> <br> <br>
+			<i> Extended Course Description </i>
+			<br> <br> <br>
+			<br> <br> <br>
+			<br> <br> <br>
+			<hr style="height:1px; margin: 1px; width:680px">
+		</div>
+	{% endfor %}
+
+
+
+{% endblock %}

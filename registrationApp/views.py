@@ -3,13 +3,13 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.core.urlresolvers import reverse
 from django.template import RequestContext
 from django.db.models import Q
-import re
-from registrationApp.models import Student, Course, Section, Discipline, StudentSchedule,PreApproval
+from registrationApp.models import Student, Course, Section, Discipline, StudentSchedule,PreApproval, DepartmentChair
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout
-
+from django.core.mail import send_mail
+import re
 
 def index(request):
 	studentInformation= Student.objects.all()[:5]
@@ -100,9 +100,9 @@ def periodSwitch (studentSchedule):
 		secOption.append(output)
 	return (secOption)
 								
-def ApprovalMethod(courseID):
+def ApprovalMethod(courseID, student):
 	preApproved = False
-	preApprovals = PreApproval.objects.filter(courseID = courseID)
+	preApprovals = PreApproval.objects.filter(studentID = student)
 	for preApp in preApprovals:
 		if preApp.courseID == courseID:
 			preApproved = True
@@ -129,7 +129,7 @@ def add(request, Student_id):
 						availForGrade = True
 				if availForGrade == True:
 					if section.courseID.preapprovalRequired == True:
-						preApproved =ApprovalMethod(section.courseID)
+						preApproved =ApprovalMethod(section.courseID, u.id)
 						if preApproved == False: 
 							msg = "You are not preapproved for " + section.courseID.courseName
 							continues = False
@@ -140,13 +140,12 @@ def add(request, Student_id):
 						output = []
 						for studSched in studentSchedule:
 							if studSched.sectionID == Section.objects.get(pk=sec):
-								output.append("you're enrolled")
 								continues = False
 						if continues != False:
 							for studSched in studentSchedule:
 								if studSched.sectionID.courseID == Section.objects.get(pk=sec).courseID:
 									alreadyEnrolled = True
-									msg = "You are already enrolled in a section of " + Section.objects.get(pk=sec).courseID.courseName + "Are you sure you want to add it? "
+									msg = "You are already enrolled in a section " + str(section) + " of " + Section.objects.get(pk=sec).courseID.courseName + " Are you sure you want to add it? "
 						if alreadyEnrolled != True:
 							section, created= StudentSchedule.objects.get_or_create(
 							studentID = u, sectionID=section,rank=1)
@@ -176,7 +175,7 @@ def addEnrolledSection(request, Student_id):
 			if created == False:
 				msg = "Could not add " + Section.objects.get(pk=sec).courseID.courseName +  " " + str(section) + "; you are already enrolled"
 			else: 
-				msg = Section.objects.get(pk=sec).courseID.courseName+ " Added. Please ensure you are not in two sections "
+				msg = Section.objects.get(pk=sec).courseID.courseName+ " Added. Please ensure you are intentionally in two sections "
 	studentSchedule = StudentSchedule.objects.filter(studentID = stud)
 	secOption = periodSwitch(studentSchedule)				
 	return render_to_response('registrationApp/add.html', {'student': stud, 'studentSchedule': studentSchedule, 'section': section, 'msg' : msg, 'secOption' : secOption},
@@ -204,9 +203,64 @@ def one(request, Student_id):
 	desc = []
 	for c in courses:
 		name.append(c.courseName)
-		name.append("<br><br>")
+		name.append("<br><br><br><br><br><br><br><br>")
 		desc.append(c.courseDescription)
-		
+	return render_to_response('registrationApp/courseCatalog.html', {'student': a, 'courses' :courses})
 
-	return HttpResponse(name)
+def schedule(request, Student_id):
+	student = get_object_or_404(Student, pk=Student_id)
+	studSched = StudentSchedule.objects.filter(studentID = student.id)
+	courseName = []
+	sectionID = []
+	for section in studSched:
+		 courseName.append(section.sectionID.courseID)
+		 sectionID.append(section.sectionID)
+	#for sec in sectionID:
+		#if str(sec.APeriodDays).contains('`1'):
+			#sectionID.append("meets on monday!")  
+	return HttpResponse(sectionID)
+#col for sec; period; time
 
+
+def preapprovals(request, DepartmentChair_id):
+	departmentChair = get_object_or_404(DepartmentChair, pk=DepartmentChair_id)
+	disc = Discipline.objects.filter(departmentChair = departmentChair)
+	for deparment in disc:
+		courses = Course.objects.filter(discipline = deparment, preapprovalRequired = True)
+	return render_to_response('registrationApp/preapprovals.html', {'departmentChair': departmentChair, 'courses': courses},
+								context_instance=RequestContext(request))
+
+def preAppContainer(request, DepartmentChair_id):
+	departmentChair = get_object_or_404(DepartmentChair, pk=DepartmentChair_id)
+	if request.is_ajax():
+		courseID = request.GET.get('courseID')
+		courseObj = Course.objects.get(pk = courseID)
+	return render_to_response('registrationApp/preAppContainer.html', {'departmentChair': departmentChair, 'courseObj': courseObj},
+								context_instance=RequestContext(request))
+
+def preAppAdd(request, DepartmentChair_id):
+	departmentChair = get_object_or_404(DepartmentChair, pk=DepartmentChair_id)
+	msg = ""
+	allCreated = True
+	if request.is_ajax():
+		courseID = request.GET.get('courseID')
+		courseObj = Course.objects.get(pk = courseID)
+		preAppName = request.GET.get('preAppName')
+		preAppNames = str(preAppName).split(',')
+		for preAppN in preAppNames:
+			preAppN = str(preAppN).strip('_')
+			preAppSplitN = str(preAppN).split('_')
+			student = Student.objects.get(firstName__iexact = str(preAppSplitN[0]), lastName__iexact = str(preAppSplitN[1]))
+			preApp, created= PreApproval.objects.get_or_create(
+			studentID = student, courseID=courseObj)
+			subject = "You were preapproved for " + courseObj.courseName
+			message = "Hello " + student.firstName + "; you were preapproved for " + courseObj.courseName + "."
+			if created == True:
+				msg += student.firstName + " preapproval added <br> "
+				send_mail(subject, message, 'darshandesai17@gmail.com', [student.email])
+			elif created == False:
+				msg += student.firstName + " is already preapproved <br> "
+				allCreated = False
+		if allCreated == True:
+			msg = "All Added Successfully"
+	return HttpResponse(msg)

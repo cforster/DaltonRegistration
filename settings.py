@@ -144,3 +144,8 @@ LOGGING = {
         },
     }
 }
+EMAIL_USE_TLS = True
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'darshandesai17@gmail.com'
+EMAIL_HOST_PASSWORD = 'kti316gu'
+EMAIL_PORT = 587

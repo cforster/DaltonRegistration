@@ -1,0 +1,27 @@
+{% extends "registrationApp/base.html" %}
+{% block script %}
+<script type="text/javascript">
+$( document ).ready( function() {
+	$('#preAppCourse').live("click", function(){
+		courseID = $(this).attr("name");
+		$( '#textBoxArea' ).html( '&nbsp;' ).load('{% url preAppContainer departmentChair.id %}?courseID=' + courseID).hide().fadeIn('slow');
+	});
+	$('#preAppNames').live("click", function(){
+		courseID = $(this).attr("name");
+		preAppName = $('#comments').val();
+		preAppName = preAppName.replace(/ /g,"_");
+		$( '#textBoxArea' ).html( '&nbsp;' ).load('{% url preAppAdd departmentChair.id %}?courseID='+courseID+'&preAppName=' + preAppName).hide().fadeIn('slow');
+	});
+});
+</script>
+{% endblock %}
+
+{% block content %}
+{% for course in courses %}
+<input type = "submit" id = "preAppCourse" name = "{{course.id}}" value = "{{course.courseName}}"/>
+{% endfor %}
+<div id = "textBoxArea">
+
+</div>
+
+{% endblock %}

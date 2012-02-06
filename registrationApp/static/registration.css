@@ -7,26 +7,31 @@
 
 
 	}
-	.perOptions {
-		position: absolute;
+	.courseCatalogDiv{
+		position:relative;
+	}
 
+	.perOptions {
+		
 		display: none;
 		width: 110px;
 		height: 35px;
 		text-align: center;
-		padding: 5px;
+		padding: 2px;
 		color:#FFFFD4;
 	}
 	.selected{
 		background-color:#d1eeee;
 	}
-
+			
 	#q{
 		height:30px;	
 		font-size: 18px;
 		font-family: "Warnock Pro","Palatino","Book Antiqua",serif;
 	}
-
+	#q:focus{
+		background:#FFFFD4;
+	}
 	#delete {
 		width:15px;
 		position:relative;
@@ -40,6 +45,10 @@
 	#result{
 		width:540px;
 	}
+
+	 #searchElement .ui-selecting { background: #FECA40; }
+#searchElement .ui-selected { background: #F39814; color: white; }
+
 
 	#Math, #Science, #English, #History, #Language, #Art, #P.E, #ComputerScience{
 	  	border: 1px solid #DDDDB2;

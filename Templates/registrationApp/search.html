@@ -1,147 +1,157 @@
 {% extends "registrationApp/base.html" %}
 
+{% block title %}
+Registration | The Dalton School
+{% endblock %}
+
 {% block content %}
    <div class="container"> 
+		<h1> {{ student.firstName }}'s Schedule </h1>
+		<input type="text" name="search" id= "q" autocomplete="off" placeholder="Enter a Course, Discipline, Period, or Required to find a match" class = "span-10"/>
 
-<h1> {{ student.firstName }}'s Schedule </h1>
+		<div class = "span-13 last" id = "header" style=" float:right;">	
+		
+			<input type="submit" id = "one" value = "one"/>
+			<input type="submit" id = "two" value = "two"/>
+			<input type="submit" id = "three" value = "three"/>
+			
+		</div>
 
-<input type="text" name="search" id= "q" autocomplete="off" placeholder="Enter a Course, Discipline, Period, or Required to find a match" class = "span-10"/>
+		<div class= "span-13" id = "t" style ="border-top:5px;float:right; height:535px; overflow:auto; position:relative;">
 
-<div class = "span-13 last" id = "header" style=" float:right;">	
-<input type="submit" id = "one" value = "one"/>
-<input type="submit" id = "two" value = "two"/>
-<input type="submit" id = "three" value = "three"/>
-</div>
+		</div>
 
-<div class= "span-13" id = "t" style ="border-top:5px;float:right;">
+		<div>
+			<span id="spinner"><img src="{{ STATIC_URL }}spinner.gif"/></span>
+		</div>
+
+		<div id="results" >
+
+		</div>
+
+		<div id="result" class="span-10" style = "position:relative;"> 
+
+		</div>
 
 
-<br>
-<br>
-</div>
-
-
-
-<div>
-	<span id="spinner"><img src="{{ STATIC_URL }}spinner.gif"/></span>
-</div>
-
-<div id="results" ></div>
-
-<hr style="height:1px; margin: 1px; width:540px">
-
-<div id="result" class="span-10"> </div>
-   </div>
+	</div>
 
 {% endblock %}
+
 {% block script %}
 
 <script type="text/javascript">
-			$( document ).ready( function() {
-				$('#q').focus();	
-				$('#q').focus(function() {
-					$(this).css('background','#FFFFD4');
-				});
-				$('#q').blur(function() {
-					$(this).css('background','#FFFFFF');
-				});
-				$('#result').load('{% url add student.id%}').hide().fadeIn('slow');
+$( document ).ready( function() {
+	$('#q').focus();	
+	$('#result').load('{% url add student.id%}').hide().fadeIn('slow');
+	$('#t').load('{% url one student.id%}').hide().fadeIn('slow');
 
-				
-				function getSearchVal(){
-					q = $('#q').val();
-					q = q.replace(/ /g,"_");
-					$( '#results' ).html( '&nbsp;' ).load('{% url searchResults student.id%}?q=' + q).hide().fadeIn('slow');
-				}
-
-				var timer;
-				var search = ($("#q").val());
-
-				$('#q').keyup(function(e){
-					e.preventDefault();
-					var newVal = ($("#q").val());
-
-					if (newVal != search) {
-						search = newVal;
-	   					timer && clearTimeout(timer);
-	   					timer = setTimeout(getSearchVal, 400);
-	   				}
-				});
-				
-				$('#searchSubmit').click(function(){
-					getSearchVal();
-				});	
-				var rank1clickcounter = 0;
-				$('#rank1').live("click", function(){
-					rank1clickcounter += 1; 
-					if ((rank1clickcounter % 2) ==1){
-					rank = $(this).val();
-					$(this).addClass("selected");
-				}
-				else {
-					rank = 0; 
-					$(this).removeClass("selected");
-				}
-								});
-
-				var rank2clickcounter = 0;
-				$('#rank2').live("click", function(){
-					rank2clickcounter += 1; 
-					if ((rank2clickcounter % 2) ==1){
-					rank = $(this).val();
-					$(this).addClass("selected");
-				}
-				else {
-					rank = 0; 
-					$(this).removeClass("selected");
-				}
-
-				});
-				
-				$( '#add' ).live("click", function() {
-					section = $(this).attr("name");
-					rank = $
-					$( '#result' ).html( '&nbsp;' ).load('{% url add student.id%}?section=' + section).hide().fadeIn('slow');
-				});
-
-				$( '#delete' ).live("click", function() {
-					studSched = $(this).attr("name");
-					$( '#result' ).html( '&nbsp;' ).load( '{% url delete student.id%}?studSched=' + studSched).hide().fadeIn('slow');
-				});
-
-				$( '#switch' ).live("click", function() {
-					section = $(this).attr("name");
-					studSched = $(this).parent().attr("id");
-					$( '#result' ).html( '&nbsp;' ).load( '{% url delete student.id%}?studSched=' + studSched);
-					$( '#result' ).html( '&nbsp;' ).load( '{% url add student.id%}?section=' + section).hide().fadeIn('slow');
-				});
-				$( '#one' ).live("click", function() {
-					$( '#t' ).html( '&nbsp;' ).load( '{% url one student.id%}').hide().fadeIn('slow');
-				});
-				$('#searchElement').live("click", function(){
-					$('#sr #searchElement' ).removeClass('selectedDiv');
-					$(this).toggleClass('selectedDiv');
-				});
-				$('searchElement').click(function () {
-					$(this).toggleClass('selectedDiv');
-				});
-				$( '.period' ).live("click", function() {
-					$(this).children("span").animate({opacity: "show"}, "slow");
-				});
-				
-				$( '#alreadyEnrolledYes' ).live("click", function() {
-					section = $(this).attr("name");
-					$( '#result' ).html( '&nbsp;' ).load('{% url addEnrolledSection student.id%}?section=' + section).hide().fadeIn('slow');
-				});
-				$( '#alreadyEnrolledNo' ).live("click", function() {
-					$( '#result' ).html( '&nbsp;' ).load('{% url add student.id%}').hide().fadeIn('slow');
-				});
+	function getSearchVal(){
+		q = $('#q').val();
+		q = q.replace(/ /g,"_");
+		$( '#results' ).html( '&nbsp;' ).load('{% url searchResults student.id%}?q=' + q).hide().fadeIn('slow');
+	}
 			
-			});
-			$( document ).ajaxStart( function() {
-				$( '#spinner' ).show();
-			}).ajaxStop( function() {
-				$( '#spinner' ).hide();
-			});
-		</script>
-		{%endblock%}
+	var timer;
+	var search = ($("#q").val());
+
+	$('#q').keyup(function(e){
+		e.preventDefault();
+		var newVal = ($("#q").val());
+		if (newVal != search) {
+			search = newVal;
+	   		timer && clearTimeout(timer);
+	   		timer = setTimeout(getSearchVal, 400);
+	   	}
+	});
+
+	$("#searchElement > a").live("click", function(f){
+		f.preventDefault();
+		var scrollto = $($(this).attr('href')).position().top + $('#t').scrollTop();
+		$('#t').stop(true).animate({ scrollTop: scrollto }, 1000);
+		$($(this).attr('href')).delay(1000).effect("highlight", {color:"#FFFFD4"}, 2000);
+	});
+
+	$('#searchSubmit').click(function(){
+		getSearchVal();
+	});	
+		
+	var rank1clickcounter = 0;
+	$('#rank1').live("click", function(){
+		rank1clickcounter += 1; 
+		if ((rank1clickcounter % 2) ==1){
+			rank = $(this).val();
+			$(this).addClass("selected");
+		}
+		else {
+			rank = 0; 
+			$(this).removeClass("selected");
+		}
+	});
+
+	var rank2clickcounter = 0;
+	$('#rank2').live("click", function(){
+		rank2clickcounter += 1; 
+		if ((rank2clickcounter % 2) ==1){
+			rank = $(this).val();
+			$(this).addClass("selected");
+		}
+		else {
+			rank = 0; 
+			$(this).removeClass("selected");
+		}
+	});
+				
+	$( '#add' ).live("click", function() {
+		section = $(this).attr("name");
+		rank = $
+		$( '#result' ).html( '&nbsp;' ).load('{% url add student.id%}?section=' + section).hide().fadeIn('slow');
+	});
+
+	$( '#delete' ).live("click", function() {
+		studSched = $(this).attr("name");
+		$( '#result' ).html( '&nbsp;' ).load( '{% url delete student.id%}?studSched=' + studSched).hide().fadeIn('slow');
+	});
+
+	$( '#switch' ).live("click", function() {
+		section = $(this).attr("name");
+		studSched = $(this).parent().attr("id");
+		$( '#result' ).html( '&nbsp;' ).load( '{% url delete student.id%}?studSched=' + studSched);
+		$( '#result' ).html( '&nbsp;' ).load( '{% url add student.id%}?section=' + section).hide().fadeIn('slow');
+	});
+	
+	$( '#one' ).live("click", function() {
+		$( '#t' ).html( '&nbsp;' ).load( '{% url one student.id%}').hide().fadeIn('slow');
+	});
+
+	$('#searchElement').live("click", function(){
+		$('#sr #searchElement' ).removeClass('selectedDiv');
+		$(this).toggleClass('selectedDiv');
+	});
+	
+	$(function() {
+		$( '#searchElement' ).selectable();
+	});
+
+	$( '.period' ).live("click", function() {
+		$(this).children("span").animate({opacity: "show"}, "slow");
+	});
+				
+	$( '#alreadyEnrolledYes' ).live("click", function() {
+		section = $(this).attr("name");
+		$( '#result' ).html( '&nbsp;' ).load('{% url addEnrolledSection student.id%}?section=' + section).hide().fadeIn('slow');
+	});
+	$( '#alreadyEnrolledNo' ).live("click", function() {
+		$( '#result' ).html( '&nbsp;' ).load('{% url add student.id%}').hide().fadeIn('slow');
+	});
+		
+});
+
+$( document ).ajaxStart( function() {
+	$( '#spinner' ).show();
+}).ajaxStop( function() {
+	$( '#spinner' ).hide();
+});
+</script>
+
+{%endblock%}
