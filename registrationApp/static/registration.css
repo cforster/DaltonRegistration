@@ -9,8 +9,9 @@
 	}
 	.courseCatalogDiv{
 		position:relative;
+		width:860px;
 	}
-
+	
 	.perOptions {
 		
 		display: none;
@@ -39,27 +40,21 @@
 	#results{
 		overflow:auto;
 		height:255px;
-		width:432px;
+		border-bottom: 1px solid #CCC;
 	}
 
-	#result{
-		width:540px;
-	}
-
-	 #searchElement .ui-selecting { background: #FECA40; }
-#searchElement .ui-selected { background: #F39814; color: white; }
+	#searchElement .ui-selecting { background: #FECA40; }
+	#searchElement .ui-selected { background: #F39814; color: white; }
 
 
 	#Math, #Science, #English, #History, #Language, #Art, #P.E, #ComputerScience{
 	  	border: 1px solid #DDDDB2;
 		height:25px;
 		opacity: 0.7;
-		margin: 10 0px 0 15px;
-    	-webkit-transition: margin-right 0.25s linear;
+		margin:10 0px 0 15px;
 	}
 	#Math:hover, #Science:hover, #English:hover, #History:hover, #Language:hover, #Art:hover, #P.E:hover, #ComputerScience:hover{
 		opacity: 1;
-	    margin-right: 10px;
 	}
 	#Math {background:#ECC8EC;}
 	#Science {background:#E1CAF9;}
@@ -70,9 +65,7 @@
 	::-webkit-scrollbar {
 		background:transparent;overflow:visible; width:10px;
 	}
-	::-webkit-scrollbar:window-inactive{
-		width:0px;
-	}
+
 	::-webkit-scrollbar-thumb {
 		background-color:rgba(0,0,0,0.2);
 	}
@@ -100,7 +93,7 @@
 	
 	}
 
-	#add, #add:visited, #switch, #switch:visited, #one, #one:visited, #two, #two:visited, #three, #three:visited {
+	.button, .button:visited {
 		background: #222 url(http://zurb.com/images/alert-overlay.png) repeat-x;
 		display: inline-block;
 		padding: 4px 4px 4px;
@@ -120,7 +113,7 @@
 		font-weight:bold;
 
 	}
-	#add:hover, #switch:hover, #one:hover, #two:hover, #three:hover {
+	.button:hover{
 		background-color: #007d9a; 
 	}
 	#searchElement{
@@ -136,8 +129,10 @@
 	a{
 		text-decoration:none;
 		color:#1b78bb;
-		display:block;	
 	}
 	.selectedDiv{
 		background:#FFFFD4;
+	}
+	a:hover{
+		color:#FFFFFF;
 	}

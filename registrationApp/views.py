@@ -154,6 +154,7 @@ def add(request):
 									alreadyEnrolled = True
 									msg = "You are already enrolled in a section " + str(section) + " of " + Section.objects.get(pk=sec).courseID.courseName + " Are you sure you want to add it? "
 						if alreadyEnrolled != True:
+							#cycle through periods to see if there is any conflict
 							section, created= StudentSchedule.objects.get_or_create(
 							studentID = u, sectionID=section,rank=1)
 							if created == False:
@@ -280,10 +281,48 @@ def preAppAdd(request, DepartmentChair_id):
 def advisor(request, House_id):
 	house = get_object_or_404(House, pk=House_id)
 	students = Student.objects.filter(houseID=house)
-	out = [] 
+	submittedStudents = [] 
 	for stud in students:
 		if stud.submit:
-			studentSchedule = StudentSchedule.objects.filter(studentID = stud.id)
-		out.append()
-	return HttpResponse(house.houseAdvisorOne_firstName)
+			submittedStudents.append(stud)
+	return render_to_response('registrationApp/advisor.html', {'house':house, 'submittedStudents': submittedStudents},
+								context_instance=RequestContext(request))
 
+def approve(request, House_id):
+	house = get_object_or_404(House, pk=House_id)
+	if request.is_ajax():
+		student = request.GET.get('student')
+		stud = Student.objects.get(pk = student)
+		stud.advisorApproval = True
+		stud.save()
+	return HttpResponse(stud.firstName + " was approved")
+
+def review(request, House_id):
+	house = get_object_or_404(House, pk=House_id)
+	if request.is_ajax():
+		student = request.GET.get('student')
+		student = Student.objects.get(pk = student)
+		message = request.GET.get('message')
+		message = message.replace('_'," ")
+		send_mail("Schedule Changes to review", "Hello; your house advisor has some suggestions for you: " +message, 'darshandesai17@gmail.com', [student.email])
+	return HttpResponse("Message sent to student successfully")
+
+def submit(request):
+	student = get_object_or_404(Student, user=request.user.id)
+	if request.is_ajax():
+		submit = request.GET.get('submit')
+		if int(submit) == 1:
+			if student.submit == True:
+				msg = "You have already submitted, please unsubmit first."
+			else:
+				student.submit = True
+				student.save()
+				msg = "Submitted for House Advisor and Parent Approval"
+		elif int(submit) == 0:
+			if student.submit == False:
+				msg = "You have not yet submitted, please submit first."
+			else:
+				student.submit = False
+				student.save()
+				msg = "Unsubmitted. Please only unsubmit in dire situations in the future."
+	return HttpResponse(msg)

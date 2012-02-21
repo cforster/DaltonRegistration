@@ -6,21 +6,22 @@ Registration | The Dalton School
 
 {% block content %}
    <div class="container">
+   		<div style="display:inline; float:right;"> <a href = "/registrationApp/logout"> Logout</a> </div>
+
 		<div> <h2> {{ student.firstName }}'s Schedule </h2> </div>
-		<div> <a href = "/registrationApp/logout"> Logout</a> </div>
 
 		
-		<input type="text" name="search" id= "q" autocomplete="off" placeholder="Enter a Course, Discipline, Period, or Required to find a match" class = "span-10"/>
+		<input type="text" name="search" id= "q" autocomplete="off" placeholder="Enter a Course, Discipline, or Period" class = "span-8"/>
 
-		<div class = "span-13 last" id = "header" style=" float:right;">	
+		<div class = "span-15 last" id = "header" style=" float:right;">	
 		
-			<input type="submit" id = "one" value = "one"/>
-			<input type="submit" id = "two" value = "two"/>
-			<input type="submit" id = "three" value = "three"/>
+			<input type="submit" id = "one" value = "one" class ="button"/>
+			<input type="submit" id = "two" value = "schedule" class ="button"/>
+			<input type="submit" id = "three" value = "catalog" class ="button"/>
 			
 		</div>
 
-		<div class= "span-13" id = "t" style ="border-top:5px;float:right; height:535px; overflow:auto; position:relative;">
+		<div class= "span-15" id = "t" style ="border-top:5px; float:right; height:535px; overflow:auto; position:relative;">
 
 		</div>
 
@@ -28,11 +29,11 @@ Registration | The Dalton School
 			<span id="spinner"><img src="{{ STATIC_URL }}spinner.gif"/></span>
 		</div>
 
-		<div id="results" >
+		<div id="results" class="span-8" >
 
 		</div>
 
-		<div id="result" class="span-10" style = "position:relative;"> 
+		<div id="result" class="span-8" style = "position:relative;"> 
 
 		</div>
 
@@ -143,7 +144,10 @@ $( document ).ready( function() {
 	$( '#alreadyEnrolledNo' ).live("click", function() {
 		$( '#result' ).html( '&nbsp;' ).load('{% url add %}').hide().fadeIn('slow');
 	});
-		
+	$( '#submitAll, #unsubmit' ).live("click", function() {
+		submit = $(this).attr("name");
+		$( '#t' ).html( '&nbsp;' ).load('{% url submit %}?submit='+submit).hide().fadeIn('slow');
+	});	
 });
 
 $( document ).ajaxStart( function() {

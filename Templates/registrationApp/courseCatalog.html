@@ -2,7 +2,7 @@
 {% block content %}
 
 	{% for course in courses %}
-		<div id = "{{course.courseName|slugify}}" class = "courseCatalogDiv" >
+		<div id = "{{course.courseName|slugify}}" class = "courseCatalogDiv" style= "width:854px" >
 			<br>
 			{{course.courseName}}
 			<br> 
@@ -14,7 +14,7 @@
 			<br> <br> <br>
 			<br> <br> <br>
 			<br> <br> <br>
-			<hr style="height:1px; margin: 1px; width:680px">
+			<hr style="height:1px; margin: 1px; width:852px">
 		</div>
 	{% endfor %}
 

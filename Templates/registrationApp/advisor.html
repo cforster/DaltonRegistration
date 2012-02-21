@@ -1,0 +1,45 @@
+{% extends "registrationApp/base.html" %}
+
+{% block content %}
+<div class="container">
+	<div id = "submittedStudents" class = "span-4" >
+	Submitted Students:
+	<br>
+
+	{% for student in submittedStudents %}
+	<br>
+	<input type="submit" class="button" id = "student" name = "{{student.id}}" value = "{{student.firstName}} {{student.lastName}}"/>
+	<input type = "submit" class = "button" id = "approve" value = "approve" name = "{{student.id}}"/>
+	
+	<textarea id="reviewText" name="{{ student.id }}"></textarea>	
+	<input type = "submit" class = "button" id = "review" value = "review" name = "{{student.id}}"/>
+
+	{% endfor %}
+	</div>
+	<div class= "span-19 last" id = "courseList">
+
+	</div>
+</div>
+{% endblock %}
+{% block script %}
+
+<script type="text/javascript">
+$( document ).ready( function() {
+	$( '#student' ).live("click", function() {
+		student = $(this).attr("name");
+		$( '#courseList' ).html( '&nbsp;' ).load('{% url add %}?student='+ student).hide().fadeIn('slow');
+	});
+	$( '#approve' ).live("click", function() {
+		student = $(this).attr("name");
+		$( '#courseList' ).html( '&nbsp;' ).load('{% url approve house.id %}?student='+ student).hide().fadeIn('slow');
+	});
+	$( '#review' ).live("click", function(){
+		message = $('#reviewText').val();
+		student = $(this).attr("name");
+		message = message.replace(/ /g,"_");
+		$( '#courseList' ).html( '&nbsp;' ).load('{% url review house.id %}?student='+ student+'&message='+message).hide().fadeIn('slow');
+	});
+});
+</script>
+
+{%endblock%}
