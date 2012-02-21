@@ -27,17 +27,18 @@ class ParentStudent (models.Model):
     
         def __unicode__(self):
 	        return u'%s' % (self.id)
-#extend models.User optional fields
-#make user= mod
+
 class Student (models.Model):
 	user = models.OneToOneField(User)
 	firstName = models.CharField(max_length=128)
 	lastName= models.CharField(max_length=128)
 	email = models.EmailField()
-	password= models.CharField(max_length=128)
 	grade= models.IntegerField()
 	houseID= models.ForeignKey(House)
 	parentStudentID= models.ForeignKey(ParentStudent)
+	submit = models.BooleanField()
+	advisorApproval = models.BooleanField()
+	parentApproval = models.BooleanField()
         def __unicode__(self):
 	        return u'%s %s' %(self.firstName, self.lastName)
 
@@ -62,6 +63,7 @@ class Discipline (models.Model):
 		('P.E.', 'Physical Education'),
 		('Art', 'Art'),
 		('Dance','Dance'),
+		('Computer Science','Computer Science'),
 	)
 	discipline = models.CharField(max_length=16, choices= discipline_Choices)
 	departmentChair = models.ForeignKey(DepartmentChair)
@@ -74,9 +76,11 @@ class Course (models.Model):
 	preapprovalRequired = models.BooleanField()
 	discipline = models.ForeignKey(Discipline)
 	grades_Offered = models.CommaSeparatedIntegerField(max_length=16)
+	courseNumber = models.IntegerField(max_length=9)
+
         def __unicode__(self):
 	        return self.courseName
-
+#prerequisite
 class Section (models.Model):
 	courseID = models.ForeignKey(Course)
 	semesterOne = models.BooleanField()
@@ -95,8 +99,10 @@ class Section (models.Model):
 	ZPeriodDays = models.CommaSeparatedIntegerField(max_length=15)
         def __unicode__(self):
 	        return u'%s' % (self.id)
+
 #default value
 #scratch column bool
+
 class StudentSchedule (models.Model):
 	studentID= models.ForeignKey(Student)
 	sectionID= models.ForeignKey(Section)
@@ -110,8 +116,3 @@ class PreApproval (models.Model):
         def __unicode__(self):
 	        return u'%s' % (self.id)
 
-def create_user_profile(sender, instance, created, **kwargs):
-    if created:
-        UserProfile.objects.create(user=instance)
-
-post_save.connect(create_user_profile, sender=User) 

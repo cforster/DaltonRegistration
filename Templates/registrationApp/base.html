@@ -4,17 +4,15 @@
     <title>{% block title %}{% endblock %}</title>
     <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}registration.css" />
     <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}screen.css" />
-    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}print.css" />
-    <script type="text/javascript" src="http://code.jquery.com/jquery-latest.js"></script>
-  	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js">
-  	</script>
-  	<script type="text/javascript" src="{{ STATIC_URL }}jquery-ui.js"></script>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js"></script>
 
-
-  
-    {% block script %}{% endblock %}
 </head>
 <body>
 	{% block content %}{% endblock %}
 </body>
+{% block script %}
+
+{% endblock %}
+
 </html>

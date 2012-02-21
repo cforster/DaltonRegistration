@@ -39,7 +39,7 @@
 	#results{
 		overflow:auto;
 		height:255px;
-		width:540px;
+		width:432px;
 	}
 
 	#result{
@@ -53,11 +53,12 @@
 	#Math, #Science, #English, #History, #Language, #Art, #P.E, #ComputerScience{
 	  	border: 1px solid #DDDDB2;
 		height:25px;
-		opacity: 0.8;
+		opacity: 0.7;
 		margin: 10 0px 0 15px;
     	-webkit-transition: margin-right 0.25s linear;
 	}
 	#Math:hover, #Science:hover, #English:hover, #History:hover, #Language:hover, #Art:hover, #P.E:hover, #ComputerScience:hover{
+		opacity: 1;
 	    margin-right: 10px;
 	}
 	#Math {background:#ECC8EC;}
@@ -99,7 +100,7 @@
 	
 	}
 
-	#add, #add:visited {
+	#add, #add:visited, #switch, #switch:visited, #one, #one:visited, #two, #two:visited, #three, #three:visited {
 		background: #222 url(http://zurb.com/images/alert-overlay.png) repeat-x;
 		display: inline-block;
 		padding: 4px 4px 4px;
@@ -119,7 +120,7 @@
 		font-weight:bold;
 
 	}
-	#add:hover {
+	#add:hover, #switch:hover, #one:hover, #two:hover, #three:hover {
 		background-color: #007d9a; 
 	}
 	#searchElement{

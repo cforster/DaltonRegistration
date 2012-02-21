@@ -3,7 +3,7 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.core.urlresolvers import reverse
 from django.template import RequestContext
 from django.db.models import Q
-from registrationApp.models import Student, Course, Section, Discipline, StudentSchedule,PreApproval, DepartmentChair
+from registrationApp.models import Student, Course, Section, Discipline, StudentSchedule,PreApproval, DepartmentChair, House 
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
@@ -16,9 +16,9 @@ def index(request):
 	output = ', '.join([p.firstName for p in studentInformation])
 	return HttpResponse(output)
 
-@login_required(login_url='/login/')
-def search(request, Student_id):
-	s = get_object_or_404(Student, pk=Student_id)
+@login_required(login_url='/registrationApp/login/')
+def search(request):
+	s = get_object_or_404(Student, user=request.user.id)
 	return render_to_response('registrationApp/search.html', {'student': s},
 							    context_instance=RequestContext(request))
 
@@ -44,8 +44,9 @@ def get_query(query_string, search_fields):
             query = query & or_query
     return query
 
-def searchResults(request, Student_id):
-	t = get_object_or_404(Student, pk=Student_id)
+@login_required(login_url='/registrationApp/login/')
+def searchResults(request):
+	t = get_object_or_404(Student, user=request.user.id)
 	if request.is_ajax():
 		searchTerms = request.GET.get('q')
 		searchTerms = searchTerms.replace("_", " ")
@@ -99,7 +100,7 @@ def periodSwitch (studentSchedule):
 			output.append(s)
 		secOption.append(output)
 	return (secOption)
-								
+
 def ApprovalMethod(courseID, student):
 	preApproved = False
 	preApprovals = PreApproval.objects.filter(studentID = student)
@@ -109,9 +110,15 @@ def ApprovalMethod(courseID, student):
 		if preApproved == False: 
 			msg = "You are not preapproved for " + courseID.courseName
 	return(preApproved)
+#remove avail for grade
+#searchrank 
+#parent/login
+#unsubmit/reject 
+#
 
-def add(request, Student_id):
-	u = get_object_or_404(Student, pk=Student_id)
+@login_required(login_url='/registrationApp/login/')
+def add(request):
+	u = get_object_or_404(Student, user=request.user.id)
 	msg = ""
 	section = ""
 	if request.is_ajax():
@@ -156,15 +163,15 @@ def add(request, Student_id):
 				else:
 					msg = section.courseID.courseName + " is not offered for " + str(u.grade) + " grade"				
 
-		studentSchedule = StudentSchedule.objects.filter(studentID = u)
-		secOption = periodSwitch(studentSchedule)
-		return render_to_response('registrationApp/add.html', {'student': u, 'studentSchedule': studentSchedule, 'section': section, 'msg' : msg, 'secOption' : secOption},
-								    context_instance=RequestContext(request))			
+	studentSchedule = StudentSchedule.objects.filter(studentID = u)
+	secOption = periodSwitch(studentSchedule)
+	return render_to_response('registrationApp/add.html', {'student': u, 'studentSchedule': studentSchedule, 'section': section, 'msg' : msg, 'secOption' : secOption},
+								context_instance=RequestContext(request))			
 
 						
-
-def addEnrolledSection(request, Student_id):
-	stud = get_object_or_404(Student, pk=Student_id)
+@login_required(login_url='/registrationApp/login/')
+def addEnrolledSection(request):
+	stud = get_object_or_404(Student, user=request.user.id)
 	msg = ""
 	if request.is_ajax():
 		sec = request.GET.get('section')
@@ -180,9 +187,10 @@ def addEnrolledSection(request, Student_id):
 	secOption = periodSwitch(studentSchedule)				
 	return render_to_response('registrationApp/add.html', {'student': stud, 'studentSchedule': studentSchedule, 'section': section, 'msg' : msg, 'secOption' : secOption},
 								    context_instance=RequestContext(request))	
-							 
-def delete(request, Student_id):
-	z = get_object_or_404(Student, pk=Student_id)
+
+@login_required(login_url='/registrationApp/login/')							 
+def delete(request):
+	z = get_object_or_404(Student, user=request.user.id)
 	if request.is_ajax():
 		studSched = request.GET.get('studSched')
 		studSchedObj = StudentSchedule.objects.get(pk = studSched)
@@ -196,8 +204,9 @@ def delete(request, Student_id):
 		else: 
 			return HttpResponse("Could not delete; obj does not exist")
 
-def one(request, Student_id):
-	a = get_object_or_404(Student, pk=Student_id)
+@login_required(login_url='/registrationApp/login/')
+def one(request):
+	a = get_object_or_404(Student, user=request.user.id)
 	courses = Course.objects.all()
 	name = []
 	desc = []
@@ -207,14 +216,17 @@ def one(request, Student_id):
 		desc.append(c.courseDescription)
 	return render_to_response('registrationApp/courseCatalog.html', {'student': a, 'courses' :courses})
 
-def schedule(request, Student_id):
-	student = get_object_or_404(Student, pk=Student_id)
+@login_required(login_url='/registrationApp/login/')
+def schedule(request):
+	student = get_object_or_404(Student, user=request.user.id)
 	studSched = StudentSchedule.objects.filter(studentID = student.id)
 	courseName = []
 	sectionID = []
 	for section in studSched:
-		 courseName.append(section.sectionID.courseID)
-		 sectionID.append(section.sectionID)
+		courseName.append(section.sectionID.courseID)
+		sectionID.append(section.sectionID)
+		
+#ical output
 	#for sec in sectionID:
 		#if str(sec.APeriodDays).contains('`1'):
 			#sectionID.append("meets on monday!")  
@@ -264,3 +276,14 @@ def preAppAdd(request, DepartmentChair_id):
 		if allCreated == True:
 			msg = "All Added Successfully"
 	return HttpResponse(msg)
+
+def advisor(request, House_id):
+	house = get_object_or_404(House, pk=House_id)
+	students = Student.objects.filter(houseID=house)
+	out = [] 
+	for stud in students:
+		if stud.submit:
+			studentSchedule = StudentSchedule.objects.filter(studentID = stud.id)
+		out.append()
+	return HttpResponse(house.houseAdvisorOne_firstName)
+

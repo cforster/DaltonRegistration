@@ -5,8 +5,11 @@ Registration | The Dalton School
 {% endblock %}
 
 {% block content %}
-   <div class="container"> 
-		<h1> {{ student.firstName }}'s Schedule </h1>
+   <div class="container">
+		<div> <h2> {{ student.firstName }}'s Schedule </h2> </div>
+		<div> <a href = "/registrationApp/logout"> Logout</a> </div>
+
+		
 		<input type="text" name="search" id= "q" autocomplete="off" placeholder="Enter a Course, Discipline, Period, or Required to find a match" class = "span-10"/>
 
 		<div class = "span-13 last" id = "header" style=" float:right;">	
@@ -43,13 +46,13 @@ Registration | The Dalton School
 <script type="text/javascript">
 $( document ).ready( function() {
 	$('#q').focus();	
-	$('#result').load('{% url add student.id%}').hide().fadeIn('slow');
-	$('#t').load('{% url one student.id%}').hide().fadeIn('slow');
+	$('#result').load('{% url add %}').hide().fadeIn('slow');
+	$('#t').load('{% url one %}').hide().fadeIn('slow');
 
 	function getSearchVal(){
 		q = $('#q').val();
 		q = q.replace(/ /g,"_");
-		$( '#results' ).html( '&nbsp;' ).load('{% url searchResults student.id%}?q=' + q).hide().fadeIn('slow');
+		$( '#results' ).html( '&nbsp;' ).load('{% url searchResults %}?q=' + q).hide().fadeIn('slow');
 	}
 			
 	var timer;
@@ -60,9 +63,9 @@ $( document ).ready( function() {
 		var newVal = ($("#q").val());
 		if (newVal != search) {
 			search = newVal;
-	   		timer && clearTimeout(timer);
-	   		timer = setTimeout(getSearchVal, 400);
-	   	}
+			timer && clearTimeout(timer);
+			timer = setTimeout(getSearchVal, 400);
+		}
 	});
 
 	$("#searchElement > a").live("click", function(f){
@@ -105,32 +108,28 @@ $( document ).ready( function() {
 	$( '#add' ).live("click", function() {
 		section = $(this).attr("name");
 		rank = $
-		$( '#result' ).html( '&nbsp;' ).load('{% url add student.id%}?section=' + section).hide().fadeIn('slow');
+		$( '#result' ).html( '&nbsp;' ).load('{% url add %}?section=' + section).hide().fadeIn('slow');
 	});
 
 	$( '#delete' ).live("click", function() {
 		studSched = $(this).attr("name");
-		$( '#result' ).html( '&nbsp;' ).load( '{% url delete student.id%}?studSched=' + studSched).hide().fadeIn('slow');
+		$( '#result' ).html( '&nbsp;' ).load( '{% url delete %}?studSched=' + studSched).hide().fadeIn('slow');
 	});
 
 	$( '#switch' ).live("click", function() {
 		section = $(this).attr("name");
 		studSched = $(this).parent().attr("id");
-		$( '#result' ).html( '&nbsp;' ).load( '{% url delete student.id%}?studSched=' + studSched);
-		$( '#result' ).html( '&nbsp;' ).load( '{% url add student.id%}?section=' + section).hide().fadeIn('slow');
+		$( '#result' ).html( '&nbsp;' ).load( '{% url delete %}?studSched=' + studSched);
+		$( '#result' ).html( '&nbsp;' ).load( '{% url add%}?section=' + section).hide().fadeIn('slow');
 	});
 	
 	$( '#one' ).live("click", function() {
-		$( '#t' ).html( '&nbsp;' ).load( '{% url one student.id%}').hide().fadeIn('slow');
+		$( '#t' ).html( '&nbsp;' ).load( '{% url one %}').hide().fadeIn('slow');
 	});
 
 	$('#searchElement').live("click", function(){
 		$('#sr #searchElement' ).removeClass('selectedDiv');
 		$(this).toggleClass('selectedDiv');
-	});
-	
-	$(function() {
-		$( '#searchElement' ).selectable();
 	});
 
 	$( '.period' ).live("click", function() {
@@ -139,10 +138,10 @@ $( document ).ready( function() {
 				
 	$( '#alreadyEnrolledYes' ).live("click", function() {
 		section = $(this).attr("name");
-		$( '#result' ).html( '&nbsp;' ).load('{% url addEnrolledSection student.id%}?section=' + section).hide().fadeIn('slow');
+		$( '#result' ).html( '&nbsp;' ).load('{% url addEnrolledSection %}?section=' + section).hide().fadeIn('slow');
 	});
 	$( '#alreadyEnrolledNo' ).live("click", function() {
-		$( '#result' ).html( '&nbsp;' ).load('{% url add student.id%}').hide().fadeIn('slow');
+		$( '#result' ).html( '&nbsp;' ).load('{% url add %}').hide().fadeIn('slow');
 	});
 		
 });
