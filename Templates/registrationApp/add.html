@@ -4,7 +4,6 @@
 <div class = "span-8" id = "enrolledDiv">
 <h3 style="text-align:center">{{student.firstName}}'s Courses</h3>
 {%if student.submit%}
-<i> You've Already Submitted!</i>
 {% endif %}
 {%if msg != "" %}
 {{msg}}
@@ -41,7 +40,5 @@
 
 </div>
 
-<input type = "submit" id = "submitAll" name = "1" class = "button"/>
-<input type = "submit" id = "unsubmit" value = "Unsubmit" name = "0"  class= "button"/>
 
 {%endblock%}

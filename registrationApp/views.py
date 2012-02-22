@@ -118,9 +118,15 @@ def ApprovalMethod(courseID, student):
 
 @login_required(login_url='/registrationApp/login/')
 def add(request):
-	u = get_object_or_404(Student, user=request.user.id)
+	student = request.GET.get('student')
+	if student is not None:
+		u = get_object_or_404(Student, user = student)
+	else:
+		u = get_object_or_404(Student, user=request.user.id)
 	msg = ""
 	section = ""
+	if u.submit:
+		msg = "You've already submitted!"
 	if request.is_ajax():
 		sec = request.GET.get('section')
 		if sec:
@@ -163,7 +169,10 @@ def add(request):
 								msg = Section.objects.get(pk=sec).courseID.courseName+ " Added "
 				else:
 					msg = section.courseID.courseName + " is not offered for " + str(u.grade) + " grade"				
-
+	fromadvisor = request.GET.get('fromadvisor')
+	if fromadvisor is not None:
+		if int(fromadvisor) == 1:
+			msg=""
 	studentSchedule = StudentSchedule.objects.filter(studentID = u)
 	secOption = periodSwitch(studentSchedule)
 	return render_to_response('registrationApp/add.html', {'student': u, 'studentSchedule': studentSchedule, 'section': section, 'msg' : msg, 'secOption' : secOption},

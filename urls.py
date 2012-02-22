@@ -24,6 +24,6 @@ urlpatterns = patterns('registrationApp.views',
 )
 urlpatterns += patterns('',
     (r'^admin/', include(admin.site.urls)),
-	url(r'^registrationApp/login/$', 'django.contrib.auth.views.login', {'template_name': 'registrationApp/login.html'}),
+	url(r'^registrationApp/login/$', 'django.contrib.auth.views.login', {'template_name': 'registrationApp/login.html'}, name='login'),
     url(r'^registrationApp/logout/$', 'django.contrib.auth.views.logout',{'template_name': 'registrationApp/logout.html'}),    
 )

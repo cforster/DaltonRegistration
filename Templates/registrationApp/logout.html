@@ -1,7 +1,24 @@
 {% extends "registrationApp/base.html" %}
 
+{% block headerscript %}
+
+<script type="text/javascript">
+	function login(){
+		$( '#logBackIn' ).html( '&nbsp;' ).load('{% url login %}').hide().fadeIn('slow');
+	}
+</script>
+
+{%endblock%}
+
 {% block content %}
 
-You have successfully logged out
-Log Back In: <a href = "/registrationApp/login">Login</a>
+
+You have successfully logged out <br>
+Log Back In: <br> 
+<a href = "#" onclick="login();return false;">Login</a>
+<br> <br>
+<div id= "logBackIn">
+
+</div>
 {% endblock %}
+

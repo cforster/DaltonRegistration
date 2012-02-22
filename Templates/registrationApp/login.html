@@ -6,7 +6,9 @@
 {% if form.errors %}
 <p>Your username and password didn't match. Please try again.</p>
 {% endif %}
-
+<img src="{{STATIC_URL}}daltonseal150px.png" width="150" height="150" alt="The Dalton School"/>
+<h1> The Dalton School <br> 
+Course Registration Website</h1>
 <form method="post" action="{% url 'django.contrib.auth.views.login' %}">
 {% csrf_token %}
 <table style="margin:auto">
