@@ -20,6 +20,8 @@ urlpatterns = patterns('registrationApp.views',
     url(r'^registrationApp/(?P<House_id>\d+)/advisor/$', 'advisor', name = 'advisor'),
     url(r'^registrationApp/(?P<House_id>\d+)/approve/$', 'approve', name = 'approve'),
     url(r'^registrationApp/(?P<House_id>\d+)/review/$', 'review', name = 'review'),
+    url(r'^registrationApp/ParentConfirm/(?P<Activation_key>\w+)', 'ParentConfirm', name = 'ParentConfirm'),
+    url(r'^registrationApp/ParentConfirmYes/$', 'ParentConfirmYes', name = 'ParentConfirmYes'),
 
 )
 urlpatterns += patterns('',

@@ -3,13 +3,13 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.core.urlresolvers import reverse
 from django.template import RequestContext
 from django.db.models import Q
-from registrationApp.models import Student, Course, Section, Discipline, StudentSchedule,PreApproval, DepartmentChair, House 
+from registrationApp.models import Student, Course, Section, Discipline, StudentSchedule,PreApproval, DepartmentChair, House, ParentStudent
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout
 from django.core.mail import send_mail
-import re
+import re, datetime, random, sha
 
 def index(request):
 	studentInformation= Student.objects.all()[:5]
@@ -51,11 +51,12 @@ def searchResults(request):
 		searchTerms = request.GET.get('q')
 		searchTerms = searchTerms.replace("_", " ")
 		allSec = []
+		courseOptions = []
 		found = get_query((searchTerms), ['courseName', 'courseDescription', 'discipline__discipline'])
-        if found is not None:            
+        if found is not None:
         	courseOptions = Course.objects.filter(found)
         	for course in courseOptions:
-	        	courseSelected = Course.objects.get(pk=course.id)
+	        	courseSelected = Course.objects.get(pk = course.id)
 	        	sectionOptions = Section.objects.filter(courseID = courseSelected)
 	        	sections = []
 	        	for s in sectionOptions:
@@ -169,9 +170,9 @@ def add(request):
 								msg = Section.objects.get(pk=sec).courseID.courseName+ " Added "
 				else:
 					msg = section.courseID.courseName + " is not offered for " + str(u.grade) + " grade"				
-	fromadvisor = request.GET.get('fromadvisor')
-	if fromadvisor is not None:
-		if int(fromadvisor) == 1:
+	fromOther = request.GET.get('fromOther')
+	if fromOther is not None:
+		if int(fromOther) == 1:
 			msg=""
 	studentSchedule = StudentSchedule.objects.filter(studentID = u)
 	secOption = periodSwitch(studentSchedule)
@@ -204,6 +205,7 @@ def delete(request):
 	if request.is_ajax():
 		studSched = request.GET.get('studSched')
 		studSchedObj = StudentSchedule.objects.get(pk = studSched)
+
 		if studSchedObj is not None:
 			studSchedObj.delete()
 			msg = studSchedObj.sectionID.courseID.courseName + " Deleted"
@@ -316,22 +318,41 @@ def review(request, House_id):
 		send_mail("Schedule Changes to review", "Hello; your house advisor has some suggestions for you: " +message, 'darshandesai17@gmail.com', [student.email])
 	return HttpResponse("Message sent to student successfully")
 
-def submit(request):
+@login_required(login_url='/registrationApp/login/')
+def submit(request):	
 	student = get_object_or_404(Student, user=request.user.id)
+	msg=""
+	if student.submit == True:
+		msg = "You have already submitted, please unsubmit first."
+	else:
+		student.submit = True
+		student.save()
+		salt = sha.new(str(random.random())).hexdigest()[:5]
+    	activation_key = sha.new(salt+student.firstName).hexdigest()
+    	student.activation_key = activation_key
+    	student.save()
+    	email_body = "http://127.0.0.1:8000/registrationApp/ParentConfirm/%s" % (student.activation_key)
+    	send_mail("Your child has submitted their schedule",
+          	  email_body,
+              'darshandesai17@gmail.com',
+              ["c12dd@dalton.org"])
+    	msg = "Submitted for House Advisor and Parent Approval"
+	return HttpResponse(msg)
+
+def ParentConfirm(request, Activation_key):
+	student = get_object_or_404(Student, activation_key=Activation_key)
+	return render_to_response('registrationApp/ParentConfirm.html', {'student':student},
+								context_instance=RequestContext(request))
+							
+def ParentConfirmYes(request):
+	msg=""
 	if request.is_ajax():
-		submit = request.GET.get('submit')
-		if int(submit) == 1:
-			if student.submit == True:
-				msg = "You have already submitted, please unsubmit first."
-			else:
-				student.submit = True
-				student.save()
-				msg = "Submitted for House Advisor and Parent Approval"
-		elif int(submit) == 0:
-			if student.submit == False:
-				msg = "You have not yet submitted, please submit first."
-			else:
-				student.submit = False
-				student.save()
-				msg = "Unsubmitted. Please only unsubmit in dire situations in the future."
+		stud = request.GET.get('student')
+		student = get_object_or_404(Student, pk=stud)
+		if student.parentApproval == True:
+			msg= "You've already approved your child!"
+		else:
+			student.parentApproval = True
+			student.save()
+			msg="Thanks for your approval!"
 	return HttpResponse(msg)

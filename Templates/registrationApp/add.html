@@ -1,4 +1,17 @@
 {% extends "registrationApp/base.html" %}
+{% block headerscript %}
+{% load registrationApp_extras %}
+
+<script type="text/javascript">
+
+	function switchPeriod(section, studSched){
+		$( '#result' ).html( '&nbsp;' ).load( '{% url delete %}?studSched=' + studSched);
+		$( '#result' ).html( '&nbsp;' ).load( '{% url add%}?section=' + section).hide().fadeIn('slow');
+	}
+
+</script>
+
+{% endblock %}
 
 {% block content %}
 <div class = "span-8" id = "enrolledDiv">
@@ -17,28 +30,31 @@
  
 {% for studSched in studentSchedule %}
 	{% with forloop.counter|cut:" " as index %}
-	<span>
 		<div id="{{studSched.sectionID.courseID.discipline.discipline}}" class = "{% if studSched.sectionID.semesterOne != studSched.sectionID.semesterTwo %}span-4{% else %}span-8{% endif %}" style = "float: {% if studSched.sectionID.semesterOne != studSched.sectionID.semesterTwo %}{% if studSched.sectionID.semesterTwo %}right{% endif %}{% endif %}">
 			{{studSched.sectionID.courseID.courseName}} |
-			<div class = "period" style = "display:inline;">
-			<a href="#">{% if not "0" in studSched.sectionID.APeriodDays %}A{% endif %}{% if not "0" in studSched.sectionID.BPeriodDays %}B{% endif %}{% if not "0" in studSched.sectionID.CPeriodDays %}C{% endif %}{% if not "0" in studSched.sectionID.DPeriodDays %}D{% endif %}{% if not "0" in studSched.sectionID.EPeriodDays %}E{% endif %}{% if not "0" in studSched.sectionID.FPeriodDays %}F{% endif %}{% if not "0" in studSched.sectionID.GPeriodDays %}G{% endif %}{% if not "0" in studSched.sectionID.HPeriodDays %}H{% endif %}{% if not "0" in studSched.sectionID.IPeriodDays %}I{% endif %}{% if not "0" in studSched.sectionID.KPeriodDays %}K{% endif %}{% if not "0" in studSched.sectionID.ZPeriodDays %}Z{% endif %}</a>
-				<span id ="{{studSched.id}}" class = "perOptions" > 
-					{% for sec in secOption|slice:index|last%}<input type="submit" name ="{{sec.id}}" id = "switch" class = "button" value="{% if not "0" in sec.APeriodDays %}A{% endif %}{% if not "0" in sec.BPeriodDays %}B{% endif %}{% if not "0" in sec.CPeriodDays %}C{% endif %}{% if not "0" in sec.DPeriodDays %}D{% endif %}{% if not "0" in sec.EPeriodDays %}E{% endif %}{% if not "0" in sec.FPeriodDays %}F{% endif %}{% if not "0" in sec.GPeriodDays %}G{% endif %}{% if not "0" in sec.HPeriodDays %}H{% endif %}{% if not "0" in sec.IPeriodDays %}I{% endif %}{% if not "0" in sec.KPeriodDays %}K{% endif %}{% if not "0" in sec.ZPeriodDays %}Z{% endif %}"/> 
-					{% endfor %}
-			 	</span>
+			<div class = "period" >
+				{% if secOption|slice:index|last|length > 1 %} <a href="#">{% endif%} {% if not "0" in studSched.sectionID.APeriodDays %}A{% endif %}{% if not "0" in studSched.sectionID.BPeriodDays %}B{% endif %}{% if not "0" in studSched.sectionID.CPeriodDays %}C{% endif %}{% if not "0" in studSched.sectionID.DPeriodDays %}D{% endif %}{% if not "0" in studSched.sectionID.EPeriodDays %}E{% endif %}{% if not "0" in studSched.sectionID.FPeriodDays %}F{% endif %}{% if not "0" in studSched.sectionID.GPeriodDays %}G{% endif %}{% if not "0" in studSched.sectionID.HPeriodDays %}H{% endif %}{% if not "0" in studSched.sectionID.IPeriodDays %}I{% endif %}{% if not "0" in studSched.sectionID.KPeriodDays %}K{% endif %}{% if not "0" in studSched.sectionID.ZPeriodDays %}Z{% endif %} {% if secOption|slice:index|last|length > 1 %} </a>{% endif%}
+				
+				{% if secOption|slice:index|last|length > 1%}
+					<span id ="{{studSched.id}}" class = "perOptions" style="top:-{{ secOption|slice:index|last|length|add:"-2"|multiply:"20"|add:"40" }}px">
 
-			</div>
-
-		<div style="float:right; position:relative; top:3px">
-			<input type="image" name= "{{studSched.id}}" id = "delete" src="{{STATIC_URL}}delete.png"/>
+						{% for sec in secOption|slice:index|last%}
+							{% if studSched.sectionID != sec %}
+								<a href = "#" id="switch" onclick="switchPeriod({{sec.id}}, {{studSched.id}});return false;">
+							 	{% if not "0" in sec.APeriodDays %}A{% endif %}{% if not "0" in sec.BPeriodDays %}B{% endif %}{% if not "0" in sec.CPeriodDays %}C{% endif %}{% if not "0" in sec.DPeriodDays %}D{% endif %}{% if not "0" in sec.EPeriodDays %}E{% endif %}{% if not "0" in sec.FPeriodDays %}F{% endif %}{% if not "0" in sec.GPeriodDays %}G{% endif %}{% if not "0" in sec.HPeriodDays %}H{% endif %}{% if not "0" in sec.IPeriodDays %}I{% endif %}{% if not "0" in sec.KPeriodDays %}K{% endif %}{% if not "0" in sec.ZPeriodDays %}Z{% endif %}</a>
+							{% endif %}
+						{% endfor %}
+					 </span>
+				{% endif %}
+			</div>	
+			<input type="image" name= "{{studSched.id}}" id = "delete" src="{{STATIC_URL}}delete_icon.png" style="float:right; top:3px;display:inline"/>
 		</div>
-
-	</div>
-</span>
-{% endwith %}
+	{% endwith %}
 {% endfor %}
 
 </div>
+			<input type = "submit" id = "submitAll" class = "button"/>
 
 
 {%endblock%}
+

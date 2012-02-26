@@ -1,0 +1,31 @@
+{% extends "registrationApp/base.html" %}
+{% block content %}
+
+<h3>{{student.firstName}} {{student.lastName}}'s Parent Confirmation </h3>
+Do you approve of your child's schedule?
+<div id="courseList" class="span-10 prepend-10">
+	
+</div>
+
+<input type="submit" value="Yes" name="{{student.id}}" id="parentConfirmYes"/>
+
+
+<div id="output" class="span-10">
+</div>
+{% endblock %}
+
+{% block headerscript %}
+
+<script type="text/javascript">
+$( document ).ready( function() {
+
+	$( '#parentConfirmYes' ).live("click", function() {
+		student = $(this).attr("name");
+		$( '#output' ).html( '&nbsp;' ).load('{% url ParentConfirmYes %}?student='+ student).hide().fadeIn('slow');
+	});
+	$( '#courseList' ).html( '&nbsp;' ).load('{% url add %}?student='+{{student.id}}+'&fromOther=1').hide().fadeIn('slow');
+
+});
+</script>
+
+{%endblock%}

@@ -1,5 +1,5 @@
 	body {
-		background:url("http://i.imgur.com/ARxo3.png" );
+		/*background:url("http://i.imgur.com/ARxo3.png" );*/
 		text-align:center;
 		color:#1b78bb;
 		margin:auto;
@@ -11,16 +11,16 @@
 		position:relative;
 		width:860px;
 	}
-	
-	.perOptions {
-		
-		display: none;
-		width: 110px;
-		height: 35px;
-		text-align: center;
-		padding: 2px;
-		color:#FFFFD4;
+	#info{
+		border-left:1px solid #CCC;
+		border-top:5px; 
+		float:right; 
+		height:535px; 
+		overflow:auto; 
+		position:relative;
+
 	}
+
 	.selected{
 		background-color:#d1eeee;
 	}
@@ -33,16 +33,69 @@
 	#q:focus{
 		background:#FFFFD4;
 	}
-	#delete {
-		width:15px;
+	#delete, #close {
+		width:20px;
 		position:relative;
+		opacity:.5;
+	}
+	.period{
+		display:inline;
+		position:absolute;
+		width:25px;
+	}
+	.period .perOptions{
+		display:none;
+		width:25px;
+		text-align: center;
+		padding: 2px;
+		color:#FFFFD4;
+		position:relative;
+	    background:#FFF;
+	}
+	.period:hover .perOptions{
+		display:inline-block;		
+
+
 	}
 	#results{
 		overflow:auto;
-		height:255px;
-		border-bottom: 1px solid #CCC;
+		border: 1px solid #CCC;
+		max-height:260px;
+	}
+	#result{
+		position:relative;
+	}
+	#screen{
+        position: fixed;
+        width:100%;
+        height:100%;
+        left: 0;
+        top: 0;
+        background: #000;
+        z-index:100;
+        display:none;
+	}
+	#confirmation{
+        width: 500px;
+        height: 200px;
+        background:url("/static/bg_vertical.jpg") ;
+        border: 1px solid #CCC;
+        text-align: center;
+        position: absolute;
+        margin-left: -250px;
+        margin-top: -100px;
+        left: 50%;
+        top: 50%;
+        z-index: 200;
+        display: none;
+	}
+	#confirmationHeader{
+		margin:auto;
+		background:url("/static/bg_tile.jpg");
+		border-bottom:5px solid #CCC;
 	}
 
+	
 	#searchElement .ui-selecting { background: #FECA40; }
 	#searchElement .ui-selected { background: #F39814; color: white; }
 
@@ -51,7 +104,7 @@
 	  	border: 1px solid #DDDDB2;
 		height:25px;
 		opacity: 0.7;
-		margin:10 0px 0 15px;
+		margin:0 0px 0 0px;
 	}
 	#Math:hover, #Science:hover, #English:hover, #History:hover, #Language:hover, #Art:hover, #P.E:hover, #ComputerScience:hover{
 		opacity: 1;
@@ -90,10 +143,9 @@
 	}
 	::-webkit-scrollbar-thumb:hover {
 		background-color: #999;
-	
 	}
 
-	.button, .button:visited {
+	.button, .button:visited, .largerButton, .largerButton:visited {
 		background: #222 url(http://zurb.com/images/alert-overlay.png) repeat-x;
 		display: inline-block;
 		padding: 4px 4px 4px;
@@ -113,7 +165,10 @@
 		font-weight:bold;
 
 	}
-	.button:hover{
+	.largerButton, .largerButton:visited{
+		padding: 7px 7px 7px;
+	}
+	.button:hover, .largerButton:hover{
 		background-color: #007d9a; 
 	}
 	#searchElement{
@@ -134,5 +189,5 @@
 		background:#FFFFD4;
 	}
 	a:hover{
-		color:#FFFFFF;
+		color:#ccc;
 	}

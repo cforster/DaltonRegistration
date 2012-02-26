@@ -27,7 +27,7 @@
 $( document ).ready( function() {
 	$( '#student' ).live("click", function() {
 		student = $(this).attr("name");
-		$( '#courseList' ).html( '&nbsp;' ).load('{% url add %}?student='+ student +'&fromadvisor=1').hide().fadeIn('slow');
+		$( '#courseList' ).html( '&nbsp;' ).load('{% url add %}?student='+ student +'&fromOther=1').hide().fadeIn('slow');
 	});
 	$( '#approve' ).live("click", function() {
 		student = $(this).attr("name");
