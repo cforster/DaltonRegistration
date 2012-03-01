@@ -8,34 +8,61 @@
 		$( '#result' ).html( '&nbsp;' ).load( '{% url delete %}?studSched=' + studSched);
 		$( '#result' ).html( '&nbsp;' ).load( '{% url add%}?section=' + section).hide().fadeIn('slow');
 	}
-
+	{% if student.submit %}
+  		$('#overlay').css({"display": "block", "opacity": 0.5}).hide().fadeIn('slow');    
+	{% endif %}
 </script>
 
 {% endblock %}
 
 {% block content %}
+
+<div class="span-8" {% if student.submit %} id="overlay" style="display:none"{% endif %}>
 <div class = "span-8" id = "enrolledDiv">
+
+
 <h3 style="text-align:center">{{student.firstName}}'s Courses</h3>
-{%if student.submit%}
-{% endif %}
-{%if msg != "" %}
-{{msg}}
-{% if "You are already enrolled in a section " in msg %}
-<br>
-<input type = "submit" name = "{{section.id}}" id = "alreadyEnrolledYes" value = "Yes"/>
-<input type = "submit" name = "{{section.id}}" id = "alreadyEnrolledNo" value = "No"/>
+
+
+{%if msg != "" and not fromOtherBool %}
+
+	{{msg}}
+
+	{% if "You are already enrolled in a section " in msg %}
+		<br>
+		<input type = "submit" name = "{{section.id}}" id = "alreadyEnrolledYes" value = "Yes"/>
+		<input type = "submit" name = "{{section.id}}" id = "alreadyEnrolledNo" value = "No"/>
+	{% endif %} 
 
 {% endif %} 
-{% endif %} 
- 
+
+
 {% for studSched in studentSchedule %}
 	{% with forloop.counter|cut:" " as index %}
-		<div id="{{studSched.sectionID.courseID.discipline.discipline}}" class = "{% if studSched.sectionID.semesterOne != studSched.sectionID.semesterTwo %}span-4{% else %}span-8{% endif %}" style = "float: {% if studSched.sectionID.semesterOne != studSched.sectionID.semesterTwo %}{% if studSched.sectionID.semesterTwo %}right{% endif %}{% endif %}">
+		<div id="{{studSched.sectionID.courseID.discipline.discipline}}" class = "
+			{% if studSched.sectionID.semesterOne != studSched.sectionID.semesterTwo %}
+				span-4
+			{% else %}
+				span-8
+			{% endif %}"
+			style = "float: 
+			{% if studSched.sectionID.semesterOne != studSched.sectionID.semesterTwo %}
+				{% if studSched.sectionID.semesterTwo %}
+					right
+				{% endif %}
+			{% endif %};border:1px solid #CCC">
 			{{studSched.sectionID.courseID.courseName}} |
+
 			<div class = "period" >
-				{% if secOption|slice:index|last|length > 1 %} <a href="#">{% endif%} {% if not "0" in studSched.sectionID.APeriodDays %}A{% endif %}{% if not "0" in studSched.sectionID.BPeriodDays %}B{% endif %}{% if not "0" in studSched.sectionID.CPeriodDays %}C{% endif %}{% if not "0" in studSched.sectionID.DPeriodDays %}D{% endif %}{% if not "0" in studSched.sectionID.EPeriodDays %}E{% endif %}{% if not "0" in studSched.sectionID.FPeriodDays %}F{% endif %}{% if not "0" in studSched.sectionID.GPeriodDays %}G{% endif %}{% if not "0" in studSched.sectionID.HPeriodDays %}H{% endif %}{% if not "0" in studSched.sectionID.IPeriodDays %}I{% endif %}{% if not "0" in studSched.sectionID.KPeriodDays %}K{% endif %}{% if not "0" in studSched.sectionID.ZPeriodDays %}Z{% endif %} {% if secOption|slice:index|last|length > 1 %} </a>{% endif%}
+			{% if not fromOtherBool and secOption|slice:index|last|length > 1 and not student.submit %}  
+				<a href="#">
+ 			{% endif%} 
+ 					 	{% if not "0" in studSched.sectionID.APeriodDays %}A{% endif %}{% if not "0" in studSched.sectionID.BPeriodDays %}B{% endif %}{% if not "0" in studSched.sectionID.CPeriodDays %}C{% endif %}{% if not "0" in studSched.sectionID.DPeriodDays %}D{% endif %}{% if not "0" in studSched.sectionID.EPeriodDays %}E{% endif %}{% if not "0" in studSched.sectionID.FPeriodDays %}F{% endif %}{% if not "0" in studSched.sectionID.GPeriodDays %}G{% endif %}{% if not "0" in studSched.sectionID.HPeriodDays %}H{% endif %}{% if not "0" in studSched.sectionID.IPeriodDays %}I{% endif %}{% if not "0" in studSched.sectionID.KPeriodDays %}K{% endif %}{% if not "0" in studSched.sectionID.ZPeriodDays %}Z{% endif %} 
+			{% if not fromOtherBool and secOption|slice:index|last|length > 1 and not student.submit%} 
+ 				</a>
+ 			{% endif%}
 				
-				{% if secOption|slice:index|last|length > 1%}
+				{% if secOption|slice:index|last|length > 1 and not fromOtherBool and not student.submit %}
 					<span id ="{{studSched.id}}" class = "perOptions" style="top:-{{ secOption|slice:index|last|length|add:"-2"|multiply:"20"|add:"40" }}px">
 
 						{% for sec in secOption|slice:index|last%}
@@ -47,14 +74,18 @@
 					 </span>
 				{% endif %}
 			</div>	
-			<input type="image" name= "{{studSched.id}}" id = "delete" src="{{STATIC_URL}}delete_icon.png" style="float:right; top:3px;display:inline"/>
+			{% if not fromOtherBool and not student.submit %}
+				<input type="image" name= "{{studSched.id}}" id = "delete" src="{{STATIC_URL}}delete_icon.png" style="float:right; top:3px;display:inline"/>
+			{% endif %}
 		</div>
 	{% endwith %}
 {% endfor %}
-
+	
 </div>
-			<input type = "submit" id = "submitAll" class = "button"/>
+</div>
 
+{% if not fromOtherBool and not student.submit %}
+	<input type = "submit" id = "submitAll" class = "button"/>
+{% endif %}
 
 {%endblock%}
-

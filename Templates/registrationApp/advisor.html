@@ -1,42 +1,72 @@
 {% extends "registrationApp/base.html" %}
-
+{% block headerscript%}
+<script type="text/javascript">
+	function getStudSched(student){
+		$( '#courseList' ).html( '&nbsp;' ).load('{% url add %}?student='+ student +'&fromOther=1').hide().fadeIn('slow');
+	}
+</script>
+{% endblock %}
 {% block content %}
 <div class="container">
-	<div id = "submittedStudents" class = "span-4" >
+	<div id = "submittedStudents" class = "span-5" >
 	Submitted Students:
 	<br>
 
 	{% for student in submittedStudents %}
 	<br>
-	<input type="submit" class="button" id = "student" name = "{{student.id}}" value = "{{student.firstName}} {{student.lastName}}"/>
+	<a href="#" onclick="getStudSched({{student.id}});return false;" /> {{student.firstName}} {{student.lastName}} </a>
 	<input type = "submit" class = "button" id = "approve" value = "approve" name = "{{student.id}}"/>
-	
-	<textarea id="reviewText" name="{{ student.id }}"></textarea>	
 	<input type = "submit" class = "button" id = "review" value = "review" name = "{{student.id}}"/>
 
+	<div id = "revTextDiv" style="display:none">
+		<input type="image" id = "close" src="{{STATIC_URL}}delete_icon.png" style="float:right; display:inline;"/>			
+		<h2 style="display:inline; position:relative; left:20px">Submit Confirmation</h2>
+			<div style="width:450px; margin:auto;">
+			<p>Please write a message for your students to review here. This will send them an email notification and let them see it on their schedule's page</p> 
+			
+		<textarea id="reviewText" name="{{ student.id }}" cols="50" rows="20"></textarea>	
+		<div style="width:100;"> 
+			<input type = "submit" class = "button" id = "submit" value = "submit" name = "{{student.id}}"/> 
+			<input type = "submit" class = "button" id = "cancel" value = "cancel" /> 
+		</div>
+	</div>
+</div>
 	{% endfor %}
 	</div>
 	<div class= "span-19 last" id = "courseList">
 
 	</div>
 </div>
+	<div id='screen'></div>
+
 {% endblock %}
 {% block script %}
 
 <script type="text/javascript">
 $( document ).ready( function() {
-	$( '#student' ).live("click", function() {
-		student = $(this).attr("name");
-		$( '#courseList' ).html( '&nbsp;' ).load('{% url add %}?student='+ student +'&fromOther=1').hide().fadeIn('slow');
+	function closeConfirmation(){
+		$('#revTextDiv, #screen').fadeOut('slow',function(){
+			$(this).css({"display": "none"})
+		});
+	}
+	$( '#cancel, #close' ).live("click", function() {
+		closeConfirmation();
 	});
+	$( '#review' ).live("click", function() {
+   		$('#screen').css({"display": "block", "opacity": 0.7}).hide().fadeIn('slow');    
+   		$('#revTextDiv').css({"display": "block"}).hide().fadeIn('slow');
+	});
+
+
 	$( '#approve' ).live("click", function() {
 		student = $(this).attr("name");
 		$( '#courseList' ).html( '&nbsp;' ).load('{% url approve house.id %}?student='+ student).hide().fadeIn('slow');
 	});
-	$( '#review' ).live("click", function(){
+	$( '#submit' ).live("click", function(){
 		message = $('#reviewText').val();
 		student = $(this).attr("name");
 		message = message.replace(/ /g,"_");
+		closeConfirmation();
 		$( '#courseList' ).html( '&nbsp;' ).load('{% url review house.id %}?student='+ student+'&message='+message).hide().fadeIn('slow');
 	});
 });

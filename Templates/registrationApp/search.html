@@ -6,6 +6,28 @@ Registration | The Dalton School
 
 {% block content %}
    <div class="container">
+
+   <div id = "notification" style = "display:none; overflow:auto;">
+
+	<input type="image" id = "close2" src="{{STATIC_URL}}delete_icon.png" style="float:right; display:inline;"/>			
+   	<div>
+   	{% if student.advisor1Note != " " and student.advisor1NoteRead == 0 %}
+   	   	Advisor 1's Note: {{student.advisor1Note}}
+   	{% endif %}
+
+   	{% if student.advisor2Note != " " and student.advisor1NoteRead == 0 %}	
+	   	Advisor 2's Note: {{student.advisor2Note}} 
+   	{% endif %}
+	   
+   	{% if student.parentNote != " " and student.advisor1NoteRead == 0  %}	
+   		Parent's Note: {{student.parentNote}}
+   	{% endif %}
+   	</div>
+   	<div>
+	<input type = "submit" value = "OK" class = "button" id="readNotifications"/>
+</div>
+	</div>
+
    		<div style="display:inline; float:right;"> <a href = "/registrationApp/logout"> Logout</a> </div>
 
 		<div> <h2> {{ student.firstName }}'s Schedule </h2> </div>
@@ -48,7 +70,7 @@ Registration | The Dalton School
 				<input type = "submit" value = "Yes" class = "largerButton" id ="schedSubmitYes" style="float:left;"/>
 				<input type = "submit" value = "No" class = "largerButton" id="schedSubmitNo" style="float:right;"/>
 			</div>
-		</div>
+			</div>
 		</div>
 	</div>
 
@@ -61,7 +83,10 @@ $( document ).ready( function() {
 	$('#q').focus();	
 	$('#result').load('{% url add %}').hide().fadeIn('slow');
 	$('#info').load('{% url one %}').hide().fadeIn('slow');
-
+	{% if student.advisor1Note != " " and student.advisor1NoteRead == 0  or  student.advisor2Note != " " and student.advisor2NoteRead == 0  or  student.parentNote != " " and student.parentNoteRead == 0  %}
+		$('#screen').css({"display": "block", "opacity": 0.7}).hide().fadeIn('slow');    
+   		$('#notification').css({"display": "block"}).hide().fadeIn('slow');
+	{% endif %}	
 	function getSearchVal(){
 		q = $('#q').val();
 		q = q.replace(/ /g,"_");
@@ -171,7 +196,29 @@ $( document ).ready( function() {
         mouseleave:function(){
 			$(this).fadeTo("slow",.5);}
 	});
+	function closeConfirmation2(){
+		$('#notification, #screen').fadeOut('slow',function(){
+			$(this).css({"display": "none"})
+		});
+	}
+	$( '#cancel, #close2' ).live("click", function() {
+		closeConfirmation2();
+	});
+	$( '#readNotifications' ).live("click", function() {
+		{% if student.advisor1Note != " " %}
+			$( '#info' ).html( '&nbsp;' ).load( '{% url notifRead %}?note=advisor1Note').hide().fadeIn('slow');
+	   	{% endif %}
 
+	   	{% if student.advisor2Note != " "  %}	
+			$( '#info' ).html( '&nbsp;' ).load( '{% url notifRead %}?note=advisor2Note').hide().fadeIn('slow');
+	   	{% endif %}
+		   
+	   	{% if student.parentNote != " "  %}	
+	   		$( '#info' ).html( '&nbsp;' ).load( '{% url notifRead %}?note=parentNote').hide().fadeIn('slow');
+	   	{% endif %}
+	   	closeConfirmation2();
+
+	});
 });
 
 $( document ).ajaxStart( function() {

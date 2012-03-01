@@ -11,13 +11,15 @@
 				<a href = "#{{section.courseID.courseName|slugify}}">
 
 				<div id ="searchElement" style = "position:relative;">
+					{% if not student.submit %}
 			    		<form name = "rankForm">
 							<input type ="radio" value = "1" id="rank1" name="rank" style= "float:left;display:block;"/><input type ="radio" value = "2" id="rank2" name="rank" style= "float:left;display:block;"/>
 				    	</form>
+				    {% endif %}	
 				    	<label for="course{{forloop.counter}}"> 
 				    	<b>{{section.courseID.courseName}} </b> 
 				    	{% for section in sec %}
-							<input type="submit" name ="{{section.id}}" id = "add" class ="button" value="{% if not "0" in section.APeriodDays %}A{% endif %}{% if not "0" in section.BPeriodDays %}B{% endif %}{% if not "0" in section.CPeriodDays %}C{% endif %}{% if not "0" in section.DPeriodDays %}D{% endif %}{% if not "0" in section.EPeriodDays %}E{% endif %}{% if not "0" in section.FPeriodDays %}F{% endif %}{% if not "0" in section.GPeriodDays %}G{% endif %}{% if not "0" in section.HPeriodDays %}H{% endif %}{% if not "0" in section.IPeriodDays %}I{% endif %}{% if not "0" in section.KPeriodDays %}K{% endif %}{% if not "0" in section.ZPeriodDays %}Z{% endif %}" />
+							<input type="submit" name ="{{section.id}}" {% if not student.submit %}id = "add" {% endif %} class ="{% if not student.submit %} button {% else %} grayButton {% endif %}"  value="{% if not "0" in section.APeriodDays %}A{% endif %}{% if not "0" in section.BPeriodDays %}B{% endif %}{% if not "0" in section.CPeriodDays %}C{% endif %}{% if not "0" in section.DPeriodDays %}D{% endif %}{% if not "0" in section.EPeriodDays %}E{% endif %}{% if not "0" in section.FPeriodDays %}F{% endif %}{% if not "0" in section.GPeriodDays %}G{% endif %}{% if not "0" in section.HPeriodDays %}H{% endif %}{% if not "0" in section.IPeriodDays %}I{% endif %}{% if not "0" in section.KPeriodDays %}K{% endif %}{% if not "0" in section.ZPeriodDays %}Z{% endif %}" />
 						{% endfor %}
 						<br>
 						<b> <i> {{section.courseID.discipline.discipline}}</i> </b> {{section.courseID.courseDescription}}  

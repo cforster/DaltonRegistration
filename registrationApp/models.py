@@ -38,9 +38,15 @@ class Student (models.Model):
 	parentStudentID= models.ForeignKey(ParentStudent)
 	submit = models.BooleanField()
 	advisorApproval = models.BooleanField()
-	advisorNote = models.CharField(max_length=100000)
+	advisor1Note = models.CharField(max_length=100000)
+	advisor2Note = models.CharField(max_length=100000)
+	advisor1NoteRead = models.BooleanField()
+	advisor2NoteRead = models.BooleanField()
+
 	parentApproval = models.BooleanField()
 	parentNote = models.CharField(max_length=100000)
+	parentNoteRead = models.BooleanField()
+	
 	activation_key = models.CharField(max_length=40)
 
         def __unicode__(self):

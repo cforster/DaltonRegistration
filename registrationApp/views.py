@@ -169,14 +169,15 @@ def add(request):
 							else: 
 								msg = Section.objects.get(pk=sec).courseID.courseName+ " Added "
 				else:
-					msg = section.courseID.courseName + " is not offered for " + str(u.grade) + " grade"				
+					msg = section.courseID.courseName + " is not offered for " + str(u.grade) + " grade"		
+	fromOtherBool = False		
 	fromOther = request.GET.get('fromOther')
 	if fromOther is not None:
 		if int(fromOther) == 1:
-			msg=""
+			fromOtherBool = True
 	studentSchedule = StudentSchedule.objects.filter(studentID = u)
 	secOption = periodSwitch(studentSchedule)
-	return render_to_response('registrationApp/add.html', {'student': u, 'studentSchedule': studentSchedule, 'section': section, 'msg' : msg, 'secOption' : secOption},
+	return render_to_response('registrationApp/add.html', {'student': u, 'studentSchedule': studentSchedule, 'section': section, 'msg' : msg, 'secOption' : secOption, 'fromOtherBool' : fromOtherBool},
 								context_instance=RequestContext(request))			
 
 						
@@ -195,8 +196,9 @@ def addEnrolledSection(request):
 			else: 
 				msg = Section.objects.get(pk=sec).courseID.courseName+ " Added. Please ensure you are intentionally in two sections "
 	studentSchedule = StudentSchedule.objects.filter(studentID = stud)
-	secOption = periodSwitch(studentSchedule)				
-	return render_to_response('registrationApp/add.html', {'student': stud, 'studentSchedule': studentSchedule, 'section': section, 'msg' : msg, 'secOption' : secOption},
+	secOption = periodSwitch(studentSchedule)
+	fromOtherBool = False				
+	return render_to_response('registrationApp/add.html', {'student': stud, 'studentSchedule': studentSchedule, 'section': section, 'msg' : msg, 'secOption' : secOption, 'fromOtherBool' : fromOtherBool},
 								    context_instance=RequestContext(request))	
 
 @login_required(login_url='/registrationApp/login/')							 
@@ -211,11 +213,27 @@ def delete(request):
 			msg = studSchedObj.sectionID.courseID.courseName + " Deleted"
 			studentSchedule = StudentSchedule.objects.filter(studentID = z)
 			secOption = periodSwitch(studentSchedule)
-			return render_to_response('registrationApp/add.html', {'student': z, 'studentSchedule': studentSchedule, 'msg': msg,'secOption' : secOption},
+			fromOtherBool = False
+			return render_to_response('registrationApp/add.html', {'student': z, 'studentSchedule': studentSchedule, 'msg': msg,'secOption' : secOption,'fromOtherBool' : fromOtherBool},
 							   			context_instance=RequestContext(request))	
 		else: 
 			return HttpResponse("Could not delete; obj does not exist")
 
+@login_required(login_url='/registrationApp/login/')
+def notifRead(request):
+	stud = get_object_or_404(Student, user=request.user.id)
+	if request.is_ajax():
+		note = request.GET.get('note')
+		if note == "advisor1Note":
+			stud.advisor1NoteRead = 1
+			stud.save()
+		if note == "advisor2Note":
+			stud.advisor2NoteRead = 1
+			stud.save()
+		if note == "parentNote":
+			stud.parentNoteRead = 1
+			stud.save()	
+	return HttpResponse("Notifications Marked as Read")
 @login_required(login_url='/registrationApp/login/')
 def one(request):
 	a = get_object_or_404(Student, user=request.user.id)
@@ -315,6 +333,13 @@ def review(request, House_id):
 		student = Student.objects.get(pk = student)
 		message = request.GET.get('message')
 		message = message.replace('_'," ")
+		student.submit = False
+		if student.advisor1Note != " ":
+			note = message + " PREVIOUS NOTE " + student.advisor1Note
+		else:
+			note = message
+		student.advisor1Note = note
+		student.save()
 		send_mail("Schedule Changes to review", "Hello; your house advisor has some suggestions for you: " +message, 'darshandesai17@gmail.com', [student.email])
 	return HttpResponse("Message sent to student successfully")
 
