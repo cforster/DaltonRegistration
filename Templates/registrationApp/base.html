@@ -1,23 +1,30 @@
-	<!DOCTYPE HTML>
+<!DOCTYPE HTML>
 <html lang="en">
-<head>
-    <title>{% block title %}{% endblock %}</title>
-    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}registration.css" />
-    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}screen.css" />
-    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
-    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js"></script>
-{% block headerscript %}
+	<head>
+		<meta charset="utf-8">
+	    <title>
+	    	{% block title %}
 
-{% endblock %}
-</head>
-<body>
-	{% block content %}
+	    	{% endblock %}
+	    </title>
 
-  {% endblock %}
+	    <link rel="stylesheet" type="text/css" href="/registrationApp/site_media/CSS/registration.css" />
+	    <link rel="stylesheet" type="text/css" href="/registrationApp/site_media/CSS/layout.css" />
+	    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+	    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.18/jquery-ui.min.js"></script>	
 
-</body>
-{% block script %}
+		{% block headerscript %}
 
-{% endblock %}
+		{% endblock %}
 
+	</head>
+
+	<body>
+		{% block content %}
+
+		{% endblock %}
+	</body>
+		{% block script %}
+
+		{% endblock %}
 </html>

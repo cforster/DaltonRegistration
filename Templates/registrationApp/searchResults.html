@@ -1,36 +1,49 @@
 {% extends "registrationApp/base.html" %}
+{% load registrationApp_extras %}
 
 {% block content %}
 
-{% if courseOptions|length %}
-	<strong>Found {{ courseOptions|length }} Course{{ courseOptions|pluralize }}:</strong>
-	<hr style="height:1px; margin-bottom:1px"/>
-	{% for sec in allSec %}
-		<div id="sr">	
-			{% for section in sec|slice:":1"%}
-				<a href = "#{{section.courseID.courseName|slugify}}">
+{% if courseList|length %}
 
-				<div id ="searchElement" style = "position:relative;">
-					{% if not student.submit %}
-			    		<form name = "rankForm">
-							<input type ="radio" value = "1" id="rank1" name="rank" style= "float:left;display:block;"/><input type ="radio" value = "2" id="rank2" name="rank" style= "float:left;display:block;"/>
-				    	</form>
-				    {% endif %}	
-				    	<label for="course{{forloop.counter}}"> 
-				    	<b>{{section.courseID.courseName}} </b> 
-				    	{% for section in sec %}
-							<input type="submit" name ="{{section.id}}" {% if not student.submit %}id = "add" {% endif %} class ="{% if not student.submit %} button {% else %} grayButton {% endif %}"  value="{% if not "0" in section.APeriodDays %}A{% endif %}{% if not "0" in section.BPeriodDays %}B{% endif %}{% if not "0" in section.CPeriodDays %}C{% endif %}{% if not "0" in section.DPeriodDays %}D{% endif %}{% if not "0" in section.EPeriodDays %}E{% endif %}{% if not "0" in section.FPeriodDays %}F{% endif %}{% if not "0" in section.GPeriodDays %}G{% endif %}{% if not "0" in section.HPeriodDays %}H{% endif %}{% if not "0" in section.IPeriodDays %}I{% endif %}{% if not "0" in section.KPeriodDays %}K{% endif %}{% if not "0" in section.ZPeriodDays %}Z{% endif %}" />
-						{% endfor %}
-						<br>
-						<b> <i> {{section.courseID.discipline.discipline}}</i> </b> {{section.courseID.courseDescription}}  
-						</label>
-		   		</div>			   		</a>
+	<strong> <div  style= "background-color:#fffee0;" >Found {{ courseList|length }} Course{{ courseList|pluralize }} with {{searchTerms|lower}}:</strong></div>
+	<hr />
 
-	   		{% endfor %}
-	   	</div>	
+	{% for course, rank, sections, availForGrade, preApproved, disciplines in courseList %}
+		<div id="searchResults" style="width:97.3%;" >	
+
+			<a href ="#{{course.courseName|slugify}}" >
+			
+			{% if not availForGrade or course.preapprovalRequired and not preApproved %} 
+				<div id= "overlay" style = "background:rgba(0,0,0,.15); display:block; position:relative;">
+			{% endif %}
+				
+			<div id ="searchElement" class="row-fluid" style="margin:auto; ">
+				
+				<span class="span7">  <b>{{course.courseName}}</b> <br /> 
+				<i> {% for discipline in disciplines %}{{discipline.discipline.discipline}}{% endfor %} </i>  </span>
+
+				<span style="float:right;" class="span5">
+					{% for section, period in sections %}
+					<div class="{% if section.semesterOne and not section.semesterOne == section.semesterTwo %}semOne{% else %}{% if section.semesterTwo and not section.semesterOne == section.semesterTwo %}semTwo{% else %}semBoth{% endif %}{% endif %}">
+						
+						<input type="submit" name ="{{section.id}}" {% if not student.submit %} id = "addSection" {% endif %} class ="{% if not student.submit %} button {% else %} grayButton {% endif %}" value="{{period}}" />
+					
+					</div>
+					{% endfor %}
+				</span>
+
+			</div>	
+			{% if not availForGrade or course.preapprovalRequired and not preApproved %} 
+				</div>
+			{% endif %}	 
+			<hr />
+		</a>
+	</div>	
+
 	{% endfor %}
+
 {% else %}
-	No courses found. Please try a different query.
+	No courses found. Please try a different search term.
 {% endif %}
 
 {% endblock %}

@@ -1,0 +1,1565 @@
+[
+    {
+        "pk": null, 
+        "model": "registrationApp.departmentChair", 
+        "fields": {
+            "first_name": "Will", 
+            "last_name": "Hopkins", 
+            "email": "darshandesai17@gmail.com"
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.departmentChair", 
+        "fields": {
+            "first_name": "Andrew", 
+            "last_name": "Glassman", 
+            "email": "darshandesai17@gmail.com"
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.departmentChair", 
+        "fields": {
+            "first_name": "Maria", 
+            "last_name": "Nebres", 
+            "email": "darshandesai17@gmail.com"
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.departmentChair", 
+        "fields": {
+            "first_name": "Lisa", 
+            "last_name": "Borenstein", 
+            "email": "darshandesai17@gmail.com"
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.departmentChair", 
+        "fields": {
+            "first_name": "Sarah", 
+            "last_name": "Lederman", 
+            "email": "darshandesai17@gmail.com"
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.departmentChair", 
+        "fields": {
+            "first_name": "Gordon", 
+            "last_name": "Campbell", 
+            "email": "darshandesai17@gmail.com"
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.departmentChair", 
+        "fields": {
+            "first_name": "Kathy", 
+            "last_name": "Martin", 
+            "email": "darshandesai17@gmail.com"
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.departmentChair", 
+        "fields": {
+            "first_name": "Randy", 
+            "last_name": "Sloan", 
+            "email": "darshandesai17@gmail.com"
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.departmentChair", 
+        "fields": {
+            "first_name": "Judith", 
+            "last_name": "Wohlreich", 
+            "email": "darshandesai17@gmail.com"
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.departmentChair", 
+        "fields": {
+            "first_name": "Dianne", 
+            "last_name": "Footlick", 
+            "email": "darshandesai17@gmail.com"
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.departmentChair", 
+        "fields": {
+            "first_name": "Kathleen", 
+            "last_name": "McNary", 
+            "email": "darshandesai17@gmail.com"
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.discipline", 
+        "fields": {
+            "discipline": "Science", 
+            "departmentChair": 1
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.discipline", 
+        "fields": {
+            "discipline": "English", 
+            "departmentChair": 2
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.discipline", 
+        "fields": {
+            "discipline": "Language", 
+            "departmentChair": 3
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.discipline", 
+        "fields": {
+            "discipline": "Math", 
+            "departmentChair": 4
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.discipline", 
+        "fields": {
+            "discipline": "History", 
+            "departmentChair": 5
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.discipline", 
+        "fields": {
+            "discipline": "Computer-Science", 
+            "departmentChair": 6
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.discipline", 
+        "fields": {
+            "discipline": "PE", 
+            "departmentChair": 7
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.discipline", 
+        "fields": {
+            "discipline": "Dance", 
+            "departmentChair": 8
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.discipline", 
+        "fields": {
+            "discipline": "Music", 
+            "departmentChair": 9
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.discipline", 
+        "fields": {
+            "discipline": "Art", 
+            "departmentChair": 10
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.discipline", 
+        "fields": {
+            "discipline": "Misc", 
+            "departmentChair": 6
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.courseDiscipline", 
+        "fields": {
+            "courseID": 3, 
+            "discipline": 4
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.courseDiscipline", 
+        "fields": {
+            "courseID": 6, 
+            "discipline": 4
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.courseDiscipline", 
+        "fields": {
+            "courseID": 8, 
+            "discipline": 4
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.courseDiscipline", 
+        "fields": {
+            "courseID": 9, 
+            "discipline": 4
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.courseDiscipline", 
+        "fields": {
+            "courseID": 11, 
+            "discipline": 4
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.courseDiscipline", 
+        "fields": {
+            "courseID": 16, 
+            "discipline": 4
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.courseDiscipline", 
+        "fields": {
+            "courseID": 18, 
+            "discipline": 4
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.courseDiscipline", 
+        "fields": {
+            "courseID": 20, 
+            "discipline": 4
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.courseDiscipline", 
+        "fields": {
+            "courseID": 50, 
+            "discipline": 4
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.courseDiscipline", 
+        "fields": {
+            "courseID": 51, 
+            "discipline": 4
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.courseDiscipline", 
+        "fields": {
+            "courseID": 52, 
+            "discipline": 4
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.courseDiscipline", 
+        "fields": {
+            "courseID": 55, 
+            "discipline": 6
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.courseDiscipline", 
+        "fields": {
+            "courseID": 57, 
+            "discipline": 6
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.courseDiscipline", 
+        "fields": {
+            "courseID": 67, 
+            "discipline": 4
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.courseDiscipline", 
+        "fields": {
+            "courseID": 68, 
+            "discipline": 4
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.courseDiscipline", 
+        "fields": {
+            "courseID": 71, 
+            "discipline": 4
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.courseDiscipline", 
+        "fields": {
+            "courseID": 74, 
+            "discipline": 6
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.courseDiscipline", 
+        "fields": {
+            "courseID": 76, 
+            "discipline": 6
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.courseDiscipline", 
+        "fields": {
+            "courseID": 80, 
+            "discipline": 6
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.courseDiscipline", 
+        "fields": {
+            "courseID": 82, 
+            "discipline": 6
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.courseDiscipline", 
+        "fields": {
+            "courseID": 90, 
+            "discipline": 4
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.courseDiscipline", 
+        "fields": {
+            "courseID": 91, 
+            "discipline": 4
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.courseDiscipline", 
+        "fields": {
+            "courseID": 109, 
+            "discipline": 3
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.courseDiscipline", 
+        "fields": {
+            "courseID": 111, 
+            "discipline": 3
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.courseDiscipline", 
+        "fields": {
+            "courseID": 112, 
+            "discipline": 3
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.courseDiscipline", 
+        "fields": {
+            "courseID": 117, 
+            "discipline": 3
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.courseDiscipline", 
+        "fields": {
+            "courseID": 118, 
+            "discipline": 3
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.courseDiscipline", 
+        "fields": {
+            "courseID": 127, 
+            "discipline": 3
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.courseDiscipline", 
+        "fields": {
+            "courseID": 134, 
+            "discipline": 3
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.courseDiscipline", 
+        "fields": {
+            "courseID": 139, 
+            "discipline": 3
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.courseDiscipline", 
+        "fields": {
+            "courseID": 141, 
+            "discipline": 3
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.courseDiscipline", 
+        "fields": {
+            "courseID": 142, 
+            "discipline": 3
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.courseDiscipline", 
+        "fields": {
+            "courseID": 144, 
+            "discipline": 3
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.courseDiscipline", 
+        "fields": {
+            "courseID": 147, 
+            "discipline": 3
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.courseDiscipline", 
+        "fields": {
+            "courseID": 153, 
+            "discipline": 3
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.courseDiscipline", 
+        "fields": {
+            "courseID": 154, 
+            "discipline": 3
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.courseDiscipline", 
+        "fields": {
+            "courseID": 162, 
+            "discipline": 3
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.courseDiscipline", 
+        "fields": {
+            "courseID": 167, 
+            "discipline": 3
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.courseDiscipline", 
+        "fields": {
+            "courseID": 172, 
+            "discipline": 3
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.courseDiscipline", 
+        "fields": {
+            "courseID": 173, 
+            "discipline": 3
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.courseDiscipline", 
+        "fields": {
+            "courseID": 182, 
+            "discipline": 3
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.courseDiscipline", 
+        "fields": {
+            "courseID": 186, 
+            "discipline": 3
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.courseDiscipline", 
+        "fields": {
+            "courseID": 187, 
+            "discipline": 3
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.courseDiscipline", 
+        "fields": {
+            "courseID": 189, 
+            "discipline": 3
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.courseDiscipline", 
+        "fields": {
+            "courseID": 190, 
+            "discipline": 3
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.courseDiscipline", 
+        "fields": {
+            "courseID": 191, 
+            "discipline": 3
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.courseDiscipline", 
+        "fields": {
+            "courseID": 202, 
+            "discipline": 3
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.courseDiscipline", 
+        "fields": {
+            "courseID": 205, 
+            "discipline": 3
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.courseDiscipline", 
+        "fields": {
+            "courseID": 206, 
+            "discipline": 3
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.courseDiscipline", 
+        "fields": {
+            "courseID": 208, 
+            "discipline": 3
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.courseDiscipline", 
+        "fields": {
+            "courseID": 209, 
+            "discipline": 3
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.courseDiscipline", 
+        "fields": {
+            "courseID": 219, 
+            "discipline": 3
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.courseDiscipline", 
+        "fields": {
+            "courseID": 222, 
+            "discipline": 3
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.courseDiscipline", 
+        "fields": {
+            "courseID": 233, 
+            "discipline": 3
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.courseDiscipline", 
+        "fields": {
+            "courseID": 235, 
+            "discipline": 3
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.courseDiscipline", 
+        "fields": {
+            "courseID": 256, 
+            "discipline": 3
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.courseDiscipline", 
+        "fields": {
+            "courseID": 260, 
+            "discipline": 3
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.courseDiscipline", 
+        "fields": {
+            "courseID": 270, 
+            "discipline": 3
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.courseDiscipline", 
+        "fields": {
+            "courseID": 271, 
+            "discipline": 3
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.courseDiscipline", 
+        "fields": {
+            "courseID": 302, 
+            "discipline": 1
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.courseDiscipline", 
+        "fields": {
+            "courseID": 303, 
+            "discipline": 1
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.courseDiscipline", 
+        "fields": {
+            "courseID": 305, 
+            "discipline": 1
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.courseDiscipline", 
+        "fields": {
+            "courseID": 306, 
+            "discipline": 1
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.courseDiscipline", 
+        "fields": {
+            "courseID": 307, 
+            "discipline": 1
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.courseDiscipline", 
+        "fields": {
+            "courseID": 308, 
+            "discipline": 1
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.courseDiscipline", 
+        "fields": {
+            "courseID": 310, 
+            "discipline": 1
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.courseDiscipline", 
+        "fields": {
+            "courseID": 311, 
+            "discipline": 1
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.courseDiscipline", 
+        "fields": {
+            "courseID": 312, 
+            "discipline": 1
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.courseDiscipline", 
+        "fields": {
+            "courseID": 319, 
+            "discipline": 1
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.courseDiscipline", 
+        "fields": {
+            "courseID": 331, 
+            "discipline": 1
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.courseDiscipline", 
+        "fields": {
+            "courseID": 332, 
+            "discipline": 1
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.courseDiscipline", 
+        "fields": {
+            "courseID": 339, 
+            "discipline": 1
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.courseDiscipline", 
+        "fields": {
+            "courseID": 347, 
+            "discipline": 1
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.courseDiscipline", 
+        "fields": {
+            "courseID": 350, 
+            "discipline": 1
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.courseDiscipline", 
+        "fields": {
+            "courseID": 407, 
+            "discipline": 2
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.courseDiscipline", 
+        "fields": {
+            "courseID": 414, 
+            "discipline": 2
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.courseDiscipline", 
+        "fields": {
+            "courseID": 424, 
+            "discipline": 2
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.courseDiscipline", 
+        "fields": {
+            "courseID": 428, 
+            "discipline": 2
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.courseDiscipline", 
+        "fields": {
+            "courseID": 437, 
+            "discipline": 2
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.courseDiscipline", 
+        "fields": {
+            "courseID": 438, 
+            "discipline": 2
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.courseDiscipline", 
+        "fields": {
+            "courseID": 446, 
+            "discipline": 2
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.courseDiscipline", 
+        "fields": {
+            "courseID": 450, 
+            "discipline": 2
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.courseDiscipline", 
+        "fields": {
+            "courseID": 458, 
+            "discipline": 2
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.courseDiscipline", 
+        "fields": {
+            "courseID": 459, 
+            "discipline": 2
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.courseDiscipline", 
+        "fields": {
+            "courseID": 464, 
+            "discipline": 2
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.courseDiscipline", 
+        "fields": {
+            "courseID": 471, 
+            "discipline": 2
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.courseDiscipline", 
+        "fields": {
+            "courseID": 491, 
+            "discipline": 2
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.courseDiscipline", 
+        "fields": {
+            "courseID": 512, 
+            "discipline": 5
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.courseDiscipline", 
+        "fields": {
+            "courseID": 514, 
+            "discipline": 5
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.courseDiscipline", 
+        "fields": {
+            "courseID": 532, 
+            "discipline": 5
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.courseDiscipline", 
+        "fields": {
+            "courseID": 539, 
+            "discipline": 5
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.courseDiscipline", 
+        "fields": {
+            "courseID": 540, 
+            "discipline": 5
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.courseDiscipline", 
+        "fields": {
+            "courseID": 547, 
+            "discipline": 5
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.courseDiscipline", 
+        "fields": {
+            "courseID": 553, 
+            "discipline": 5
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.courseDiscipline", 
+        "fields": {
+            "courseID": 558, 
+            "discipline": 5
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.courseDiscipline", 
+        "fields": {
+            "courseID": 561, 
+            "discipline": 5
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.courseDiscipline", 
+        "fields": {
+            "courseID": 562, 
+            "discipline": 5
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.courseDiscipline", 
+        "fields": {
+            "courseID": 579, 
+            "discipline": 5
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.courseDiscipline", 
+        "fields": {
+            "courseID": 596, 
+            "discipline": 5
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.courseDiscipline", 
+        "fields": {
+            "courseID": 621, 
+            "discipline": 2
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.courseDiscipline", 
+        "fields": {
+            "courseID": 622, 
+            "discipline": 2
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.courseDiscipline", 
+        "fields": {
+            "courseID": 623, 
+            "discipline": 2
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.courseDiscipline", 
+        "fields": {
+            "courseID": 624, 
+            "discipline": 2
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.courseDiscipline", 
+        "fields": {
+            "courseID": 625, 
+            "discipline": 2
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.courseDiscipline", 
+        "fields": {
+            "courseID": 626, 
+            "discipline": 2
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.courseDiscipline", 
+        "fields": {
+            "courseID": 627, 
+            "discipline": 2
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.courseDiscipline", 
+        "fields": {
+            "courseID": 629, 
+            "discipline": 2
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.courseDiscipline", 
+        "fields": {
+            "courseID": 630, 
+            "discipline": 2
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.courseDiscipline", 
+        "fields": {
+            "courseID": 630, 
+            "discipline": 5
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.courseDiscipline", 
+        "fields": {
+            "courseID": 701, 
+            "discipline": 10
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.courseDiscipline", 
+        "fields": {
+            "courseID": 704, 
+            "discipline": 10
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.courseDiscipline", 
+        "fields": {
+            "courseID": 705, 
+            "discipline": 10
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.courseDiscipline", 
+        "fields": {
+            "courseID": 706, 
+            "discipline": 10
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.courseDiscipline", 
+        "fields": {
+            "courseID": 707, 
+            "discipline": 10
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.courseDiscipline", 
+        "fields": {
+            "courseID": 708, 
+            "discipline": 10
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.courseDiscipline", 
+        "fields": {
+            "courseID": 709, 
+            "discipline": 10
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.courseDiscipline", 
+        "fields": {
+            "courseID": 710, 
+            "discipline": 10
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.courseDiscipline", 
+        "fields": {
+            "courseID": 711, 
+            "discipline": 10
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.courseDiscipline", 
+        "fields": {
+            "courseID": 712, 
+            "discipline": 10
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.courseDiscipline", 
+        "fields": {
+            "courseID": 714, 
+            "discipline": 10
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.courseDiscipline", 
+        "fields": {
+            "courseID": 715, 
+            "discipline": 10
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.courseDiscipline", 
+        "fields": {
+            "courseID": 716, 
+            "discipline": 10
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.courseDiscipline", 
+        "fields": {
+            "courseID": 717, 
+            "discipline": 10
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.courseDiscipline", 
+        "fields": {
+            "courseID": 718, 
+            "discipline": 10
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.courseDiscipline", 
+        "fields": {
+            "courseID": 722, 
+            "discipline": 10
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.courseDiscipline", 
+        "fields": {
+            "courseID": 723, 
+            "discipline": 10
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.courseDiscipline", 
+        "fields": {
+            "courseID": 724, 
+            "discipline": 10
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.courseDiscipline", 
+        "fields": {
+            "courseID": 725, 
+            "discipline": 9
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.courseDiscipline", 
+        "fields": {
+            "courseID": 727, 
+            "discipline": 9
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.courseDiscipline", 
+        "fields": {
+            "courseID": 730, 
+            "discipline": 8
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.courseDiscipline", 
+        "fields": {
+            "courseID": 731, 
+            "discipline": 8
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.courseDiscipline", 
+        "fields": {
+            "courseID": 732, 
+            "discipline": 8
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.courseDiscipline", 
+        "fields": {
+            "courseID": 733, 
+            "discipline": 8
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.courseDiscipline", 
+        "fields": {
+            "courseID": 734, 
+            "discipline": 8
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.courseDiscipline", 
+        "fields": {
+            "courseID": 736, 
+            "discipline": 9
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.courseDiscipline", 
+        "fields": {
+            "courseID": 740, 
+            "discipline": 10
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.courseDiscipline", 
+        "fields": {
+            "courseID": 742, 
+            "discipline": 8
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.courseDiscipline", 
+        "fields": {
+            "courseID": 744, 
+            "discipline": 8
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.courseDiscipline", 
+        "fields": {
+            "courseID": 748, 
+            "discipline": 8
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.courseDiscipline", 
+        "fields": {
+            "courseID": 752, 
+            "discipline": 10
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.courseDiscipline", 
+        "fields": {
+            "courseID": 753, 
+            "discipline": 10
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.courseDiscipline", 
+        "fields": {
+            "courseID": 754, 
+            "discipline": 10
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.courseDiscipline", 
+        "fields": {
+            "courseID": 755, 
+            "discipline": 10
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.courseDiscipline", 
+        "fields": {
+            "courseID": 758, 
+            "discipline": 10
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.courseDiscipline", 
+        "fields": {
+            "courseID": 761, 
+            "discipline": 9
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.courseDiscipline", 
+        "fields": {
+            "courseID": 773, 
+            "discipline": 10
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.courseDiscipline", 
+        "fields": {
+            "courseID": 776, 
+            "discipline": 9
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.courseDiscipline", 
+        "fields": {
+            "courseID": 777, 
+            "discipline": 9
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.courseDiscipline", 
+        "fields": {
+            "courseID": 788, 
+            "discipline": 8
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.courseDiscipline", 
+        "fields": {
+            "courseID": 791, 
+            "discipline": 10
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.courseDiscipline", 
+        "fields": {
+            "courseID": 797, 
+            "discipline": 10
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.courseDiscipline", 
+        "fields": {
+            "courseID": 807, 
+            "discipline": 11
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.courseDiscipline", 
+        "fields": {
+            "courseID": 850, 
+            "discipline": 2
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.courseDiscipline", 
+        "fields": {
+            "courseID": 861, 
+            "discipline": 11
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.courseDiscipline", 
+        "fields": {
+            "courseID": 862, 
+            "discipline": 11
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.courseDiscipline", 
+        "fields": {
+            "courseID": 883, 
+            "discipline": 5
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.courseDiscipline", 
+        "fields": {
+            "courseID": 892, 
+            "discipline": 3
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.courseDiscipline", 
+        "fields": {
+            "courseID": 892, 
+            "discipline": 5
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.courseDiscipline", 
+        "fields": {
+            "courseID": 893, 
+            "discipline": 5
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.courseDiscipline", 
+        "fields": {
+            "courseID": 894, 
+            "discipline": 3
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.courseDiscipline", 
+        "fields": {
+            "courseID": 894, 
+            "discipline": 5
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.courseDiscipline", 
+        "fields": {
+            "courseID": 895, 
+            "discipline": 5
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.courseDiscipline", 
+        "fields": {
+            "courseID": 897, 
+            "discipline": 5
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.courseDiscipline", 
+        "fields": {
+            "courseID": 897, 
+            "discipline": 10
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.courseDiscipline", 
+        "fields": {
+            "courseID": 902, 
+            "discipline": 7
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.courseDiscipline", 
+        "fields": {
+            "courseID": 924, 
+            "discipline": 7
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.courseDiscipline", 
+        "fields": {
+            "courseID": 926, 
+            "discipline": 7
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.courseDiscipline", 
+        "fields": {
+            "courseID": 938, 
+            "discipline": 7
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.courseDiscipline", 
+        "fields": {
+            "courseID": 940, 
+            "discipline": 7
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.courseDiscipline", 
+        "fields": {
+            "courseID": 944, 
+            "discipline": 7
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.courseDiscipline", 
+        "fields": {
+            "courseID": 947, 
+            "discipline": 7
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.courseDiscipline", 
+        "fields": {
+            "courseID": 948, 
+            "discipline": 7
+        }
+    }
+]

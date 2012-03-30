@@ -1,91 +1,190 @@
 {% extends "registrationApp/base.html" %}
-{% block headerscript %}
 {% load registrationApp_extras %}
+{% block headerscript %}
+
+<script type="text/javascript" src="/registrationApp/site_media/Scripts/drop.js"></script>	
 
 <script type="text/javascript">
-
-	function switchPeriod(section, studSched){
-		$( '#result' ).html( '&nbsp;' ).load( '{% url delete %}?studSched=' + studSched);
-		$( '#result' ).html( '&nbsp;' ).load( '{% url add%}?section=' + section).hide().fadeIn('slow');
+	function addP(section){
+		$( '#result' ).html( '&nbsp;' ).load("{% url add %}", {
+			section: section,
+			csrfmiddlewaretoken: '{{ csrf_token }}'
+       	}).hide().fadeIn('slow');
 	}
-	{% if student.submit %}
-  		$('#overlay').css({"display": "block", "opacity": 0.5}).hide().fadeIn('slow');    
-	{% endif %}
-</script>
+	function switchPeriod(section, studSched){
+		$.post("{% url delete %}", { 
+		    studSched: studSched,
+		   	csrfmiddlewaretoken: '{{ csrf_token }}'
+    	})
+    	.success(function() { addP(section); })
+	}
+	function switchRank(studSched, rank){
+		$( '#result' ).html( '&nbsp;' ).load( '{% url rankChange %}?studSched=' + studSched  +'&rank=' +rank);
+	}
 
+	$('.dropdown-toggle').dropdown();
+
+</script>
+	
 {% endblock %}
 
 {% block content %}
+{% csrf_token %} 
 
-<div class="span-8" {% if student.submit %} id="overlay" style="display:none"{% endif %}>
-<div class = "span-8" id = "enrolledDiv">
+<div  id = "enrolledDiv">
+{% if student.submit %} <div id="overlay" style="display:none" class="span4">{% endif %}
 
+<h3 style="text-align:center"> {{student.first_name}}'s Courses </h3>
 
-<h3 style="text-align:center">{{student.firstName}}'s Courses</h3>
+{%if msg and not fromOtherBool %}
+<div id = "msg" style="background:#f5f5f5;">
+	{% for m in msg%}
+		{% if forloop.counter != msg|length %}
+			{{m}} In addition, 
+		{% else %}
+			{{m}}	
+		{% endif %}
+	{% endfor %}
+{% for confirm, courseConfirm in confirmationBox %}
+	{% if confirm%}
+		Are you sure you want to add it?
 
-
-{%if msg != "" and not fromOtherBool %}
-
-	{{msg}}
-
-	{% if "You are already enrolled in a section " in msg %}
-		<br>
-		<input type = "submit" name = "{{section.id}}" id = "alreadyEnrolledYes" value = "Yes"/>
-		<input type = "submit" name = "{{section.id}}" id = "alreadyEnrolledNo" value = "No"/>
-	{% endif %} 
-
+		<br />
+		<input type = "submit" id = "{% if courseConfirm %}YesCourse{% else %}Yes{% endif %}" class = "button" value = "Yes"/>
+		<input type = "submit" id = "No" class = "button" value = "No"/>
+		<input type = "hidden" name = "{% if courseConfirm %}{{courseConfirm.courseNumber}}{% else %}{{section.id}}{% endif %}" id = "confirmType" />
+	{% endif %}
+{% endfor %}
+</div>
+	
 {% endif %} 
 
+<div>
+	<span id="addAlert"> </span>
+{% for studSched, prd, disciplines, sectionOptions, engHistRank, engRank, dayz in studentSchedules %}
+	<div class="{% for discipline in disciplines %} {{discipline.discipline.discipline|slugify}} {% endfor %} discipline roundBorder6" id = "{{studSched.id}}" style = "{% if studSched.sectionID.semesterOne != studSched.sectionID.semesterTwo %}width:49.5%;{% if studSched.sectionID.semesterTwo %}float:right;{% endif %}{% else %}width:99%;{% endif %};z-index:{{forloop.revcounter|multiply:100}};{% ifchanged prd %}clear:both{% else %}{% endifchanged %};">
 
-{% for studSched in studentSchedule %}
-	{% with forloop.counter|cut:" " as index %}
-		<div id="{{studSched.sectionID.courseID.discipline.discipline}}" class = "
-			{% if studSched.sectionID.semesterOne != studSched.sectionID.semesterTwo %}
-				span-4
-			{% else %}
-				span-8
-			{% endif %}"
-			style = "float: 
-			{% if studSched.sectionID.semesterOne != studSched.sectionID.semesterTwo %}
-				{% if studSched.sectionID.semesterTwo %}
-					right
+		<ul class="nav dd" style= "max-width:80%; margin:auto" >
+			
+			<li id="courseName" ><a rel ="tooltip" href = "#{{studSched.sectionID.courseID.courseName|slugify}}" id = "courseNameLink" title = "{{studSched.sectionID.courseID.courseName}}">{% if studSched.sectionID.semesterOne != studSched.sectionID.semesterTwo %}{{studSched.sectionID.courseID.courseName|truncatewords_by_chars:15}}{% else %}{{studSched.sectionID.courseID.courseName|truncatewords_by_chars:50}}{% endif %}</a></li>
+
+			<li class="{% if sectionOptions|length != 0 %}dropdown{% else %}dropdownFalse{% endif %}" >
+				<a rel = "tooltip" class="dropdown-toggle"  data-toggle="dropdown" title= "{{dayz|toDays}}" {% if sectionOptions|length != 0 %}href="#"{% endif %} > {{prd}} {% if sectionOptions|length != 0 %} <b class="caret"></b> {% endif %}</a> 			
+				{% if sectionOptions and not fromOtherBool and not student.submit %}
+					<ul class = "dropdown-menu">
+						{% for sectionOpt, period, days in sectionOptions %}
+						<li>
+						<a href = "#" rel="tooltip" title= "{{days|toDays}}" id="switch" onclick="switchPeriod({{sectionOpt.id}}, {{studSched.id}}); return false;">{{period}}</a>
+						</li>
+						{% endfor %}	
+					</ul>
 				{% endif %}
-			{% endif %};border:1px solid #CCC">
-			{{studSched.sectionID.courseID.courseName}} |
+			</li>
+		</ul>
 
-			<div class = "period" >
-			{% if not fromOtherBool and secOption|slice:index|last|length > 1 and not student.submit %}  
-				<a href="#">
- 			{% endif%} 
- 					 	{% if not "0" in studSched.sectionID.APeriodDays %}A{% endif %}{% if not "0" in studSched.sectionID.BPeriodDays %}B{% endif %}{% if not "0" in studSched.sectionID.CPeriodDays %}C{% endif %}{% if not "0" in studSched.sectionID.DPeriodDays %}D{% endif %}{% if not "0" in studSched.sectionID.EPeriodDays %}E{% endif %}{% if not "0" in studSched.sectionID.FPeriodDays %}F{% endif %}{% if not "0" in studSched.sectionID.GPeriodDays %}G{% endif %}{% if not "0" in studSched.sectionID.HPeriodDays %}H{% endif %}{% if not "0" in studSched.sectionID.IPeriodDays %}I{% endif %}{% if not "0" in studSched.sectionID.KPeriodDays %}K{% endif %}{% if not "0" in studSched.sectionID.ZPeriodDays %}Z{% endif %} 
-			{% if not fromOtherBool and secOption|slice:index|last|length > 1 and not student.submit%} 
- 				</a>
- 			{% endif%}
-				
-				{% if secOption|slice:index|last|length > 1 and not fromOtherBool and not student.submit %}
-					<span id ="{{studSched.id}}" class = "perOptions" style="top:-{{ secOption|slice:index|last|length|add:"-2"|multiply:"20"|add:"40" }}px">
-
-						{% for sec in secOption|slice:index|last%}
-							{% if studSched.sectionID != sec %}
-								<a href = "#" id="switch" onclick="switchPeriod({{sec.id}}, {{studSched.id}});return false;">
-							 	{% if not "0" in sec.APeriodDays %}A{% endif %}{% if not "0" in sec.BPeriodDays %}B{% endif %}{% if not "0" in sec.CPeriodDays %}C{% endif %}{% if not "0" in sec.DPeriodDays %}D{% endif %}{% if not "0" in sec.EPeriodDays %}E{% endif %}{% if not "0" in sec.FPeriodDays %}F{% endif %}{% if not "0" in sec.GPeriodDays %}G{% endif %}{% if not "0" in sec.HPeriodDays %}H{% endif %}{% if not "0" in sec.IPeriodDays %}I{% endif %}{% if not "0" in sec.KPeriodDays %}K{% endif %}{% if not "0" in sec.ZPeriodDays %}Z{% endif %}</a>
-							{% endif %}
+		
+			{% if studSched.sectionID.courseID.rankType and not fromOtherBool and not student.submit %}
+				<div class = "engHistRank" style="display:inline; float:left; padding-left:4px;"> <a href="#">{{studSched.rank}}</a>
+					<span id ="{{studSched.id}}" class = "rankOptions" style="top:-20px; ">
+						{% for c, rank in engHistRank %}
+						{% if studSched.sectionID.courseID != c %}
+							<a href = "#" id="switch" onclick="switchRank({{studSched.id}}, {{rank}});return false;">{{rank}}</a>
+						{% endif %}
 						{% endfor %}
-					 </span>
-				{% endif %}
-			</div>	
-			{% if not fromOtherBool and not student.submit %}
-				<input type="image" name= "{{studSched.id}}" id = "delete" src="{{STATIC_URL}}delete_icon.png" style="float:right; top:3px;display:inline"/>
+
+					</span>
+				</div>
+
 			{% endif %}
+
+			{% if not fromOtherBool and not student.submit %}
+				<input type="image" name= "{{studSched.id}}" id = "delete" class="roundButton deleteCloseButton" src="/registrationApp/site_media/Images/delete.png" />
+			{% endif %}
+
 		</div>
-	{% endwith %}
-{% endfor %}
-	
+	{% endfor %}
 </div>
+{% if reqMessage %}
+{% for req, reqMsg in reqMessage %}
+<div id = "{{req.courseID}}{{req.discipline|slugify}}" style= "clear:both;" class = "required roundBorder6"><i>{{reqMsg}}</i>
+	<input type="image" {%if req.courseID %} name="{{req.courseID.courseNumber}}" id="addRequiredCourse"{% else %} name= "{{req.discipline|slugify}}" id="addRequiredDiscipline"{% endif %} class="roundButton deleteCloseButton" src="/registrationApp/site_media/Images/add.png" style="float: right;"/>
+</div>
+{% endfor %}
+{% endif %}
+</div>
+
 </div>
 
 {% if not fromOtherBool and not student.submit %}
-	<input type = "submit" id = "submitAll" class = "button"/>
+<div style="width:99%; clear:both;">
+	<input type = "submit" id = "submitAll" class = "button" value ="submit" style="margin:auto"/>
+</div>
 {% endif %}
 
+
+
+    <div id ="confirmation" class = "confirmationDiv">
+       	<input type="image" id = "close" src="/registrationApp/site_media/Images/delete.png" class= "roundButton deleteCloseButton"/>         
+        <div id = "submitConfirmationHeader" class="confirmationHeader" >
+            <h1 style="display:inline; position:relative;">Submit Confirmation</h1>
+        </div>
+        <div class="confirmationBody">
+        <p>You cannot unsubmit once you are done, so please double check your schedule. As soon as you press submit, your schedule will be submitted for House Advisor and then Parent approval. Are you sure you want to submit?</p> 
+        <p> You still have the following warnings:<br/>
+        {% if reqMessage%}
+            {% for req, reqMsg in reqMessage %}
+                {{reqMsg}}<br/>
+            {% endfor %}
+            </p>
+        {% endif %}
+        </div>
+        <div id = "submitConfirmation"class = "submitConfirmationButtons">
+            <input type = "submit" value = "No" class = "button" id="schedSubmitNo"/>
+            <input type = "submit" value = "Yes" class = "button" id ="schedSubmitYes" />
+        </div>
+    </div>
+
+
 {%endblock%}
+{% block script %}
+<script>
+$( document ).ready( function() {
+	$('.dropdown-toggle').dropdown();
+	
+	{% if msg %}
+		$('#msg').delay(500).effect("highlight", {color:"#fffee0"}, 5000);
+	{% endif %}
+
+	$('.engHistRank').click(function() {
+		$(this).children('.rankOptions').toggle();	
+	});
+
+	$(document).on("click", "#Yes", function(){
+		sec = $("#confirmType").attr("name");
+		$( '#result' ).html( '&nbsp;' ).load("{% url add %}", {
+			section : sec,
+			confirm : 1,
+			csrfmiddlewaretoken: '{{ csrf_token }}'
+       	}).hide().fadeIn('slow');
+	});
+
+	$(document).on("click", "#YesCourse", function(){
+		course = $("#confirmType").attr("name");
+		$( '#result' ).html( '&nbsp;' ).load("{% url add %}", {
+			course : course,
+			confirm : 1,
+			csrfmiddlewaretoken: '{{ csrf_token }}'
+       	}).hide().fadeIn('slow');
+	});
+
+	$(document).on("click", "#No", function(){
+		$( '#result' ).html( '&nbsp;' ).load("{% url add %}", {csrfmiddlewaretoken: '{{ csrf_token }}'}).hide().fadeIn('slow');
+	});
+
+	{% if student.submit %}
+  		$('#overlay').css({"display": "block", "opacity": 0.5}).hide().fadeIn('slow');    
+	{% endif %}
+
+});
+</script>
+{% endblock %}

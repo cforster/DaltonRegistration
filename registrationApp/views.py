@@ -3,27 +3,49 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.core.urlresolvers import reverse
 from django.template import RequestContext
 from django.db.models import Q
-from registrationApp.models import Student, Course, Section, Discipline, StudentSchedule,PreApproval, DepartmentChair, House, ParentStudent
-from django.contrib.auth import authenticate, login
+from registrationApp.models import *
+from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
-from django.contrib.auth.decorators import login_required
-from django.contrib.auth import logout
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.core.mail import send_mail
+from operator import itemgetter
 import re, datetime, random, sha
 
-def index(request):
-	studentInformation= Student.objects.all()[:5]
-	output = ', '.join([p.firstName for p in studentInformation])
-	return HttpResponse(output)
+def group_required(*group_names):
+    """Requires user membership in at least one of the groups passed in."""
+    def in_groups(u):
+        if u.is_authenticated():
+            if bool(u.groups.filter(name__in=group_names)) | u.is_superuser:
+                return True
+        return False
+    return user_passes_test(in_groups)
 
-@login_required(login_url='/registrationApp/login/')
-def search(request):
-	s = get_object_or_404(Student, user=request.user.id)
-	return render_to_response('registrationApp/search.html', {'student': s},
+def requiredCheck(student):
+	studentSchedule = StudentSchedule.objects.filter(studentID = student)
+	required = RequiredObjects.objects.filter(grade = student.graduationYear-2000)
+	requiredBoolList = []
+	for req in required:
+		reqPass = False
+		for studSched in studentSchedule:
+			if studSched.sectionID.courseID == req.courseID:
+				reqPass = True
+			else:
+				disc = CourseDiscipline.objects.filter(courseID = studSched.sectionID.courseID.courseNumber)
+				for discipline in disc:
+					if req.discipline == discipline.discipline:
+						reqPass = True
+		requiredBoolList.append((req, reqPass))
+	return requiredBoolList
+
+@login_required
+@group_required('student')
+def index(request):
+	student = get_object_or_404(Student, pk= request.user.id)
+	return render_to_response('registrationApp/search.html', {'student': student},
 							    context_instance=RequestContext(request))
 
 def split_into_keywords(query_string,
-                    findterms=re.compile(r'"([^"]+)"|(\S+)').findall,
+                   	findterms=re.compile(r'"([^"]+)"|(\S+)').findall,
                     normspace=re.compile(r'\section{2,}').sub): 
     return [normspace(' ', (t[0] or t[1]).strip()) for t in findterms(query_string)] 
 
@@ -44,52 +66,224 @@ def get_query(query_string, search_fields):
             query = query & or_query
     return query
 
-@login_required(login_url='/registrationApp/login/')
-def searchResults(request):
-	t = get_object_or_404(Student, user=request.user.id)
-	if request.is_ajax():
-		searchTerms = request.GET.get('q')
-		searchTerms = searchTerms.replace("_", " ")
-		allSec = []
-		courseOptions = []
-		found = get_query((searchTerms), ['courseName', 'courseDescription', 'discipline__discipline'])
-        if found is not None:
-        	courseOptions = Course.objects.filter(found)
-        	for course in courseOptions:
-	        	courseSelected = Course.objects.get(pk = course.id)
-	        	sectionOptions = Section.objects.filter(courseID = courseSelected)
-	        	sections = []
-	        	for s in sectionOptions:
-		        	sections.append(s)
-		        allSec.append(sections)
-		return render_to_response('registrationApp/searchResults.html', {'student': t, 'courseOptions' : courseOptions,'allSec' : allSec},
-						context_instance=RequestContext(request))
+def daysToPeriod(section):
+	periods = ""
+	pAndD = []
+	days = []
+	sectionPeriods = section.__dict__
+	for period, day in sorted(sectionPeriods.iteritems()):
+		if "PeriodDays" in period and day:
+			days.append(day)
+			pAndD.append((period[0],day))
 
-def daysToPeriod(s):
-	output = []
-	if not "0" in s.APeriodDays:
-		output.append("A")
-	if not "0" in s.BPeriodDays:
-		output.append("B")
-	if not "0" in s.CPeriodDays:
-		output.append("C")
-	if not "0" in s.DPeriodDays:
-		output.append("D")
-	if not "0" in s.EPeriodDays:
-		output.append("E")
-	if not "0" in s.FPeriodDays:
-		output.append("F")
-	if not "0" in s.GPeriodDays:
-		output.append("G")
-	if not "0" in s.HPeriodDays:
-		output.append("H")
-	if not "0" in s.IPeriodDays:
-		output.append("I")
-	if not "0" in s.KPeriodDays:
-		output.append("K")
-	if not "0" in s.ZPeriodDays:
-		output.append("Z")		
-	return output
+	pAndD.sort(key=itemgetter(1), reverse= True)
+	for p, d in pAndD:
+		periods += p
+	return periods, days
+
+def numbersToDay(numbers):
+	output = ""
+	for num in sorted(numbers):
+		lists = [x.strip() for x in num.split(',')]
+		for day in lists:
+			if int(day) == 1:
+				output += "Monday, "
+			if int(day) == 2:
+				output += "Tuesday, "
+			if int(day) == 3:
+				output += "Wednesday, "
+			if int(day) == 4:
+				output += "Thursday, "
+			if int(day) == 5:
+				output += "Friday One, "
+			if int(day) == 6:
+				output += "Friday Two, "
+			if int(day) == 7:
+				output += "Friday Three, "
+			if int(day) == 8:
+				output += "Friday Four, "
+	return output[:-1] #["-2"]
+
+
+def checkPeriodMatch(section, existingSection):
+	canAdd = True
+	conflicts = []
+	sectionPeriods = section.__dict__
+	existingSectionPeriods = existingSection.__dict__
+	for t, existingT in zip(sorted(sectionPeriods.iteritems()), sorted(existingSectionPeriods.iteritems())):
+		period = t[0]
+		existingPeriod = existingT[0]
+		if "PeriodDays" in period and "PeriodDays" in existingPeriod:
+			if t[1] and existingT[1]:
+				listA = [x.strip() for x in t[1].split(',')]
+				listB = [x.strip() for x in existingT[1].split(',')]
+				match = list(set(listA) & set(listB))
+				if match:
+					canAdd = False
+					conflicts.append((period[0], match))
+	return  canAdd, conflicts
+
+
+def checkPeriodAvailable(studentSchedule, course = None, section = None):
+	if section is not None:
+		sectionOptions = Section.objects.filter(pk = section.id)
+	elif course is not None:
+		sectionOptions = Section.objects.filter(courseID = course)
+	conflict = []
+	sectionToAdd = None
+	conflictListAll = []
+	sectionAddable = False
+	for section in sectionOptions:
+		canAddList = []
+		for existingSection in studentSchedule:
+			canAdd, conflict = checkPeriodMatch(section, existingSection.sectionID)
+			canAddList.append((canAdd, conflict, section, existingSection.sectionID))
+		if all([(canAddList[i][0]) for i in range(len(canAddList))]):
+			sectionToAdd = section
+			sectionAddable = True
+		else:
+			conflictList = []
+			for canAdd, conflict, section, existingSection in canAddList:
+				for x, y in conflict:
+					conflictList.append((section, existingSection, x, y))
+ 			conflictListAll.append((conflictList, sum([len(u) for e, r, t, u in conflictList])))
+	conflictListAll.sort(key=itemgetter(1))
+	if conflictListAll and not sectionAddable:
+		conflict = conflictListAll[0][0]
+	return sectionToAdd, conflict
+
+def sectionConflictPeriodCheck (student, course= None, section=None):
+	msg = ""
+	add =  False
+	sec = ""
+	studentSchedule = StudentSchedule.objects.filter(studentID = student)
+	
+	if section is not None:
+		sectionToAdd, conflict = checkPeriodAvailable(studentSchedule, section=section)
+		courseName = section.courseID.courseName
+	elif course is not None:
+		sectionToAdd, conflict = checkPeriodAvailable(studentSchedule, course = course)
+		courseName = course.courseName
+
+
+	if sectionToAdd is not None:
+		add = True	
+	else:
+		for count, (sec, existingSection, periodConflict, dayConflict) in enumerate(conflict):
+			period, days = daysToPeriod(existingSection)
+			secPeriod, secDays = daysToPeriod(sec)
+			daysConflict = numbersToDay(dayConflict)
+			if len(conflict) == (count + 1) :
+				msg += courseName +  " " + secPeriod + " Period conflicts with " + existingSection.courseID.courseName+ " " + period + " Period on " + daysConflict +  " during " + periodConflict +"."
+			else:
+				msg += courseName +  " " + secPeriod + " Period conflicts with " + existingSection.courseID.courseName+ " " + period + " Period on " + daysConflict +  " during " + periodConflict + " and, additionally, "
+
+	return add, sectionToAdd, msg, sec
+
+def gradeCheck(student, course):
+	gradesOffered = str(course.gradesOffered)
+	lis = [x.strip() for x in gradesOffered.split(',')]
+	for l in lis:
+		if student.graduationYear-2000 == int(l):
+			availForGrade = True
+		else:
+			availForGrade = False	
+	return availForGrade
+
+def preApprovalCheck(student, course):
+	preApprovals = PreApproval.objects.filter(studentID = student.id)
+	preApproved = False
+	for preApp in preApprovals:
+		if preApp.courseID == course:
+			preApproved = True
+	return preApproved
+
+def alreadyEnrolledCourse(student, course):
+	alreadyEnrolledCourse = False
+	sectionEnrolled = []
+	studentSections = StudentSchedule.objects.filter(studentID = student.id)
+	for studSched in studentSections:
+		if studSched.sectionID.courseID == course:
+			alreadyEnrolledCourse = True
+			sectionEnrolled.append(studSched.sectionID)
+	return alreadyEnrolledCourse, sectionEnrolled
+
+
+
+@login_required
+@group_required('student')
+def searchResults(request):
+#, 'discipline__discipline'
+	t = get_object_or_404(Student, id=request.user.id)
+	if request.is_ajax():
+		searchTerms = request.POST.get('q')
+		fromBox = request.POST.get('fromBox')
+		courseOptions = []
+		rank = []
+		courseList = []                                        
+		preApproved = True
+
+        
+		found = get_query((searchTerms), ['courseName', 'courseDescription', 'coursediscipline__discipline__discipline'])
+
+        if found is not None:
+        	if fromBox == "False":
+        		courseOptions = Course.objects.filter(courseName__iregex=r'^%s.*'%searchTerms)
+        	else:
+        		courseOptions = Course.objects.filter(found).distinct()
+
+        	for course in courseOptions:
+				discipline = CourseDiscipline.objects.filter(courseID = course)
+				rankScore = 0
+				if str(course.courseName).lower() in searchTerms.lower():
+					rankScore +=100
+				for disc in discipline:
+					if str(disc).lower() in searchTerms.lower():
+						rankScore += 100
+				availForGrade = gradeCheck(t, course)
+				if availForGrade:
+					rankScore += 10
+				else:
+					rankScore -= 30
+
+				if course.preapprovalRequired:
+					preApproved = preApprovalCheck(t, course)
+					if preApproved:
+						rankScore += 10
+					else:
+						rankScore -= 30
+				alreadyEnrolledinCourse, sectionEnrolled = alreadyEnrolledCourse(t, course)
+				if alreadyEnrolledinCourse:
+					rankScore -= 20 
+
+				requiredBoolList = requiredCheck(t)
+				for req, reqPass in requiredBoolList:
+					if not reqPass:
+						if course == req.courseID:
+							rankScore += 20
+						else:
+							for disc in discipline:
+								if disc.discipline == req.discipline:
+									rankScore += 20
+
+				sectionOptions = Section.objects.filter(courseID = course.courseNumber)
+				sections = []
+				for section in sectionOptions:
+					period, day = daysToPeriod(section)
+					sections.append((section, period))
+
+				courseList.append((course, rankScore, sections, availForGrade, preApproved, discipline))
+
+				courseList.sort(key=itemgetter(1), reverse = True)
+		if fromBox == "False":
+			if courseList:
+				return HttpResponse(courseList[0][0].courseName)
+		else:
+			return render_to_response('registrationApp/searchResults.html', {'student': t, 'courseList' : courseList, 'searchTerms': searchTerms},
+										context_instance=RequestContext(request))			
+	else:
+		return HttpResponse(" ")
+
 
 def periodSwitch (studentSchedule):
 	secOption = []
@@ -102,141 +296,269 @@ def periodSwitch (studentSchedule):
 		secOption.append(output)
 	return (secOption)
 
-def ApprovalMethod(courseID, student):
-	preApproved = False
-	preApprovals = PreApproval.objects.filter(studentID = student)
-	for preApp in preApprovals:
-		if preApp.courseID == courseID:
-			preApproved = True
-		if preApproved == False: 
-			msg = "You are not preapproved for " + courseID.courseName
-	return(preApproved)
+def alreadyEnrolledSection(student, section):
+	alreadyEnrolled = False
+	studentSections = StudentSchedule.objects.filter(studentID = student)
+	for studSched in studentSections:
+		if studSched.sectionID == section:
+			alreadyEnrolled = True
+	return alreadyEnrolled
+	
 #remove avail for grade
 #searchrank 
 #parent/login
 #unsubmit/reject 
-#
 
-@login_required(login_url='/registrationApp/login/')
+# if submitted, reload same schedule: you can't submit
+# otherwise get section, rank, discipline
+# check if section is preapproved; if not, "you cannot add"
+# check if section is already enrolled; if so, you cannot add
+# check if course is already enrolled; if so redirect to yes/no
+# check if grade available; if so redirect to yes no
+# add course
+# check for required courses, append to required list if not added by end
+
+def studentScheduleAddView(studentSchedule):
+	engHistRank = []
+	engRank = []
+	studSched = []
+	same = False
+	for sectionList in studentSchedule:
+		discipline = CourseDiscipline.objects.filter(courseID = sectionList.sectionID.courseID.courseNumber)
+		prd, dayz = daysToPeriod(sectionList.sectionID)
+		if sectionList.sectionID.courseID.rankType == "EngHist":
+			engHistRank.append((sectionList.sectionID.courseID, sectionList.rank))
+		elif sectionList.sectionID.courseID.rankType == "English":
+			engRank.append((sectionList.sectionID.courseID, sectionList.rank))
+
+		sectionOptions = Section.objects.filter(
+			courseID = sectionList.sectionID.courseID
+			).exclude(pk = sectionList.sectionID.id
+		)
+		
+		sectionsOptions = []
+		for section in sectionOptions:	
+			append = True
+			for s in studentSchedule:
+				if section == s.sectionID:
+					append = False
+			if append == True:
+				period, days = daysToPeriod(section)
+				sectionsOptions.append((section, period, days))
+		studSched.append((sectionList, prd, discipline, sectionsOptions, engHistRank, engRank, dayz))
+		studSched.sort(key=itemgetter(1))
+
+	return studSched
+
+def addSection(student, section, rank):
+	studSchedule, created= StudentSchedule.objects.get_or_create(
+						studentID = student, sectionID=section, rank=rank)
+	if created:
+		period, days = daysToPeriod(studSchedule.sectionID)
+		msg = studSchedule.sectionID.courseID.courseName +" " + period + " Period Added "
+	else: 
+		msg = "Could not add "
+	return msg
+
+@login_required
+@group_required('student')
 def add(request):
 	student = request.GET.get('student')
 	if student is not None:
-		u = get_object_or_404(Student, user = student)
+		u = get_object_or_404(Student, id = student)
 	else:
-		u = get_object_or_404(Student, user=request.user.id)
-	msg = ""
+		u = get_object_or_404(Student, id=request.user.id)
 	section = ""
+	confirmationBox = []
+	rank = 0
+	msg = []
 	if u.submit:
 		msg = "You've already submitted!"
 	if request.is_ajax():
-		sec = request.GET.get('section')
+		sec = request.POST.get('section')
+		confirm = request.POST.get('confirm')
+		if confirm:
+			confirm = int(confirm)
+		else:
+			confirm = 0
+		if sec is None:
+			course = request.POST.get('course')
+			if course is not None:
+				courseObj = Course.objects.get(pk = course)
+				add, sectionAdd, message, sect = sectionConflictPeriodCheck(u, course = courseObj)
+
+				if add:
+					msg.append(addSection(u, sectionAdd, 1))
+
+				elif not add and confirm ==1:
+					msg.append(addSection(u, sect, 1))
+
+				elif not add:
+					confirmationBox = [[True, courseObj]]
+					msg.append(message)
+
 		if sec:
 			section = Section.objects.get(pk=sec)
+			continues = True
+
 			if section is not None:
-				continues = True
-				availForGrade = False
-				alreadyEnrolled = False
-				sectionGradesOffered = str(section.courseID.grades_Offered)
-				lis = [x.strip() for x in sectionGradesOffered .split(',')]
-				for l in lis:
-					if u.grade == int(l):
-						availForGrade = True
-				if availForGrade == True:
-					if section.courseID.preapprovalRequired == True:
-						preApproved =ApprovalMethod(section.courseID, u.id)
-						if preApproved == False: 
-							msg = "You are not preapproved for " + section.courseID.courseName
-							continues = False
-						elif preApproved == True:
-							continues = True
-					if continues == True:
-						studentSchedule = StudentSchedule.objects.filter(studentID = u)
-						output = []
-						for studSched in studentSchedule:
-							if studSched.sectionID == Section.objects.get(pk=sec):
-								continues = False
-						if continues != False:
-							for studSched in studentSchedule:
-								if studSched.sectionID.courseID == Section.objects.get(pk=sec).courseID:
-									alreadyEnrolled = True
-									msg = "You are already enrolled in a section " + str(section) + " of " + Section.objects.get(pk=sec).courseID.courseName + " Are you sure you want to add it? "
-						if alreadyEnrolled != True:
-							#cycle through periods to see if there is any conflict
-							section, created= StudentSchedule.objects.get_or_create(
-							studentID = u, sectionID=section,rank=1)
-							if created == False:
-								msg = "Could not add " + Section.objects.get(pk=sec).courseID.courseName +  " " + str(section) + "; you are already enrolled"
-							else: 
-								msg = Section.objects.get(pk=sec).courseID.courseName+ " Added "
-				else:
-					msg = section.courseID.courseName + " is not offered for " + str(u.grade) + " grade"		
+
+				alreadyEnrolled = alreadyEnrolledSection(u, section)
+				if alreadyEnrolled:
+					period, days = daysToPeriod(section)
+					msg.append("You are already enrolled in section " + period + " of " + section.courseID.courseName +".")
+					continues = False
+
+				elif section.courseID.preapprovalRequired:
+					preApproved = preApprovalCheck(u, section.courseID)
+					if not preApproved:
+						msg.append("You are not preapproved for " + str(section.courseID.courseName) +".")
+						continues = False
+
+				if continues:
+					
+					availForGrade = gradeCheck(u, section.courseID)
+				
+					if availForGrade or (not availForGrade and confirm == 1):
+						continues = True
+
+					elif not availForGrade and confirm ==0:
+						msg.append(section.courseID.courseName +" is not available for your grade. ")
+						confirmationBox = [[True, ""]]
+						continues = False
+					
+					alreadyEnrolledC, sectionEnrolled = alreadyEnrolledCourse(u, section.courseID)
+
+					periods = ""
+					for sections in sectionEnrolled:
+						period, days= daysToPeriod(sections)
+						periods += period
+						
+					if continues and (not alreadyEnrolledC or (alreadyEnrolledC and confirm == 1)):
+						continues = True
+
+					elif alreadyEnrolledC and confirm == 0:
+						
+						msg.append("You are already enrolled in section " + periods + " of " + Section.objects.get(pk=sec).courseID.courseName+"." )
+						confirmationBox = [[True, ""]]
+						continues = False
+					
+					
+					add, sectionAdd, mess, sect = sectionConflictPeriodCheck(u, section = section)
+
+					if add and continues:
+						msg.append(addSection(u, sectionAdd, 1))
+
+					elif continues and not add and confirm ==1: 	
+						msg.append(addSection(u, section, 1))
+
+					elif not add:
+						confirmationBox = [[True, ""]]
+						msg.append(mess)
+	
 	fromOtherBool = False		
 	fromOther = request.GET.get('fromOther')
 	if fromOther is not None:
 		if int(fromOther) == 1:
 			fromOtherBool = True
+
 	studentSchedule = StudentSchedule.objects.filter(studentID = u)
-	secOption = periodSwitch(studentSchedule)
-	return render_to_response('registrationApp/add.html', {'student': u, 'studentSchedule': studentSchedule, 'section': section, 'msg' : msg, 'secOption' : secOption, 'fromOtherBool' : fromOtherBool},
-								context_instance=RequestContext(request))			
 
-						
-@login_required(login_url='/registrationApp/login/')
-def addEnrolledSection(request):
-	stud = get_object_or_404(Student, user=request.user.id)
-	msg = ""
-	if request.is_ajax():
-		sec = request.GET.get('section')
-		if sec:
-			section = Section.objects.get(pk=sec)
-			section, created= StudentSchedule.objects.get_or_create(
-			studentID = stud, sectionID=section,rank=1)
-			if created == False:
-				msg = "Could not add " + Section.objects.get(pk=sec).courseID.courseName +  " " + str(section) + "; you are already enrolled"
-			else: 
-				msg = Section.objects.get(pk=sec).courseID.courseName+ " Added. Please ensure you are intentionally in two sections "
-	studentSchedule = StudentSchedule.objects.filter(studentID = stud)
-	secOption = periodSwitch(studentSchedule)
-	fromOtherBool = False				
-	return render_to_response('registrationApp/add.html', {'student': stud, 'studentSchedule': studentSchedule, 'section': section, 'msg' : msg, 'secOption' : secOption, 'fromOtherBool' : fromOtherBool},
-								    context_instance=RequestContext(request))	
+	requiredBoolList = requiredCheck(u)
+	reqMessage = []
+	for req, reqPass in requiredBoolList:
+		if not reqPass:
+			reqMessage.append((req, req.message))
 
-@login_required(login_url='/registrationApp/login/')							 
+
+	studentSchedules = studentScheduleAddView(studentSchedule)
+	return render_to_response('registrationApp/add.html', {'student': u, 'studentSchedules': studentSchedules, 'section': section, 'msg' : msg, 'fromOtherBool' : fromOtherBool, 'reqMessage' : reqMessage, 'confirmationBox': confirmationBox},
+								context_instance=RequestContext(request))		
+
+	'''
+							studentSchedule = StudentSchedule.objects.filter(studentID = u)
+							if section.courseID.rankType:
+								engHistCount = 1
+								engCount = 1
+								for sectionList in studentSchedule:
+									if str(sectionList.sectionID.courseID.rankType) == "EngHist":
+										engHistCount = engHistCount + 1
+									elif str(sectionList.sectionID.courseID.rankType) == "English":
+										engCount = engCount + 1
+								if engHistCount > 1:
+									rank = engHistCount
+								elif engCount > 1:
+									rank = engCount
+								else:
+									rank = 1
+							else: rank = 1 	
+							'''
+
+@login_required
+@group_required('student')						 
 def delete(request):
-	z = get_object_or_404(Student, user=request.user.id)
+	rank = 0 
+	msg= []
+	z = get_object_or_404(Student, id=request.user.id)
 	if request.is_ajax():
-		studSched = request.GET.get('studSched')
+		studSched = request.POST.get('studSched')
 		studSchedObj = StudentSchedule.objects.get(pk = studSched)
 
 		if studSchedObj is not None:
+			if studSchedObj.sectionID.courseID.rankType:
+				rank = studSchedObj.rank
 			studSchedObj.delete()
-			msg = studSchedObj.sectionID.courseID.courseName + " Deleted"
+			msg.append(studSchedObj.sectionID.courseID.courseName + " Deleted")
 			studentSchedule = StudentSchedule.objects.filter(studentID = z)
 			secOption = periodSwitch(studentSchedule)
 			fromOtherBool = False
-			return render_to_response('registrationApp/add.html', {'student': z, 'studentSchedule': studentSchedule, 'msg': msg,'secOption' : secOption,'fromOtherBool' : fromOtherBool},
+			requiredBoolList = requiredCheck(z)
+			reqMessage = []
+			for req, reqPass in requiredBoolList:
+				if not reqPass:
+					reqMessage.append((req, req.message))
+			studentSchedules = studentScheduleAddView(studentSchedule)
+
+			return render_to_response('registrationApp/add.html', {'student': z, 'studentSchedules': studentSchedules, 'msg': msg, 'fromOtherBool' : fromOtherBool,'reqMessage' : reqMessage},
 							   			context_instance=RequestContext(request))	
 		else: 
-			return HttpResponse("Could not delete; obj does not exist")
+			return HttpResponse("Could not delete; section does not exist")
 
-@login_required(login_url='/registrationApp/login/')
-def notifRead(request):
-	stud = get_object_or_404(Student, user=request.user.id)
+@login_required
+@group_required('student')
+def notifications(request):
+	student = get_object_or_404(Student, id=request.user.id)
 	if request.is_ajax():
-		note = request.GET.get('note')
-		if note == "advisor1Note":
-			stud.advisor1NoteRead = 1
-			stud.save()
-		if note == "advisor2Note":
-			stud.advisor2NoteRead = 1
-			stud.save()
-		if note == "parentNote":
-			stud.parentNoteRead = 1
-			stud.save()	
+		full = False
+	else:
+		full = True
+	return render_to_response('registrationApp/notifications.html',{'student': student, 'full': full},
+								context_instance=RequestContext(request))
+
+
+@login_required
+@group_required('student')
+def notifRead(request):
+	stud = get_object_or_404(Student, id=request.user.id)
+	if request.is_ajax():
+		notes = request.POST.get('note')
+		notes = notes.split(",")
+		for note in notes:
+			if note == "advisor1Note":
+				stud.advisor1NoteRead = 1
+				stud.save()
+			if note == "advisor2Note":
+				stud.advisor2NoteRead = 1
+				stud.save()
+			if note == "parentNote":
+				stud.parentNoteRead = 1
+				stud.save()	
 	return HttpResponse("Notifications Marked as Read")
-@login_required(login_url='/registrationApp/login/')
-def one(request):
-	a = get_object_or_404(Student, user=request.user.id)
+
+@login_required
+@group_required('student')
+def catalog(request):
+	a = get_object_or_404(Student, id=request.user.id)
 	courses = Course.objects.all()
 	name = []
 	desc = []
@@ -246,22 +568,115 @@ def one(request):
 		desc.append(c.courseDescription)
 	return render_to_response('registrationApp/courseCatalog.html', {'student': a, 'courses' :courses})
 
-@login_required(login_url='/registrationApp/login/')
-def schedule(request):
-	student = get_object_or_404(Student, user=request.user.id)
-	studSched = StudentSchedule.objects.filter(studentID = student.id)
-	courseName = []
-	sectionID = []
-	for section in studSched:
-		courseName.append(section.sectionID.courseID)
-		sectionID.append(section.sectionID)
+@login_required
+@group_required('student')
+def one (request):
+	sections = []
+	student = get_object_or_404(Student, id= request.user.id)
+	studentSchedule = StudentSchedule.objects.filter(studentID = student)
+
+	requiredBoolList = requiredCheck(student)
+	requiredList = []
+	for req, reqPass in requiredBoolList:
+		requiredList.append((req, reqPass, req.message))
+	sections = studentScheduleAddView(studentSchedule)
+	return render_to_response('registrationApp/one.html', {'student': student, 'sections'  : sections, 'requiredList': requiredList},
+								context_instance=RequestContext(request))
+@login_required
+@group_required('student')
+def rankChange(request):
+	student = get_object_or_404(Student, id=request.user.id)
+	if request.is_ajax():
+		json_data = simplejson.loads(request.raw_post_data)
+    	try:
+      		data = json_data['data']
+      		return HttpResponse(data)
+
+    	except KeyError:
+      		HttpResponseServerError("bad data")
+
+		'''
+		rankOrder= request.POST.get('rankOrder')
+		ranks = rankOrder.split("&")
+		for rank in ranks:
+			return HttpResponse(ranks)
+		return HttpResponse (ranks)
+		'''
+	'''
+	msg = ""
+	section = ""
+	confirmationBox = False
+	rank = 0
+		studSched = request.GET.get('studSched')
+		studSchedObj = StudentSchedule.objects.get(pk = studSched)
+		oldRank = studSchedObj.rank
+
+		newRank = request.GET.get('rank')
+		oldRankObjects = StudentSchedule.objects.filter(rank = newRank)
+		for oldRankObject in oldRankObjects:
+			if oldRankObject.sectionID.courseID.rankType:
+				oldRankObject.rank = oldRank
+				oldRankObject.save()
+		studSchedObj.rank = newRank
+		studSchedObj.save()
+		msg = studSchedObj.sectionID.courseID.courseName + "changed to rank " + studSchedObj.rank
+	fromOtherBool = False		
+	
+	studentSchedule = StudentSchedule.objects.filter(studentID = student)
+
+	requiredBoolList = requiredCheck(student)
+	reqMessage = []
+	for req, reqPass in requiredBoolList:
+		if not reqPass:
+			reqMessage.append((req, req.message))
+
+
+	studSched = studentScheduleAddView(studentSchedule)
+	return render_to_response('registrationApp/add.html', {'student': student, 'studSched': studSched, 'section': section, 'msg' : msg, 'fromOtherBool' : fromOtherBool, 'reqMessage' : reqMessage, 'confirmationBox': confirmationBox},
+								context_instance=RequestContext(request))		
+'''
+@login_required
+@group_required('student')
+
+def schedule(request): #this goes to the schedule view
+	student = get_object_or_404(Student, id = request.user.id)
+	studentSchedule = StudentSchedule.objects.filter(studentID = student.id)
+	schedule = []
+	for studSched in studentSchedule:
+		sectionPeriods = studSched.sectionID.__dict__
+		for period, day in sorted(sectionPeriods.iteritems()):
+			if "PeriodDays" in period and day:
+				schedule.append((studSched.sectionID.courseID.courseName, period[0], day))
+				#appends courseName, period Letter, day in 1,2,3,4,5,6,7,8 format, where 1-4 is m-t, and 5-8 is a friday 
+				#days = numbersToDay(numbers) to change 1,2,3 to M,T,W
+	return HttpResponse (schedule)
 		
-#ical output
-	#for sec in sectionID:
+	
+#for sec in sectionID:
 		#if str(sec.APeriodDays).contains('`1'):
-			#sectionID.append("meets on monday!")  
-	return HttpResponse(sectionID)
+			#sectionID.append("meets on monday!") 
 #col for sec; period; time
+
+@login_required(login_url='/registrationApp/login/')
+def submit(request):	
+	student = get_object_or_404(Student, id=request.user.id)
+	msg=""
+	if student.submit == True:
+		msg = "You have already submitted!"
+	else:
+		student.submit = True
+		student.save()
+		salt = sha.new(str(random.random())).hexdigest()[:5]
+    	activation_key = sha.new(salt+student.firstName).hexdigest()
+    	student.activation_key = activation_key
+    	student.save()
+    	email_body = "http://127.0.0.1:8000/registrationApp/ParentConfirm/%s" % (student.activation_key)
+    	send_mail("Your child has submitted their schedule",
+          	  email_body,
+              'darshandesai17@gmail.com',
+              ["c12dd@dalton.org"])
+    	msg = "Submitted for House Advisor and Parent Approval"
+	return HttpResponse(msg)
 
 
 def preapprovals(request, DepartmentChair_id):
@@ -307,6 +722,7 @@ def preAppAdd(request, DepartmentChair_id):
 			msg = "All Added Successfully"
 	return HttpResponse(msg)
 
+@group_required('advisor')
 def advisor(request, House_id):
 	house = get_object_or_404(House, pk=House_id)
 	students = Student.objects.filter(houseID=house)
@@ -334,8 +750,8 @@ def review(request, House_id):
 		message = request.GET.get('message')
 		message = message.replace('_'," ")
 		student.submit = False
-		if student.advisor1Note != " ":
-			note = message + " PREVIOUS NOTE " + student.advisor1Note
+		if student.advisor1Note:
+			note = message + " PREVIOUS NOTE: " + student.advisor1Note
 		else:
 			note = message
 		student.advisor1Note = note
@@ -343,26 +759,6 @@ def review(request, House_id):
 		send_mail("Schedule Changes to review", "Hello; your house advisor has some suggestions for you: " +message, 'darshandesai17@gmail.com', [student.email])
 	return HttpResponse("Message sent to student successfully")
 
-@login_required(login_url='/registrationApp/login/')
-def submit(request):	
-	student = get_object_or_404(Student, user=request.user.id)
-	msg=""
-	if student.submit == True:
-		msg = "You have already submitted, please unsubmit first."
-	else:
-		student.submit = True
-		student.save()
-		salt = sha.new(str(random.random())).hexdigest()[:5]
-    	activation_key = sha.new(salt+student.firstName).hexdigest()
-    	student.activation_key = activation_key
-    	student.save()
-    	email_body = "http://127.0.0.1:8000/registrationApp/ParentConfirm/%s" % (student.activation_key)
-    	send_mail("Your child has submitted their schedule",
-          	  email_body,
-              'darshandesai17@gmail.com',
-              ["c12dd@dalton.org"])
-    	msg = "Submitted for House Advisor and Parent Approval"
-	return HttpResponse(msg)
 
 def ParentConfirm(request, Activation_key):
 	student = get_object_or_404(Student, activation_key=Activation_key)

@@ -3,12 +3,13 @@
 
 {% block content %}
 
+
+<img src="/registrationApp/site_media/Images/daltonseal150px.png" width="150" height="150" alt="The Dalton School"/>
+<h1> The Dalton School <br> 
+Pre-Registration Website</h1>
 {% if form.errors %}
 <p>Your username and password didn't match. Please try again.</p>
 {% endif %}
-<img src="{{STATIC_URL}}daltonseal150px.png" width="150" height="150" alt="The Dalton School"/>
-<h1> The Dalton School <br> 
-Course Registration Website</h1>
 <form method="post" action="{% url 'django.contrib.auth.views.login' %}">
 {% csrf_token %}
 <table style="margin:auto">
@@ -21,8 +22,8 @@ Course Registration Website</h1>
     <td>{{ form.password }}</td>
 </tr>
 </table>
-
-<input type="submit" value="login" />
+<br/ >
+<input type="submit" value="login" class="button" />
 <input type="hidden" name="next" value="{{ next }}" />
 </form>
 

@@ -6,6 +6,9 @@ admin.site.register(Student)
 from registrationApp.models import House
 admin.site.register(House)
 
+from registrationApp.models import HouseAdvisor
+admin.site.register(HouseAdvisor)
+
 from registrationApp.models import Parent
 admin.site.register(Parent)
 
@@ -29,3 +32,9 @@ admin.site.register(StudentSchedule)
 
 from registrationApp.models import PreApproval 
 admin.site.register(PreApproval)
+
+from registrationApp.models import CourseDiscipline
+admin.site.register(CourseDiscipline)
+
+from registrationApp.models import RequiredObjects
+admin.site.register(RequiredObjects)

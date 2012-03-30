@@ -14,12 +14,12 @@
 
 	{% for student in submittedStudents %}
 	<br>
-	<a href="#" onclick="getStudSched({{student.id}});return false;" /> {{student.firstName}} {{student.lastName}} </a>
+	<a href="#" onclick="getStudSched({{student.id}});return false;" > {{student.firstName}} {{student.lastName}} </a>
 	<input type = "submit" class = "button" id = "approve" value = "approve" name = "{{student.id}}"/>
 	<input type = "submit" class = "button" id = "review" value = "review" name = "{{student.id}}"/>
 
 	<div id = "revTextDiv" style="display:none">
-		<input type="image" id = "close" src="{{STATIC_URL}}delete_icon.png" style="float:right; display:inline;"/>			
+		<input type="image" id = "close" src="/registrationApp/site_media/Images/delete.png" style="float:right; display:inline;"/>			
 		<h2 style="display:inline; position:relative; left:20px">Submit Confirmation</h2>
 			<div style="width:450px; margin:auto;">
 			<p>Please write a message for your students to review here. This will send them an email notification and let them see it on their schedule's page</p> 

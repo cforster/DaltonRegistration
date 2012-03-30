@@ -1,17 +1,14 @@
 {% extends "registrationApp/base.html" %}
 
 {% block headerscript %}
-
 <script type="text/javascript">
 	function login(){
 		$( '#logBackIn' ).html( '&nbsp;' ).load('{% url login %}').hide().fadeIn('slow');
 	}
 </script>
-
 {%endblock%}
 
 {% block content %}
-
 
 You have successfully logged out <br>
 Log Back In: <br> 
