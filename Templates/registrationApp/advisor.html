@@ -1,74 +1,114 @@
-{% extends "registrationApp/base.html" %}
+{% extends "registrationApp/headerBase.html" %}
 {% block headerscript%}
+
 <script type="text/javascript">
-	function getStudSched(student){
-		$( '#courseList' ).html( '&nbsp;' ).load('{% url add %}?student='+ student +'&fromOther=1').hide().fadeIn('slow');
+	function getStudSched(studentID){
+		$( '#courseList' ).html( '&nbsp;' ).load('{% url add %}',{
+			student: studentID,
+			fromOther : 1,
+			csrfmiddlewaretoken: '{{ csrf_token }}'
+		}).hide().fadeIn('slow');
 	}
 </script>
+
 {% endblock %}
 {% block content %}
-<div class="container">
-	<div id = "submittedStudents" class = "span-5" >
-	Submitted Students:
-	<br>
+<div class="container-fluid">
+ 	<div class="row-fluid">
+   		<div class="span4">
+	   		<div class=" leftDiv leftColumnTop" id = "submittedStudents">
+				<p> Submitted Students (without your approval): </p>
+				{% for student, parentApp in students %}
+					{% if student.submit and not student.advisorApproval %}
+							<br />
+							<br / >
+							<a href="#" onclick="getStudSched({{student.id}});return false;" > {{student.first_name}} {{student.last_name}} </a>{% if not parentApp %}(Needs Parent Approval){% endif %} <br />
+							<input type = "submit" class = "button" id = "approve" value = "approve" name = "{{student.id}}"/>
+							<input type = "submit" class = "button" id = "review" value = "send note" name = "{{student.id}}"/>
+							<br / >
 
-	{% for student in submittedStudents %}
-	<br>
-	<a href="#" onclick="getStudSched({{student.id}});return false;" > {{student.firstName}} {{student.lastName}} </a>
-	<input type = "submit" class = "button" id = "approve" value = "approve" name = "{{student.id}}"/>
-	<input type = "submit" class = "button" id = "review" value = "review" name = "{{student.id}}"/>
+					<div id ="revTextDiv" class = "confirmationDiv">
+					   	<input type="image" id = "close" src="/registrationApp/site_media/Images/delete.png" class= "roundButton deleteCloseButton"/>         
+					    <div id = "submitConfirmationHeader" class="confirmationHeader" >
+					        <h1 style="display:inline; position:relative;">Submit Confirmation</h1>
+					    </div>
+					    <div class="confirmationBody">
+						    <p>Please write a message for {{ student.first_name }} {{student.last_name}} to review here. This will send them an email notification and let them see it on their schedule's page</p> 
+							<textarea id="reviewText" cols="50" rows="15"></textarea>	
+	    				</div>
 
-	<div id = "revTextDiv" style="display:none">
-		<input type="image" id = "close" src="/registrationApp/site_media/Images/delete.png" style="float:right; display:inline;"/>			
-		<h2 style="display:inline; position:relative; left:20px">Submit Confirmation</h2>
-			<div style="width:450px; margin:auto;">
-			<p>Please write a message for your students to review here. This will send them an email notification and let them see it on their schedule's page</p> 
-			
-		<textarea id="reviewText" name="{{ student.id }}" cols="50" rows="20"></textarea>	
-		<div style="width:100;"> 
-			<input type = "submit" class = "button" id = "submit" value = "submit" name = "{{student.id}}"/> 
-			<input type = "submit" class = "button" id = "cancel" value = "cancel" /> 
+					    <div id = "submitConfirmation"class = "submitConfirmationButtons">
+					        <input type = "submit" value = "Cancel" class = "button" id="cancel" />
+					        <input type = "submit" value = "Send" class = "button" id ="submit" name="{{ student.id }}" />
+					    </div>
+					</div>
+
+					{% endif %}
+
+				{% endfor %}
+			</div>
+			<div class="span4 leftDiv leftColumnTop">	
+				Completed by you: <br />			
+				{% for student in advisorApproved %}
+						<a href="#" onclick="getStudSched({{student.id}});return false;" > {{student.first_name}} {{student.last_name}} </a>
+					{% if not student.parentApproval %}Awaiting Parent Approval{% endif %}
+					<br />
+				{% endfor %}
+			</div>
+			<div class="span4 leftDiv leftColumnTop">
+				Students who have yet to submit: <br />
+				{% for student, parentApp in students %}
+					{% if not student.submit %}
+						{{student.first_name}} {{student.last_name}}
+						<br /> 
+					{% endif %}
+				{% endfor %}
+			</div>
 		</div>
+		<div class= "span8" id = "courseList"></div>
 	</div>
 </div>
-	{% endfor %}
-	</div>
-	<div class= "span-19 last" id = "courseList">
-
-	</div>
-</div>
-	<div id='screen'></div>
+		 
+<div id='screen'></div>
 
 {% endblock %}
 {% block script %}
 
 <script type="text/javascript">
 $( document ).ready( function() {
+	
 	function closeConfirmation(){
 		$('#revTextDiv, #screen').fadeOut('slow',function(){
 			$(this).css({"display": "none"})
 		});
 	}
-	$( '#cancel, #close' ).live("click", function() {
+	$(document).on("click", "#cancel, #close", function(){
 		closeConfirmation();
-	});
-	$( '#review' ).live("click", function() {
+    });
+
+
+	$(document).on("click", "#review", function(){
    		$('#screen').css({"display": "block", "opacity": 0.7}).hide().fadeIn('slow');    
    		$('#revTextDiv').css({"display": "block"}).hide().fadeIn('slow');
 	});
 
 
-	$( '#approve' ).live("click", function() {
-		student = $(this).attr("name");
-		$( '#courseList' ).html( '&nbsp;' ).load('{% url approve house.id %}?student='+ student).hide().fadeIn('slow');
+	$(document).on("click", "#approve", function(){
+		$( '#courseList' ).html( '&nbsp;' ).load('{% url approve %}',{
+			student: $(this).attr("name"),
+			csrfmiddlewaretoken: '{{ csrf_token }}'
+		}).hide().fadeIn('slow');
 	});
-	$( '#submit' ).live("click", function(){
-		message = $('#reviewText').val();
-		student = $(this).attr("name");
-		message = message.replace(/ /g,"_");
+
+	$(document).on("click", "#submit", function(){
+        $( '#courseList' ).html( '&nbsp;' ).load("{% url review %}", {
+            student : $(this).attr("name"),
+            message : $('#reviewText').val(),
+            csrfmiddlewaretoken: '{{ csrf_token }}'
+        }).hide().fadeIn('slow');
 		closeConfirmation();
-		$( '#courseList' ).html( '&nbsp;' ).load('{% url review house.id %}?student='+ student+'&message='+message).hide().fadeIn('slow');
-	});
+    });
+
 });
 </script>
 

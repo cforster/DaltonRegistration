@@ -1,26 +1,10 @@
-{% extends "registrationApp/base.html" %}
+{% extends "registrationApp/headerBase.html" %}
 
 {% block title %}
     Pre-Registration | The Dalton School
 {% endblock %}
 
 {% block headerscript %}
-<script type="text/javascript">
-    function notifReadButton(){
-        $('#notif').toggleClass("slide");
-        $('#notif').toggleClass("sel");
-        $('#notifA').toggleClass("notifButtonSelected");
-        
-        if ($('#notifDiv').is(":hidden")){
-                $('#notifDiv').slideDown("slow");
-                $('#notifDiv').load('{% url notifications %}')
-                nDiv.data("loaded", true);
-            } else {
-                $('#notifDiv').slideUp("slow");
-            }
-        return false;
-    }
-    </script>   
 	<link type="text/css" href="/registrationApp/site_media/CSS/jquery-ui-1.8.18.custom.css" rel="stylesheet" />
 {% endblock %}
 
@@ -29,7 +13,7 @@
 {% if student.advisor1Note and not student.advisor1NoteRead or student.advisor2Note and not student.advisor2NoteRead or student.parentNote and not student.parentNoteRead %}
     <div id= "screen"></div>
     <div id ="notification" class = "confirmationDiv">
-    <input type="image" id = "close2" class="roundButton deleteCloseButton" src="/registrationApp/site_media/Images/delete.png" />            
+    <input type="image" id = "close2" class="roundButton deleteCloseButton" src="/registrationApp/site_media/Images/delete.png"/>            
         <div class="confirmationHeader roundBorderTopRight roundBorderTopLeft">
             <h1 style="display:inline; position:relative;"> Notifications </h1>
         </div>
@@ -54,19 +38,7 @@
 
 {% endif %}
 
-   <div class="container-fluid">
-        <div class= "row-fluid" style= "margin-bottom:20px; position:relative" >
-            <span id="headerLeft" >
-                <ul class="header nav">
-                    <li class="slide" style="float:left"><a href="http://dalton.org" target="_blank" rel="tooltip" title="dalton.org">The Dalton School</a></li> 
-                    <li class = "slide center"> <a href="#"> <h3>{{ student.first_name }}'s Schedule </h3> </a>
-                    <li class="slide" style="float:right"> <a href = "/registrationApp/logout"> Logout</a></li>
-                    <li class="slide" style="float:right;" id= "notif"> <a href ="#" onclick = "notifReadButton(); return false;" rel="tooltip" title="notifications" id="notifA" class="notifButton opaqueImage"> </a></li>
-                </ul> 
-            </span>
-        </div>
-    </div>
-<span id="notifDiv" class="roundBorder6"></span>
+
 <div class="container-fluid">
     <div class="row-fluid">
         <div class="span4">
@@ -75,13 +47,12 @@
                 <input type="text" name="search" id= "searchBox" autocomplete="off" placeholder="Enter a Course, Discipline, or Period" />
         
 <span id="spinner" style="display:inline; height:20px;"><img src="/registrationApp/site_media/Images/spinner.gif"/></span>
-                <div id="results">
-
+                <div id="results" class="scroll">
+                    <div id = "overlay" > </div>
                 </div>
-
             </div>
             
-            <div id="result" class="leftDiv">
+            <div id="result" class="leftDiv ">
 
             </div>
                 
@@ -92,14 +63,19 @@
         <div class="span8">
             <div id= "tabs" class="rightDiv" >
                 <ul class="tabs">
-                    <li id ="tab1"><a href="{% url one %}">one</a></li>
-                    <li id="tab2"><a href="#tabs-2">schedule</a></li>
-                    <li id="tab3"><a href="{% url catalog %}">catalog</a></li>
+                    <li id = "tab1"><a href="#tabs1">instructions</a></li>
+                    <li id = "tab2"><a href="#tabs2">schedule</a></li>
+                    <li id = "tab3"><a href="{% url catalog %}">catalog</a></li>
+                    <li id = "tab4"><a href="#tabs4">preferences</a></li>
                 </ul>
-                    
-                <div id="tabs-2">
+                <div id = "tabs1"> </div> 
+                <div id="tabs2">
                     <p>schedule</p>
                 </div>
+                <div id = "tabs3"> </div> 
+                <div id = "tabs4"> </div> 
+
+
             </div>
         </div>
               
@@ -111,18 +87,12 @@
 {% block script %}
 
 <script type="text/javascript">
-
 $( document ).ready( function() {
-    $(' #tabs' ).tabs();
-    $(' #tabs' ).tabs("load", 0);
-
-	$('#searchBox').focus();	
-	$('#result').load('{% url add %}').hide().fadeIn('slow');
     var  mouseHover;
-    $('a[rel=tooltip]').live("mouseenter", function(e){
+    $('a[rel=tooltip], #tool').live("mouseenter", function(e){
         $anchor = $(this);
         mouseHover = true;
-        var tip = $(this).attr('title');    
+        var tip = $(this).attr('title');
         $(this).removeAttr('title');
         if (mouseHover == true){
                 var offset = $(this).offset();
@@ -138,19 +108,66 @@ $( document ).ready( function() {
             timer3 = setTimeout(showTip, 1000);
         }
     });
-    $('a[rel=tooltip]').live("mouseleave", function(e){
+    $('a[rel=tooltip], #tool').live("mouseleave", function(e){
         mouseHover = false;
         $(this).attr('title',$('#tooltip').html());
         $(this).children('div#tooltip').remove();
     });
+    $('#tabs').tabs({
+        ajaxOptions: {
+          timeout: 100000,
+          error: function() {
+            $('#tabs').tabs('abort');
+            }
+        }
+    });
+    $(document).on("click","#notif", function(e){
+        e.stopPropagation(); 
+        $('#notif').toggleClass("slide");
+        $('#notif').toggleClass("sel");
+        $('#notifA').toggleClass("notifButtonSelected");
+
+        if ($('#notifDiv').is(":hidden")){
+                $('#notifDiv').slideDown("slow");
+                $('#notifDiv').load('{% url notifications %}')
+                nDiv.data("loaded", true);
+            } else {
+                $('#notifDiv').slideUp("slow");       
+
+            }
+    });
+    $(document).on("click","#notifDiv", function(e){
+        e.stopPropagation(); 
+    });
+
+
+    $(document).on("click", function(){
+        if (!($('#notifDiv').is(":hidden"))){
+            $('#notif').toggleClass("slide");
+            $('#notif').toggleClass("sel");
+            $('#notifA').toggleClass("notifButtonSelected");
+            $('#notifDiv').slideUp("slow");       
+        }
+    });
+
+    $('#tabs').tabs();
+    $('#tabs').tabs("select", "#tabs1");
+    $('#tabs1').load('{% url one %}');
+    $('#tabs').tabs();
+    $('#tabs4').load('{% url preferences %}');
+
+	$('#searchBox').focus();	
+	$('#result').load('{% url add %}').hide().fadeIn('slow');
+
+  
 	{% if student.advisor1Note != " " and student.advisor1NoteRead == 0  or  student.advisor2Note != " " and student.advisor2NoteRead == 0  or  student.parentNote != " " and student.parentNoteRead == 0  %}
 		$('#screen').css({"display": "block", "opacity": 0.7}).hide().fadeIn('slow');    
    		$('#notification').css({"display": "block"}).hide().fadeIn('slow');
 	{% endif %}
 
 
-	function getSearchVal(){
-		q = $('#searchBox').val();
+	function getSearchVal(search){
+		q = search;
 		$( '#results' ).html( '&nbsp;' ).load("{% url searchResults %}",{
 			q : q,
 			csrfmiddlewaretoken: '{{ csrf_token }}'
@@ -168,7 +185,6 @@ $( document ).ready( function() {
 	var lastKeyPressCode = null
 	var timer;
     var timer2;
-
 	var search = ($("#searchBox").val());
 	$('#searchBox').keyup(function(e){
 		e.preventDefault();
@@ -178,22 +194,12 @@ $( document ).ready( function() {
 			search = newVal;
 
 			timer && clearTimeout(timer);
-            timer = setTimeout(autoFillVal, 200);  
+            timer = setTimeout(autoFillVal, 100);  
 
             timer2 && clearTimeout(timer2);
-
-			timer2 = setTimeout(getSearchVal, 200);	
+			timer2 = setTimeout(getSearchVal(search), 1000);	
 		}
 	});
-    function autoFill(sValue){
-        if ((lastKeyPressCode != 8) && (lastKeyPressCode!= 46)){
-            $input = $('#searchBox').val();
-            prev = $input;
-            $('#searchBox').val($input + sValue.substring(prev.length));
-            createSelection(prev.length, sValue.length);
-        }
-    };
-
     function createSelection(start, end){
         var field = $("#searchBox").get(0);
         if( field.createTextRange ){
@@ -212,11 +218,21 @@ $( document ).ready( function() {
         }
         field.focus();
     };
+    function autoFill(sValue){
+        if ((lastKeyPressCode != 8) && (lastKeyPressCode!= 46)){
+            $input = $('#searchBox').val();
+            prev = $input;
+            $('#searchBox').val($input + sValue.substring(prev.length));
+            createSelection(prev.length, sValue.length);
+        }
+    };
+
+ 
 
 	$(' #tabs' ).tabs();
 	$(' #tabs' ).tabs("load", 2);
 
-	$(document).on("click", "#searchResults > a, #courseNameLink", function(f){
+	$(document).on("click", "#searchResults>a, #courseNameLink", function(f){
 		f.preventDefault();
 		$('#tabs' ).tabs();
 		$('#tabs' ).tabs("select", 2);
@@ -248,10 +264,6 @@ $( document ).ready( function() {
 		});
 	}
 
-    $(document).on("click", "#submitAll", function(){
-   		$('#screen').css({"display": "block", "opacity": 0.7}).hide().fadeIn('slow');    
-   		$('#confirmation').css({"display": "block"}).hide().fadeIn('slow');
-	});	
 
     $('#results').hover(
         function () {   
@@ -261,10 +273,15 @@ $( document ).ready( function() {
            $(this).css({"overflow-y": "hidden"});
         }
     );
+    $(document).on("click", "#submitAll", function(){
+        $('#screen').css({"display": "block", "opacity": 0.7}).hide().fadeIn('slow');    
+        $('#confirmation').css({"display": "block"}).hide().fadeIn('slow');
+    }); 
+
 	$(document).on("click", "#schedSubmitYes", function(){
 		$(' #tabs' ).tabs();
 		$(' #tabs' ).tabs("select", 0);
-		$( '#tabs-1' ).html( '&nbsp;' ).load('{% url submit %}').hide().fadeIn('slow');
+		$( '#ui-tabs-1' ).html( '&nbsp;' ).load('{% url submit %}').hide().fadeIn('slow');
 		$( '#result' ).html( '&nbsp;' ).load('{% url add %}').hide().fadeIn('slow');
 		closeConfirmation($("#screen"));
         closeConfirmation($("#confirmation"));
@@ -285,13 +302,19 @@ $( document ).ready( function() {
             course : $(this).attr("name"),
             csrfmiddlewaretoken: '{{ csrf_token }}'
         }).hide().fadeIn('slow');
+
     });
 
     $(document).on("click", "#addRequiredDiscipline", function(){
+        disc = $(this).attr("name");
+
         $( '#results' ).html( '&nbsp;' ).load("{% url searchResults %}", {
-            q : $(this).attr("name"),
+            q : disc,
+            onlyDisciplineSearch : 1,
             csrfmiddlewaretoken: '{{ csrf_token }}'
         }).hide().fadeIn('slow');
+        $('#searchBox').val(disc);
+
     });
 
 	$(function() {
@@ -329,9 +352,10 @@ $( document ).ready( function() {
 	    closeConfirmation($("#notification"));
         closeConfirmation($("#screen"));
 	});
+
 });
 
-$( document ).ajaxStart( function() {
+$(document).ajaxStart( function() {
 	$( '#spinner' ).show();
 }).ajaxStop( function() {
 	$( '#spinner' ).hide();

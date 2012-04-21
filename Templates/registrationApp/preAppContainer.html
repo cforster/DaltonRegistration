@@ -1,11 +1,12 @@
 {% extends "registrationApp/base.html" %}
 
 {% block content %}
+	
 	{{courseObj.courseName}}
 
 	<br>
 	<textarea id="comments" name="{{ courseObj.courseNumber }}" rows="30" cols="50"></textarea>
 	<br>
-	<input type = "submit" name = "{{ courseObj.courseNumber }}" id = "preAppNames"/>
+	<input type = "submit" name = "{{ courseObj.courseNumber }}" class="button" id = "preAppNames" value ="submit"/>
 
 {% endblock %}

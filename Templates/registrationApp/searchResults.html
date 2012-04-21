@@ -19,31 +19,31 @@
 				
 			<div id ="searchElement" class="row-fluid" style="margin:auto; ">
 				
-				<span class="span7">  <b>{{course.courseName}}</b> <br /> 
+				<span class="span7" id="tool" title="{{course.courseName}}"><b>{{course.courseName|truncatewords_by_chars:60}}</b> <br /> 
 				<i> {% for discipline in disciplines %}{{discipline.discipline.discipline}}{% endfor %} </i>  </span>
 
 				<span style="float:right;" class="span5">
-					{% for section, period in sections %}
-					<div class="{% if section.semesterOne and not section.semesterOne == section.semesterTwo %}semOne{% else %}{% if section.semesterTwo and not section.semesterOne == section.semesterTwo %}semTwo{% else %}semBoth{% endif %}{% endif %}">
-						
-						<input type="submit" name ="{{section.id}}" {% if not student.submit %} id = "addSection" {% endif %} class ="{% if not student.submit %} button {% else %} grayButton {% endif %}" value="{{period}}" />
-					
-					</div>
-					{% endfor %}
+					<span style = "margin:auto">
+						{% for section, period, day in sections %}
+							
+							<div id="tool" title="{{day|toDays}}">
+							<input type="submit" name ="{{section.id}}" {% if not student.submit %} id = "addSection" {% endif %} class ="{% if not student.submit %} button {% else %} grayButton {% endif %}" value="{{period}}"  />
+						</div>
+						{% endfor %}
+					</span>
 				</span>
-
 			</div>	
 			{% if not availForGrade or course.preapprovalRequired and not preApproved %} 
 				</div>
 			{% endif %}	 
-			<hr />
+			<hr style="width:100%;" />
 		</a>
 	</div>	
 
 	{% endfor %}
 
 {% else %}
-	No courses found. Please try a different search term.
+	No courses found for {{searchTerms|lower}}. Please try a different search term.
 {% endif %}
 
 {% endblock %}

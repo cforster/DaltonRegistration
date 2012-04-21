@@ -38,21 +38,21 @@ def toDays(value):
             lists = [x.strip() for x in num.split(',')]
             for day in lists:
                 if int(day) == 1:
-                    output += "M,"
+                    output += "M, "
                 if int(day) == 2:
-                    output += "T,"
+                    output += "T, "
                 if int(day) == 3:
-                    output += "W,"
+                    output += "W, "
                 if int(day) == 4:
-                    output += "R,"
+                    output += "R, "
                 if int(day) == 5:
-                    output += "F1,"
+                    output += "F1, "
                 if int(day) == 6:
-                    output += "F2,"
+                    output += "F2, "
                 if int(day) == 7:
-                    output += "F3,"
+                    output += "F3, "
                 if int(day) == 8:
-                    output += "F4,"
-        return output[:-1]
+                    output += "F4, "
+        return output[:-2]
     else:
         return value

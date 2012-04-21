@@ -17,14 +17,12 @@ urlpatterns = patterns('registrationApp.views',
     url(r'^registrationApp/notifications/$', 'notifications', name = 'notifications'),
     url(r'^registrationApp/notifRead/$', 'notifRead', name = 'notifRead'),
     url(r'^registrationApp/rankChange/$', 'rankChange', name = 'rankChange'),
-    url(r'^registrationApp/alternate/$', 'alternate', name = 'alternate'),
     url(r'^registrationApp/preapprovals/$', 'preapprovals', name = 'preapprovals'),
     url(r'^registrationApp/preappContainer/$', 'preappContainer', name = 'preappContainer'),
     url(r'^registrationApp/preappAdd/$', 'preappAdd', name = 'preappAdd'),
     url(r'^registrationApp/advisor/$', 'advisor', name = 'advisor'),
     url(r'^registrationApp/approve/$', 'approve', name = 'approve'),
     url(r'^registrationApp/review/$', 'review', name = 'review'),
-
     url(r'^registrationApp/ParentConfirm/(?P<Activation_key>\w+)', 'ParentConfirm', name = 'ParentConfirm'),
     url(r'^registrationApp/ParentConfirmYes/$', 'ParentConfirmYes', name = 'ParentConfirmYes'),
 
@@ -34,6 +32,6 @@ urlpatterns += patterns('',
 	url(r'^registrationApp/login/$', 'django.contrib.auth.views.login', {'template_name': 'registrationApp/login.html'}, name='login'),
     url(r'^registrationApp/logout/$', 'django.contrib.auth.views.logout',{'template_name': 'registrationApp/logout.html'}),    
     (r'^registrationApp/site_media/(?P<path>.*)$', 'django.views.static.serve',
-        {'document_root': 'site_media/'}),
+        {'document_root': 'C:/Users/Darshan/Desktop/registration/site_media/'}),
 )
 

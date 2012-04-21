@@ -2,29 +2,76 @@
 {% load url from future %}
 
 {% block content %}
+<div class="container-fluid">
+	<div class="row-fluid">
+		<img src="/registrationApp/site_media/Images/daltonseal150px.png" width="150" height="150" alt="The Dalton School" style="margin-top:20px;" />
 
+		<h1> The Dalton School <br> 
+		Pre-Registration Website</h1>
+		<div class = "leftDiv" style="width:30%; min-width:470px; margin:auto;">
+			<h2> Login </h2>
+			{% if form.errors %}
+			<div class="error roundBorder">
+				<p style="font-size:14px">Your username and password did not match.<br /> Please try again.</p>
+			</div>
+			<br />
+			{% endif %}
+			
+			<div style = "margin:auto; width:50%; margin-bottom:20px;">
+				<form method="post" action="{% url 'django.contrib.auth.views.login' %}">
+				{% csrf_token %}
+		
+				<div id="usernameRow" class= "login">
+				    {{ form.username }}
+				    <span class="roundButton" id="usernameHelp">
+				    	<a rel ="tooltip" title="Enter your Dalton/Forum Username, i.e. c14xx"><img src="/registrationApp/site_media/Images/help.png"/> </a>
+				    </span>
+				</div>
 
-<img src="/registrationApp/site_media/Images/daltonseal150px.png" width="150" height="150" alt="The Dalton School"/>
-<h1> The Dalton School <br> 
-Pre-Registration Website</h1>
-{% if form.errors %}
-<p>Your username and password didn't match. Please try again.</p>
-{% endif %}
-<form method="post" action="{% url 'django.contrib.auth.views.login' %}">
-{% csrf_token %}
-<table style="margin:auto">
-<tr>
-    <td>{{ form.username.label_tag }}</td>
-    <td>{{ form.username }}</td>
-</tr>
-<tr>
-    <td>{{ form.password.label_tag }}</td>
-    <td>{{ form.password }}</td>
-</tr>
-</table>
-<br/ >
-<input type="submit" value="login" class="button" />
-<input type="hidden" name="next" value="{{ next }}" />
-</form>
+				<div class= "login">
+				    {{ form.password }}
+				</div>
+				<input type="submit" value="login" class="largerButton" />
+				<input type="hidden" name="next" value="{{ next }}" />	
+
+			</form>
+
+			</div>
+
+		</div>
+	</div>
+</div>
 
 {% endblock %}
+{% block script %}
+		<script type="text/javascript">
+$( document ).ready( function() {
+	 var  mouseHover;
+    $('a[rel=tooltip], #tool').live("mouseenter", function(e){
+        $anchor = $(this);
+        mouseHover = true;
+        var tip = $(this).attr('title');
+        $(this).removeAttr('title');
+        if (mouseHover == true){
+                var offset = $(this).offset();
+                var width = $(this).outerWidth();
+                $(this).append($('<div id="tooltip" class="roundBorder6">' + tip + '</div>').stop().show(980).hide().fadeIn('slow'));
+                var timer3;
+                function showTip(){ 
+                    $('#tooltip').css("left", (offset.left + (width)/2 - ($('#tooltip').outerWidth() ) /2 ));
+                    $('#tooltip').css("top", (offset.top + 28));
+                }
+
+            timer3 && clearTimeout(timer3);
+            timer3 = setTimeout(showTip, 1000);
+        }
+    });
+    $('a[rel=tooltip], #tool').live("mouseleave", function(e){
+        mouseHover = false;
+        $(this).attr('title',$('#tooltip').html());
+        $(this).children('div#tooltip').remove();
+    });
+    });
+</script>
+		{% endblock %}
+	 

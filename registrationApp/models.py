@@ -4,7 +4,7 @@ from django.db.models.signals import post_save
 #take out this def
 
 class HouseAdvisor (User):
-	favoriteColor = models.CharField(max_length=128)	
+	favoriteColor = models.CharField(max_length=128,  blank = True, null = True)	
 	objects = UserManager()
 
 class House (models.Model):
@@ -17,7 +17,7 @@ class House (models.Model):
 class Parent (models.Model):
 	parentFirstName= models.CharField(max_length=128)
 	parentLastName= models.CharField(max_length=128)
-	parentEmail = models.CharField(max_length=256) #email field
+	parentEmail = models.EmailField(max_length=256)
 	parentPhoneNumber = models.IntegerField()
         def __unicode__(self):
 	        return self.parentFirstName
@@ -34,9 +34,9 @@ class Student (User):
 	parentStudentID= models.ForeignKey(ParentStudent)
 	submit = models.BooleanField()
 	advisorApproval = models.BooleanField()
-	advisor1Note = models.CharField(max_length=9999999, null=True, blank=True)
-	advisor2Note = models.CharField(max_length=9999999, null=True, blank=True)
-	parentNote = models.CharField(max_length=9999999, null=True, blank=True)
+	advisor1Note = models.CharField(max_length=2000, null=True, blank=True)
+	advisor2Note = models.CharField(max_length=2000, null=True, blank=True)
+	parentNote = models.CharField(max_length=2000, null=True, blank=True)
 	advisor1NoteRead = models.BooleanField()
 	advisor2NoteRead = models.BooleanField()
 	parentApproval = models.BooleanField()
@@ -46,15 +46,11 @@ class Student (User):
         def __unicode__(self):
 	        return u'%s %s' %(self.first_name, self.last_name)
 
-#courseDisc
 class DepartmentChair (User):
-	favoriteColor = models.CharField(max_length=128)	
+	favoriteColor = models.CharField(max_length=128,  blank = True, null = True)	
 	objects = UserManager()
         def __unicode__(self):
 	        return u'%s %s' %(self.first_name, self.last_name)
-
-# three column table
-#grade/course/disc.
 
 class Discipline (models.Model):
 	discipline_Choices= (
@@ -70,28 +66,29 @@ class Discipline (models.Model):
 		('Music','Music'),
 		('Misc','Misc')
 	)
-	#visual art
-	#inter
+
 	discipline = models.CharField(max_length=16, choices= discipline_Choices)
 	departmentChair = models.ForeignKey(DepartmentChair)
         def __unicode__(self):
 	        return self.discipline
 
 class Course (models.Model):
+	courseNumber = models.IntegerField(db_index=True, max_length=9, primary_key=True)
 	courseName = models.CharField(max_length=256)
-	courseDescription = models.CharField(max_length=999999, blank = True, null = True)
+	courseDescription = models.CharField(max_length=2000, blank = True, null = True)
 	preapprovalRequired = models.BooleanField()
-	gradesOffered = models.CommaSeparatedIntegerField(max_length=16)
-	courseNumber = models.IntegerField(max_length=9,primary_key=True )
+	alternateRequired = models.BooleanField()
+	gradesOffered = models.CommaSeparatedIntegerField(db_index=True, max_length=16)
+	prerequisite = models.CharField(max_length = 2000, blank = True, null = True)
+	corequisite = models.CharField(max_length = 2000, blank = True, null = True)
+	courseCredit = models.CharField(max_length = 200, blank = True, null = True)
 	rankChoices = (
-		('EngHist', 'EnglishHistory'),
+		('EngHist', 'EngHist'),
 		('English', 'English'),
 	)
 	rankType = models.CharField(max_length=10, choices = rankChoices, blank = True, null = True)
         def __unicode__(self):
 	        return self.courseName
-
-#alternate courses
 
 class CourseDiscipline (models.Model):
 	courseID = models.ForeignKey(Course)
@@ -99,10 +96,8 @@ class CourseDiscipline (models.Model):
         def __unicode__(self):
 	        return u'%s' % (self.id)
 
-#system wide property==curent year set in ram 
-#set current years 
 class Section (models.Model):
-	courseID = models.ForeignKey(Course)
+	courseID = models.ForeignKey(Course, db_index=True)
 	semesterOne = models.BooleanField()
 	semesterTwo = models.BooleanField()
 	APeriodDays = models.CommaSeparatedIntegerField(max_length=15, null=True, blank=True) 
@@ -120,12 +115,12 @@ class Section (models.Model):
         def __unicode__(self):
 	        return u'%s %s' % (self.courseID.courseName, self.id)
 
-#scratch column bool
 
 class StudentSchedule (models.Model):
 	studentID= models.ForeignKey(Student)
 	sectionID= models.ForeignKey(Section)
 	rank = models.IntegerField(null=True, blank=True)
+	alternateFor = models.ForeignKey(Course, null=True, blank=True)
         def __unicode__(self):
 	        return u'%s' % (self.id)
 	        	
@@ -135,21 +130,29 @@ class PreApproval (models.Model):
         def __unicode__(self):
 	        return u'%s %s' % (self.studentID.firstName, self.courseID.courseName)
 
-class RequiredObjects(models.Model):
-	courseID = models.ForeignKey(Course, null=True, blank=True)
-	discipline = models.ForeignKey(Discipline, null=True, blank=True)
-	gradeChoices= (
+gradeChoices= (
 		('9', '9'),
 		('10', '10'),
 		('11', '11'),
 		('12', '12'),
-	)
-	grade = models.CharField(max_length=16, choices= gradeChoices)#graduation year
+)
+
+class RequiredObjects(models.Model):
+	courseID = models.ForeignKey(Course, null=True, blank=True)
+	discipline = models.ForeignKey(Discipline, null=True, blank=True)
+
+	grade = models.CharField(max_length=16, choices= gradeChoices)
 	message = models.CharField(max_length=2048)
 	def __unicode__(self):
-	    	return u'%s' % (self.grade)
+		return u'%s %s' % (self.grade, self.courseID)
+
+class AlternateCourse(models.Model):
+	courseID = models.ForeignKey(Course)
+	grade = models.CharField(max_length=16, choices= gradeChoices)
+	def __unicode__(self):
+		return u'%s %s' % (self.grade, self.courseID)
 #preferences view
 #schedule output...
 
-#index table for descriptions 
-# take each word 
+#visuaaolart
+#Inter disc

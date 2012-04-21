@@ -38,3 +38,6 @@ admin.site.register(CourseDiscipline)
 
 from registrationApp.models import RequiredObjects
 admin.site.register(RequiredObjects)
+
+from registrationApp.models import AlternateCourse
+admin.site.register(AlternateCourse)

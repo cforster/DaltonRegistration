@@ -2,9 +2,8 @@
 		text-align:center;
 		color:#1b78bb;
 		margin:auto;
-		font-family:"Warnock Pro", "Palatino","Book Antiqua", serif;
-		font-size:14px;
-		overflow-x: hidden;
+		font-family:"Warnock Pro", "Palatino", "Rosarivo", serif;
+		font-size:12px;
 		letter-spacing:.5px;
 		border:0;
 	}
@@ -43,6 +42,7 @@
 		border-radius: 3px;
 		font-family: "Warnock Pro","Palatino","Book Antiqua",serif;
 	}
+
 	img{
 		border:0;
 	}
@@ -54,6 +54,17 @@
 	    padding: 0;
 	    border: 0
 	}
+	.login > input{
+		width:200px;
+		height:30px;
+		margin-bottom:7px;
+		-webkit-transition: all .3s ease-in-out;
+		-moz-transition: all .3s ease-in-out;
+		-o-transition: all.3s ease-in-out;
+		-ms-transition: all .3s ease-in-out;	
+		transition: all .3s ease-in-out;
+	}
+
 	#notifDiv{
 		position: absolute;
 		top:39px;
@@ -100,7 +111,7 @@
 		color:#1b78bb;
 	}
 
-	#searchBox:focus, textarea:focus {
+	#searchBox:focus, textarea:focus, .login > input:focus {
 	    border-color: rgba(82, 168, 236, 0.8);
 	    -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(82, 168, 236, 0.6);
 	    -moz-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(82, 168, 236, 0.6);
@@ -120,6 +131,28 @@
 		-moz-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);
  	 	box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);
 	}
+	.addMessage{
+		width:99%; 
+		margin:auto;
+		padding:6px;
+	}
+
+	.error{
+		background:#FFBABA;
+		color:#D8000C;
+		border:2px solid #D8000C;
+	}
+	.success{
+		color:#4F8A10;
+		background:#DFF2BF;
+		border-color:#4F8A10;
+	}
+	.warning{
+		background:#FEEFB3;
+		color: #9F6000;
+		border-color: #9F6000;
+
+	}
 	.roundBorder6{
 		-webkit-border-radius: 6px;
 	 	-moz-border-radius: 6px;
@@ -127,7 +160,9 @@
 	}
 		
 	.leftDiv{ padding: 10px;  }
+
 	.leftColumnTop{margin-bottom:15px;}
+
 	.dropClass{
 		display:none;
 	}
@@ -140,6 +175,7 @@
 		height:30px;
 		margin:4px;
 	}
+
 	.selectedDiv{
 		background:#FFFFD4;
 	}
@@ -193,7 +229,7 @@
 	    position:fixed;
 	    z-index:9999;
 	    font-size:13px;
-	    padding: 8px 8px;
+	    padding: 8px;
 		color: #ffffff;
 		text-align: center;
 		text-decoration: none;
@@ -201,29 +237,53 @@
 		left:0;
 		top:0; 
 	}
-
-	#screen, #overlay{
-        position: fixed;
-        background-color: #000000;
-		top: 0;
-		right: 0;
-		bottom: 0;
-		left: 0;
-        display:none;
+	#usernameRow{
+		position:relative;
+		left:10px;
 	}
-	#screen{
-		z-index:99999;
+	#usernameHelp{
+		visibility:hidden;	
+		opacity:0;	
+		-webkit-transition: all .5s ease-in-out;
+		-moz-transition: all  .5s ease-in-out;
+		-o-transition: all  .5s ease-in-out;
+		-ms-transition: all  .5s ease-in-out;	
+		transition: all  .5s ease-in-out;
+	}
+	#usernameRow:hover #usernameHelp{
+		visibility: visible;
+		opacity:.6;
+	}
+	#screen, #overlay{
+        position: absolute;
+        background-color: #000000;
+        display:none;
 		width:100%;
         height:100%;
+	}
+	#screen{
+		position:fixed;
+		z-index:9999;
         left: 0;
         top: 0;
 	}
 	.semOne, .semBoth{
 		display:inline-block;
 	}
-	.semTwo{
-		display:inline-block;
+	{
 
+	}
+	.semTwo{
+		display:block;
+		top:25px;
+		float:left;
+		position:relative;
+	}
+	#cover{
+		background-color: #000000;
+		opacity:.5;
+		z-index:999990;
+		display:block;
 	}
 	.confirmationDiv{
         width: 40%;
@@ -259,6 +319,11 @@
 		padding-right:10px;
 		margin-left:10px;
 		margin-right:10px;
+	}
+	.roundBorder{
+		-webkit-border-radius: 12px;
+	  	-moz-border-radius: 12px;
+	  	border-radius: 12px;
 	}
 	.roundBorderTopLeft{
 		-webkit-border-top-left-radius: 12px;
@@ -354,6 +419,7 @@
 		width:100%;
 		background:#F5F5F5;
 	}
+
 	.discipline, .required{
 		position:relative;
 	  	border: 1px solid #ccc;
@@ -369,6 +435,7 @@
 		transition: opacity .2s ease-in-out;
 
 	}
+
 	.discipline:hover, .required:hover{
 		opacity: 1;
 	}
@@ -376,10 +443,10 @@
 	.math {background:rgba(182, 207, 254, 1);}
 	.science {background:rgba(185, 154, 255, 1);}
 	.english {background:rgba(246, 145, 178, 1);}
-	.history {background:rgba(152, 215, 228, 1);}
+	.history {background:rgba(251, 233, 131, 1);}
 	.language {background:rgba(235, 219, 222, 1);}
 	.computer-science{background:rgba(66, 214, 146, 1);}
-	.art{background:rgba(251, 233, 131, 1);}
+	.art{background:rgba(152, 215, 228, 1);}
 	.dance{background:rgba(255, 214, 162, 1);}
 
 	.button, .button:visited, .largerButton, .largerButton:visited, .grayButton, .grayButton:visited{
@@ -387,22 +454,24 @@
 		display: inline-block;
 		padding: 4px 4px 4px;
 		text-decoration: none;
-		background-color: #CCE0FF;
+		background-color:#019AD2;
 		line-height: 1;
-		-moz-border-radius: 5px;
-		-webkit-border-radius: 5px;
-		border-radius: 5px;
+		-moz-border-radius: 3px;
+		-webkit-border-radius: 3px;
+		border-radius: 3px;
 		position: relative;
 		cursor: pointer;
 		font-size: 11px;
-		color:#1b78bb;
 		font-weight:bold;
+		border-color: #096EB3;
+		color:#FFFFFF;
 		-webkit-transition: all .3s ease-in-out;
 		-moz-transition: all .3s ease-in-out;
 		-o-transition: all.3s ease-in-out;
 		-ms-transition: all .3s ease-in-out;	
 		transition: all .3s ease-in-out;
 	}
+
 	.grayButton, .grayButton:visited{
 		background-color:#CCC;
 	}
@@ -410,10 +479,12 @@
 		background-color:#CCC;
 	}
 	.largerButton, .largerButton:visited{
-		padding: 7px 7px 7px;
+		padding:6px 12px;
+		font-size: 13px;
 	}
 	.button:hover, .largerButton:hover{
-		background-color: #139CD1;
+		background-color:#096EB3;
+		border-color: #2F5BB7;
 		color:#FFFFFF;
 	}
 	#searchElement{
@@ -429,23 +500,22 @@
 		background:rgba(212,237,237,.9);
 	}
 
-	#results ::-webkit-scrollbar {
-    	background: #000000;
+	.scroll::-webkit-scrollbar {
+    	background: transparent;
     	width:13px;
 	}
-	::-webkit-scrollbar:hover {
+	.scroll::-webkit-scrollbar:hover {
     	background: rgba(0, 0, 0, 0.05);
 	}
-	::-webkit-scrollbar-thumb {
+	.scroll::-webkit-scrollbar-thumb {
 	    background-color: rgba(0, 0, 0, 0.2);
 	    border: solid whiteSmoke 1px;
 	    width:10px;
-	    height:80px;
+	    height:40px;
 	    -webkit-border-radius: 12px;
-	  	-moz-border-radius: 12px;
-	  	border-radius: 12px;
+	  	-webkit-box-shadow: inset 1px 1px 0 rgba(0,0,0,0.10),inset 0 -1px 0 rgba(0,0,0,0.07);
 	}
-	::-webkit-scrollbar-thumb:hover {
+	.scroll::-webkit-scrollbar-thumb:hover {
 	    background-color: rgba(0, 0, 0, 0.3);
 	}​
 
@@ -591,6 +661,8 @@
 	  -webkit-border-radius: 5px;
 	  -moz-border-radius: 5px;
 	  border-radius: 5px;
+	  position:relative;
+	  top:1px;
 	}
 
 	.nav .active > a, .nav .active > a:hover {

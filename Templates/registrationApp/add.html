@@ -24,47 +24,64 @@
 
 	$('.dropdown-toggle').dropdown();
 
+	$( ".draggable" ).draggable({ revert: "invalid" });
+
+	$( ".droppable" ).droppable({
+		activeClass: "ui-state-hover",
+		hoverClass: "ui-state-active",
+		drop: function( event, ui ) {
+			$( this ).addClass( "ui-state-highlight" );
+
+			$(ui.draggable).hide('slow');
+			$( '#tabs4' ).html( '&nbsp;' ).load("{% url alternate %}", {
+				alternateID : $(ui.draggable).attr("id"),
+				alternateFor: $(this).attr("id"),
+				csrfmiddlewaretoken: '{{ csrf_token }}'
+			}).hide().fadeIn('slow');
+		}
+	});
 </script>
 	
 {% endblock %}
 
 {% block content %}
 {% csrf_token %} 
+{% if student.submit %} <div id="cover"> {% endif %}
 
-<div  id = "enrolledDiv">
-{% if student.submit %} <div id="overlay" style="display:none" class="span4">{% endif %}
-
+<div id = "enrolledDiv" >
 <h3 style="text-align:center"> {{student.first_name}}'s Courses </h3>
 
-{%if msg and not fromOtherBool %}
-<div id = "msg" style="background:#f5f5f5;">
-	{% for m in msg%}
-		{% if forloop.counter != msg|length %}
-			{{m}} In addition, 
-		{% else %}
-			{{m}}	
-		{% endif %}
-	{% endfor %}
-{% for confirm, courseConfirm in confirmationBox %}
-	{% if confirm%}
-		Are you sure you want to add it?
+	{%if msg and not fromOtherBool %}
+		<div id = "msg" class="addMessage {{messageType}} roundBorder6">
 
-		<br />
-		<input type = "submit" id = "{% if courseConfirm %}YesCourse{% else %}Yes{% endif %}" class = "button" value = "Yes"/>
-		<input type = "submit" id = "No" class = "button" value = "No"/>
-		<input type = "hidden" name = "{% if courseConfirm %}{{courseConfirm.courseNumber}}{% else %}{{section.id}}{% endif %}" id = "confirmType" />
-	{% endif %}
-{% endfor %}
-</div>
-	
-{% endif %} 
+			{% for m in msg%}
+				{% if forloop.counter != msg|length %}
+					{{m}} In addition, 
+				{% else %}
+					{{m}}	
+				{% endif %}
+			{% endfor %}
+
+			{% for confirm, courseConfirm in confirmationBox %}
+				{% if confirm%}
+					Are you sure you want to add it?
+					<br />
+					<input type = "submit" id = "{% if courseConfirm %}YesCourse{% else %}Yes{% endif %}" class = "button" value = "Yes"/>
+					<input type = "submit" id = "No" class = "button" value = "No"/>
+					<input type = "hidden" name = "{% if courseConfirm %}{{courseConfirm.courseNumber}}{% else %}{{section.id}}{% endif %}" id = "confirmType" />
+					<br />
+				{% endif %}
+		{% endfor %}
+
+		</div>
+	{% endif %} 
 
 <div>
-	<span id="addAlert"> </span>
-{% for studSched, prd, disciplines, sectionOptions, engHistRank, engRank, dayz in studentSchedules %}
-	<div class="{% for discipline in disciplines %} {{discipline.discipline.discipline|slugify}} {% endfor %} discipline roundBorder6" id = "{{studSched.id}}" style = "{% if studSched.sectionID.semesterOne != studSched.sectionID.semesterTwo %}width:49.5%;{% if studSched.sectionID.semesterTwo %}float:right;{% endif %}{% else %}width:99%;{% endif %};z-index:{{forloop.revcounter|multiply:100}};{% ifchanged prd %}clear:both{% else %}{% endifchanged %};">
-
-		<ul class="nav dd" style= "max-width:80%; margin:auto" >
+{% for studSched, prd, disciplines, sectionOptions, engHistRank, engRank, dayz, droppable in studentSchedules %}
+{% if not studSched.alternateFor %}
+	<div class="{% for discipline in disciplines %} {{discipline.discipline.discipline|slugify}} {% endfor %} discipline roundBorder6 {% if droppable %}droppable{% endif %} draggable" id = "{{studSched.id}}" style = "{% if studSched.sectionID.semesterOne != studSched.sectionID.semesterTwo %}width:49.5%;{% if studSched.sectionID.semesterTwo %}float:right;{% endif %}{% else %}width:99%;{% endif %};z-index:{{forloop.revcounter|multiply:100}};clear:both;">
+		<!-- {% ifchanged prd %}clear:both{% else %}{% endifchanged %}-->
+		<ul id="disciplineProperties"class="nav dd" style= "max-width:80%; margin:auto" >
 			
 			<li id="courseName" ><a rel ="tooltip" href = "#{{studSched.sectionID.courseID.courseName|slugify}}" id = "courseNameLink" title = "{{studSched.sectionID.courseID.courseName}}">{% if studSched.sectionID.semesterOne != studSched.sectionID.semesterTwo %}{{studSched.sectionID.courseID.courseName|truncatewords_by_chars:15}}{% else %}{{studSched.sectionID.courseID.courseName|truncatewords_by_chars:50}}{% endif %}</a></li>
 
@@ -82,37 +99,22 @@
 			</li>
 		</ul>
 
-		
-			{% if studSched.sectionID.courseID.rankType and not fromOtherBool and not student.submit %}
-				<div class = "engHistRank" style="display:inline; float:left; padding-left:4px;"> <a href="#">{{studSched.rank}}</a>
-					<span id ="{{studSched.id}}" class = "rankOptions" style="top:-20px; ">
-						{% for c, rank in engHistRank %}
-						{% if studSched.sectionID.courseID != c %}
-							<a href = "#" id="switch" onclick="switchRank({{studSched.id}}, {{rank}});return false;">{{rank}}</a>
-						{% endif %}
-						{% endfor %}
-
-					</span>
-				</div>
-
-			{% endif %}
-
 			{% if not fromOtherBool and not student.submit %}
 				<input type="image" name= "{{studSched.id}}" id = "delete" class="roundButton deleteCloseButton" src="/registrationApp/site_media/Images/delete.png" />
 			{% endif %}
 
 		</div>
+	{% endif %}
 	{% endfor %}
+
 </div>
 {% if reqMessage %}
 {% for req, reqMsg in reqMessage %}
-<div id = "{{req.courseID}}{{req.discipline|slugify}}" style= "clear:both;" class = "required roundBorder6"><i>{{reqMsg}}</i>
+<div id = "{{req.courseID}}{{req.discipline|slugify}}" style= "clear:both;" class = "required roundBorder6"><p style="line-height:5px"><i>{{reqMsg}}</i></p>
 	<input type="image" {%if req.courseID %} name="{{req.courseID.courseNumber}}" id="addRequiredCourse"{% else %} name= "{{req.discipline|slugify}}" id="addRequiredDiscipline"{% endif %} class="roundButton deleteCloseButton" src="/registrationApp/site_media/Images/add.png" style="float: right;"/>
 </div>
 {% endfor %}
 {% endif %}
-</div>
-
 </div>
 
 {% if not fromOtherBool and not student.submit %}
@@ -123,6 +125,7 @@
 
 
 
+	<div id = "screen"> </div>
     <div id ="confirmation" class = "confirmationDiv">
        	<input type="image" id = "close" src="/registrationApp/site_media/Images/delete.png" class= "roundButton deleteCloseButton"/>         
         <div id = "submitConfirmationHeader" class="confirmationHeader" >
@@ -144,8 +147,12 @@
         </div>
     </div>
 
+{% if student.submit %} </div> {% endif %}
 
 {%endblock%}
+
+
+
 {% block script %}
 <script>
 $( document ).ready( function() {
@@ -178,13 +185,11 @@ $( document ).ready( function() {
 	});
 
 	$(document).on("click", "#No", function(){
-		$( '#result' ).html( '&nbsp;' ).load("{% url add %}", {csrfmiddlewaretoken: '{{ csrf_token }}'}).hide().fadeIn('slow');
+		$("#msg").slideUp();
 	});
-
-	{% if student.submit %}
-  		$('#overlay').css({"display": "block", "opacity": 0.5}).hide().fadeIn('slow');    
+	{% if messageType != "warning" %}
+		$("#msg").delay(10000).slideUp();
 	{% endif %}
-
 });
 </script>
 {% endblock %}

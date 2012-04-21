@@ -1,33 +1,21 @@
-{% extends "registrationApp/base.html" %}
+{% extends "registrationApp/headerBase.html" %}
 {% load registrationApp_extras %}
 
 {% block content %}
-{% if full %}
-   <div class="container-fluid">
-        <div class= "row-fluid" style= "margin-bottom:20px; position:relative" >
-            <span id="headerLeft" >
-                <ul class="header nav">
-                    <li class="slide" style="float:left"><a href="http://dalton.org" target="_blank" rel="tooltip" title="dalton.org">The Dalton School</a></li> 
-                    <li class = "slide center"> <a href="#"> <h3>{{ student.firstName }}'s Schedule </h3> </a>
-                    <li class="slide" style="float:right"> <a href = "/registrationApp/logout"> Logout</a></li>
-                    <li class="sel" style="float:right;" id= "notif"> <a href ="#" id="notifA" class="notifButtonSelected"> </a></li>
-                </ul> 
-            </span>
-        </div>
-    </div>
-
-{% endif %}
 <div 
 {% if full %}
-style="width:40%; margin:auto;" class="leftDiv">
-<h1> {{student.firstName}}'s Notifications </h1>
+style="width:40%; margin:auto; min-width:500px;" class="leftDiv">
+<h1> {{student.first_name}}'s Notifications </h1>
 {% else %}
 style="width:99%; max-height:500px; overflow:auto;">
 Notifications:
 {% endif %}
+{% if not student.advisor1Note and not student.advisor2Note and not student.parentNote %}
+  <p> You have no notifications </p>
+{% endif %}
 	{% if student.advisor1Note %}
     	{% if not full %}<a href="/registrationApp/notifications" target="_blank"> {% endif %}
-    		<p>{{student.houseID.houseAdvisor.first_name}} {{student.houseID.houseAdvisorOne_lastName}}'s Note: 
+    		<p>{{student.houseID.houseAdvisorOneID.first_name}} {{student.houseID.houseAdvisorOneID.last_name}}'s Note: 
         	<br />
 	        {% if full %}
 	       		{{student.advisor1Note}}
@@ -41,7 +29,7 @@ Notifications:
 
     {% if student.advisor2Note  %} 
         {% if not full %}<a href="/registrationApp/notifications" target="_blank"> {% endif %}
-  			<p> {{student.houseID.houseAdvisorTwo_firstName}} {{student.houseID.houseAdvisorTwo_lastName}}'s Note: 
+  			<p> {{student.houseID.houseAdvisorTwoID.first_Name}} {{student.houseID.houseAdvisorTwoID.last_name}}'s Note: 
             <br />
            	{% if full %}
 	       		{{student.advisor2Note}}

@@ -1,6 +1,6 @@
 {% extends "registrationApp/base.html" %}
 {% block content %}
-<div id = "courseCatalog">
+<div id = "courseCatalog" class="scroll">
 	{% for course in courses %}
 		<div id = "{{course.courseName|slugify}}" class = "courseCatalogDiv" style= "width:95%; background:#f5f5f5; margin:auto" >
 			<br />
@@ -8,6 +8,17 @@
 			<br /> 
 			<br /> 
 			{{course.courseDescription}}
+			<br />
+			<br />
+
+			{{course.prerequisite}}
+			<br />
+			
+			{{course.corequisite}}
+			<br />
+			<br />
+			
+			{{course.courseCredit}}
 
 			<hr style="height:1px; margin: 1px; width:100%">
 		</div>

@@ -1,9 +1,6 @@
 {% extends "registrationApp/base.html" %}       
 {% load registrationApp_extras %}
-{% block headerscript%}
-        <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.18/jquery-ui.min.js"></script>   
 
-{% endblock %}
 {% block content %}
 
 <div id="alert"></div>
@@ -14,7 +11,7 @@
 
 <div id="required" class="oneView">
     {% if requiredList %}
-        Here is a list of required courses you have to take in {{student.grade}}th grade: <br />
+        Here is a list of required courses you have to take in {{grade}}th grade: <br />
         {% for req, reqPass, reqMessage in requiredList %}
             <div class= "required roundBorder6" >
                 <p class="reqDisc">{{ reqMessage }} 
@@ -29,94 +26,7 @@
         <input type = "submit" value = "add all" class="button"/>
     {% endif %}
 </div>
-<div id ="rank" class="oneView" style="padding-bottom:80px">
-        {% if student.grade == 12 %}
-                Please rank the following courses; drag them in the order you want to rank them in:
-         <ul id= "sortable1"> 
-            {% for studSched, prd, disciplines, sectionOptions, engHistRank, engRank, dayz in sections %}
-                {% if studSched.sectionID.courseID.rankType == "EngHist" %}
-                    {% if studSched.sectionID.semesterOne != studSched.sectionID.semesterTwo %}
-                        {% if studSched.sectionID.semesterOne %}
 
-                            <li class=" {% for discipline in disciplines %}{{discipline.discipline.discipline|slugify}}{% endfor %} discipline roundBorder6" id = "rank_{{studSched.id}}"style="width:49%;" >
 
-                            <p class="reqDisc">{{ studSched.sectionID.courseID.courseName }} | {{ prd }} </p>
-                            </li>
-                        {% endif %}
-                        {% else %}
-                         <li class=" {% for discipline in disciplines %}{{discipline.discipline.discipline|slugify}}{% endfor %} discipline roundBorder6" id = "rank_{{studSched.id}}"style="width:49%%;" >
 
-                        <p class="reqDisc">{{ studSched.sectionID.courseID.courseName }} | {{ prd }} </p>
-                        </li>
-                    {% endif %}
-                {% endif %}
-            {% endfor %}
-        </ul>
-        <ul id= "sortable2"> 
-            {% for studSched, prd, disciplines, sectionOptions, engHistRank, engRank, dayz in sections %}
-                {% if studSched.sectionID.courseID.rankType == "EngHist" %}
-                    {% if studSched.sectionID.semesterOne != studSched.sectionID.semesterTwo %}
-                        {% if studSched.sectionID.semesterTwo %}
-
-                            <li class=" {% for discipline in disciplines %}{{discipline.discipline.discipline|slugify}}{% endfor %} discipline roundBorder6" id = "rank_{{studSched.id}}"style="width:49%; float:right;" >
-
-                            <p class="reqDisc">{{ studSched.sectionID.courseID.courseName }} | {{ prd }} </p>
-                            </li>
-                        {% endif %}
-                    {% else %}
-                         <li class=" {% for discipline in disciplines %}{{discipline.discipline.discipline|slugify}}{% endfor %} discipline roundBorder6" id = "rank_{{studSched.id}}"style="width:49%;float:right;" >
-
-                        <p class="reqDisc">{{ studSched.sectionID.courseID.courseName }} | {{ prd }} </p>
-                        </li>
-                    {% endif %}
-
-                {% endif %}
-
-            {% endfor %}
-        </ul>
-            <input type = "submit" value = "save" id="rankSave" class="button" style="clear:both;"/>
-
-        {% endif %}
-        {% if student.grade == 11 %}
-                Please rank the following courses:
-            {% for studSched, prd, disciplines, sectionOptions, engHistRank, engRank, dayz in sections %}
-                {% if studSched.sectionID.courseID.rankType == "English" %}
-                    <li class="{% for discipline in disciplines %}{{discipline.discipline.discipline|slugify}}{% endfor %} discipline roundBorder6" id = "rank_{{studSched.id}}"style="{% if studSched.sectionID.semesterOne != studSched.sectionID.semesterTwo %}width:49.5%;{% if studSched.sectionID.semesterTwo %}float:right;{% endif %}{% else %}width:99%;{% endif %}">
-                    <p class="reqDisc"> {{ studSched.sectionID.courseID.courseName }} | {{ prd }} </p>
-                    </li>
-                {% endif %}
-            {% endfor %}
-            <input type = "submit" value = "save" id="rankSave" class="button"/>
-        {% endif %}
-</div>
-
-{% endblock %}
-
-{% block script %}
-<script>
-$( document ).ready( function() {
-    $(function() {
-        $( '#sortable1, #sortable2' ).sortable({
-            placeholder: "placeholder",
-            containment: "parent",
-            opacity : "0.6" 
-        });
-        $( "#sortable" ).disableSelection();
-    });  
-    $(document).on("click", "#rankSave", function(){
-        $( '#sortable' ).sortable();
-        var s =$("#sortable").sortable( "serialize");
-        json_response = JSON.stringify(s);
-        alert(json_response);
-        $.post("{% url rankChange %}", {
-            rankOrder: json_response,
-            csrfmiddlewaretoken: '{{ csrf_token }}'
-        },
-            function(data){
-                $('#rank').prepend(data).effect("highlight", {color:"#fffee0"}, 2000)
-        });
-             
-    });
-});
-</script>
 {% endblock %}
