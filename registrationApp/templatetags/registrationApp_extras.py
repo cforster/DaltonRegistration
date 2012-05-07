@@ -31,11 +31,12 @@ def truncatewords_by_chars(value, arg):
         return value
 
 @register.filter
-def toDays(value):
+def toDays(value,prd):
     output = ""
     if value:
-        for num in value:
+        for num, period in zip(value, prd):
             lists = [x.strip() for x in num.split(',')]
+            output += period +": "
             for day in lists:
                 if int(day) == 1:
                     output += "M, "
@@ -53,6 +54,7 @@ def toDays(value):
                     output += "F3, "
                 if int(day) == 8:
                     output += "F4, "
-        return output[:-2]
+            output = output[:-2] + "<br /><br />"
+        return output[:-12]
     else:
         return value

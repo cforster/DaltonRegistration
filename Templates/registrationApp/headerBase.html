@@ -1,12 +1,13 @@
 {% extends "registrationApp/base.html" %}
+
 {% block header %}
 {% if notifDiv and full or not notifDiv %}
    <div class="container-fluid" style="min-width:600px;">
         <div class= "row-fluid" style= "margin-bottom:20px; position:relative" >
             <span id="headerLeft" >
-                <ul class="header nav">
+                <ul class="header nav" style="text-align:center">
                     <li class="slide" style="float:left"><a href="http://dalton.org" target="_blank" rel="tooltip" title="dalton.org">The Dalton School</a></li> 
-                    <li class = "slide center"> <a href="#"> <h3>{% if student %}{{student.first_name}} {{student.last_name}}'s Schedule {% endif %} {% if departmentChair %}{{departmentChair.first_name}} {{departmentChair.last_name}}{% endif %}{% if house %} {{house.houseAdvisorOneID.last_name}} {{house.houseAdvisorTwoID.last_name}} House{% endif %}</h3> </a>
+                    <li class = "slide center" id = "centerHeader"> <a href="#"> <h3>{% if student %}{{student.first_name}} {{student.last_name}}'s Schedule {% endif %} {% if departmentChair %}{{departmentChair.first_name}} {{departmentChair.last_name}}{% endif %}{% if house %} {{house.houseAdvisorOneID.last_name}} {{house.houseAdvisorTwoID.last_name}} House{% endif %}</h3> </a>
                     <li class="slide" style="float:right"> <a href = "/registrationApp/logout"> Logout</a></li>
                 	{% if not notifDiv %}    
                     <li class="slide" style="float:right;" id= "notif"> <a href ="#" rel="tooltip" title="notifications" id="notifA" class="notifButton opaqueImage"> </a></li>
@@ -19,4 +20,15 @@
     </div>
 <span id="notifDiv" class="roundBorder6"></span>
 {% endif %}
+{% endblock %}
+
+{% block headerscript %}
+<script type="text/javascript">
+$( document ).ready( function() {
+   
+
+});
+</script>
+ 
+
 {% endblock %}

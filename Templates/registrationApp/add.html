@@ -2,22 +2,33 @@
 {% load registrationApp_extras %}
 {% block headerscript %}
 
-<script type="text/javascript" src="/registrationApp/site_media/Scripts/drop.js"></script>	
 
+
+<script type="text/javascript" src="/registrationApp/site_media/Scripts/drop.js"></script>  
 <script type="text/javascript">
 	function addP(section){
 		$( '#result' ).html( '&nbsp;' ).load("{% url add %}", {
 			section: section,
 			csrfmiddlewaretoken: '{{ csrf_token }}'
        	}).hide().fadeIn('slow');
+       	$(' #tabs' ).tabs();
+		$(' #tabs' ).tabs("load", 0);
 	}
+
 	function switchPeriod(section, studSched){
 		$.post("{% url delete %}", { 
 		    studSched: studSched,
 		   	csrfmiddlewaretoken: '{{ csrf_token }}'
     	})
-    	.success(function() { addP(section); })
+    	.success(function() { 
+    		addP(section);
+    		$(' #tabs' ).tabs();
+			$(' #tabs' ).tabs("load", 0);
+    	 });
+
+
 	}
+
 	function switchRank(studSched, rank){
 		$( '#result' ).html( '&nbsp;' ).load( '{% url rankChange %}?studSched=' + studSched  +'&rank=' +rank);
 	}
@@ -31,67 +42,80 @@
 		hoverClass: "ui-state-active",
 		drop: function( event, ui ) {
 			$( this ).addClass( "ui-state-highlight" );
-
 			$(ui.draggable).hide('slow');
-			$( '#tabs4' ).html( '&nbsp;' ).load("{% url alternate %}", {
+
+            $(' #tabs' ).tabs();
+            $(' #tabs' ).tabs("select", 3);
+			
+			$.post("{% url alternate %}", { 
 				alternateID : $(ui.draggable).attr("id"),
 				alternateFor: $(this).attr("id"),
 				csrfmiddlewaretoken: '{{ csrf_token }}'
-			}).hide().fadeIn('slow');
+		    	})
+		    	.success(function(data) { 
+
+		            $(' #tabs' ).tabs();
+            		$(' #tabs' ).tabs("load", 3);
+            		window.setTimeout(function () {
+	    				$('#preRank').html(data);
+			    		$('#preRank').css("display", "block");
+			            $('#preRank').effect("highlight", {color:"#fffee0"}, 5000);
+			            $("#preRank").delay(10000).slideUp();
+					}, 500);
+
+
+		     });
 		}
 	});
 </script>
-	
+			
 {% endblock %}
 
 {% block content %}
 {% csrf_token %} 
-{% if student.submit %} <div id="cover"> {% endif %}
 
-<div id = "enrolledDiv" >
-<h3 style="text-align:center"> {{student.first_name}}'s Courses </h3>
+	<div id = "enrolledDiv" >
+	<h3 style="text-align:center"> {{student.first_name}}'s Courses </h3>
 
-	{%if msg and not fromOtherBool %}
+	{%if msg %}
 		<div id = "msg" class="addMessage {{messageType}} roundBorder6">
-
-			{% for m in msg%}
-				{% if forloop.counter != msg|length %}
-					{{m}} In addition, 
-				{% else %}
-					{{m}}	
-				{% endif %}
-			{% endfor %}
-
-			{% for confirm, courseConfirm in confirmationBox %}
-				{% if confirm%}
-					Are you sure you want to add it?
-					<br />
-					<input type = "submit" id = "{% if courseConfirm %}YesCourse{% else %}Yes{% endif %}" class = "button" value = "Yes"/>
-					<input type = "submit" id = "No" class = "button" value = "No"/>
-					<input type = "hidden" name = "{% if courseConfirm %}{{courseConfirm.courseNumber}}{% else %}{{section.id}}{% endif %}" id = "confirmType" />
-					<br />
-				{% endif %}
+		{% for m in msg%}
+			{% if forloop.counter != msg|length %}
+				{{m}}<br /> In addition, 
+			{% else %}
+				{{m}}	
+			{% endif %}
 		{% endfor %}
 
+		{% for confirm, courseConfirm in confirmationBox %}
+			{% if confirm%}
+				Are you sure you want to add it?
+				<br />
+				<input type = "submit" id = "{% if courseConfirm %}YesCourse{% else %}Yes{% endif %}" class = "button" value = "Yes"/>
+				<input type = "submit" id = "No" class = "button" value = "No"/>
+				<input type = "hidden" name = "{% if courseConfirm %}{{courseConfirm.courseNumber}}{% else %}{{section.id}}{% endif %}" id = "confirmType" />
+				<br />
+			{% endif %}
+		{% endfor %}
 		</div>
 	{% endif %} 
 
 <div>
-{% for studSched, prd, disciplines, sectionOptions, engHistRank, engRank, dayz, droppable in studentSchedules %}
-{% if not studSched.alternateFor %}
+{% for studSched, prd, disciplines, sectionOptions, rank, dayz, droppable, show in studentSchedules %}
+{% if show %}
 	<div class="{% for discipline in disciplines %} {{discipline.discipline.discipline|slugify}} {% endfor %} discipline roundBorder6 {% if droppable %}droppable{% endif %} draggable" id = "{{studSched.id}}" style = "{% if studSched.sectionID.semesterOne != studSched.sectionID.semesterTwo %}width:49.5%;{% if studSched.sectionID.semesterTwo %}float:right;{% endif %}{% else %}width:99%;{% endif %};z-index:{{forloop.revcounter|multiply:100}};clear:both;">
 		<!-- {% ifchanged prd %}clear:both{% else %}{% endifchanged %}-->
-		<ul id="disciplineProperties"class="nav dd" style= "max-width:80%; margin:auto" >
+		<ul id="disciplineProperties"class="nav dd" style= "max-width:80%; margin:auto;" >
 			
 			<li id="courseName" ><a rel ="tooltip" href = "#{{studSched.sectionID.courseID.courseName|slugify}}" id = "courseNameLink" title = "{{studSched.sectionID.courseID.courseName}}">{% if studSched.sectionID.semesterOne != studSched.sectionID.semesterTwo %}{{studSched.sectionID.courseID.courseName|truncatewords_by_chars:15}}{% else %}{{studSched.sectionID.courseID.courseName|truncatewords_by_chars:50}}{% endif %}</a></li>
 
 			<li class="{% if sectionOptions|length != 0 %}dropdown{% else %}dropdownFalse{% endif %}" >
-				<a rel = "tooltip" class="dropdown-toggle"  data-toggle="dropdown" title= "{{dayz|toDays}}" {% if sectionOptions|length != 0 %}href="#"{% endif %} > {{prd}} {% if sectionOptions|length != 0 %} <b class="caret"></b> {% endif %}</a> 			
-				{% if sectionOptions and not fromOtherBool and not student.submit %}
+				<a rel = "tooltip" class="dropdown-toggle"  data-toggle="dropdown" title= "{{dayz|toDays:prd}}" {% if sectionOptions|length != 0 %}href="#"{% endif %} > {{prd}} {% if sectionOptions|length != 0 %} <b class="caret"></b> {% endif %}</a> 			
+				{% if sectionOptions %}
 					<ul class = "dropdown-menu">
 						{% for sectionOpt, period, days in sectionOptions %}
 						<li>
-						<a href = "#" rel="tooltip" title= "{{days|toDays}}" id="switch" onclick="switchPeriod({{sectionOpt.id}}, {{studSched.id}}); return false;">{{period}}</a>
+						<a href = "#" rel="tooltip" title= "{{days|toDays:prd}}" id="switch" onclick="switchPeriod({{sectionOpt.id}}, {{studSched.id}}); return false;">{{period}}</a>
 						</li>
 						{% endfor %}	
 					</ul>
@@ -99,9 +123,9 @@
 			</li>
 		</ul>
 
-			{% if not fromOtherBool and not student.submit %}
+
 				<input type="image" name= "{{studSched.id}}" id = "delete" class="roundButton deleteCloseButton" src="/registrationApp/site_media/Images/delete.png" />
-			{% endif %}
+
 
 		</div>
 	{% endif %}
@@ -109,20 +133,18 @@
 
 </div>
 {% if reqMessage %}
-{% for req, reqMsg in reqMessage %}
-<div id = "{{req.courseID}}{{req.discipline|slugify}}" style= "clear:both;" class = "required roundBorder6"><p style="line-height:5px"><i>{{reqMsg}}</i></p>
-	<input type="image" {%if req.courseID %} name="{{req.courseID.courseNumber}}" id="addRequiredCourse"{% else %} name= "{{req.discipline|slugify}}" id="addRequiredDiscipline"{% endif %} class="roundButton deleteCloseButton" src="/registrationApp/site_media/Images/add.png" style="float: right;"/>
-</div>
-{% endfor %}
+	{% for req, reqMsg in reqMessage %}
+		<div id = "{{req.courseID}}{{req.discipline|slugify}}" style= "clear:both;" class = "required roundBorder6"><p style="line-height:5px"><i>{{reqMsg}}</i></p>
+			<input type="image" {%if req.courseID %} name="{{req.courseID.courseNumber}}" id="addRequiredCourse"{% else %} name= "{{req.discipline|slugify}}" id="addRequiredDiscipline"{% endif %} class="roundButton deleteCloseButton" src="/registrationApp/site_media/Images/add.png" style="float: right;"/>
+		</div>
+	{% endfor %}
 {% endif %}
 </div>
 
-{% if not fromOtherBool and not student.submit %}
+
 <div style="width:99%; clear:both;">
 	<input type = "submit" id = "submitAll" class = "button" value ="submit" style="margin:auto"/>
 </div>
-{% endif %}
-
 
 
 	<div id = "screen"> </div>
@@ -131,15 +153,12 @@
         <div id = "submitConfirmationHeader" class="confirmationHeader" >
             <h1 style="display:inline; position:relative;">Submit Confirmation</h1>
         </div>
-        <div class="confirmationBody">
-        <p>You cannot unsubmit once you are done, so please double check your schedule. As soon as you press submit, your schedule will be submitted for House Advisor and then Parent approval. Are you sure you want to submit?</p> 
-        <p> You still have the following warnings:<br/>
-        {% if reqMessage%}
-            {% for req, reqMsg in reqMessage %}
-                {{reqMsg}}<br/>
-            {% endfor %}
-            </p>
-        {% endif %}
+        <div class="confirmationBody" >
+        	<p>You cannot unsubmit once you are done, so please double check your schedule. As soon as you press submit, your schedule will be submitted for House Advisor and then Parent approval. Are you sure you want to submit?</p> 
+    
+        	<div  id="warningDiv"> </div>
+			    <p>Please write any additional notes here:</p> 
+				<textarea id="studentNote" cols="50" rows="10"></textarea>
         </div>
         <div id = "submitConfirmation"class = "submitConfirmationButtons">
             <input type = "submit" value = "No" class = "button" id="schedSubmitNo"/>
@@ -147,14 +166,13 @@
         </div>
     </div>
 
-{% if student.submit %} </div> {% endif %}
 
 {%endblock%}
 
 
 
 {% block script %}
-<script>
+<script type="text/javascript">
 $( document ).ready( function() {
 	$('.dropdown-toggle').dropdown();
 	
@@ -165,28 +183,38 @@ $( document ).ready( function() {
 	$('.engHistRank').click(function() {
 		$(this).children('.rankOptions').toggle();	
 	});
-
-	$(document).on("click", "#Yes", function(){
+	
+	$('#Yes').click(function(){
 		sec = $("#confirmType").attr("name");
 		$( '#result' ).html( '&nbsp;' ).load("{% url add %}", {
 			section : sec,
 			confirm : 1,
 			csrfmiddlewaretoken: '{{ csrf_token }}'
-       	}).hide().fadeIn('slow');
+       	});		       	
+       	$(' #tabs' ).tabs();
+		$(' #tabs' ).tabs("load", 0);
+       	$(' #tabs' ).tabs();
+		$(' #tabs' ).tabs("select", 0);
 	});
 
-	$(document).on("click", "#YesCourse", function(){
+
+	$('#YesCourse').click(function(){
 		course = $("#confirmType").attr("name");
 		$( '#result' ).html( '&nbsp;' ).load("{% url add %}", {
 			course : course,
 			confirm : 1,
 			csrfmiddlewaretoken: '{{ csrf_token }}'
        	}).hide().fadeIn('slow');
+       	$(' #tabs' ).tabs();
+		$(' #tabs' ).tabs("load", 0);
+		$(' #tabs' ).tabs();
+		$(' #tabs' ).tabs("select", 0);
 	});
 
-	$(document).on("click", "#No", function(){
+	$('#No').click(function(){
 		$("#msg").slideUp();
 	});
+
 	{% if messageType != "warning" %}
 		$("#msg").delay(10000).slideUp();
 	{% endif %}

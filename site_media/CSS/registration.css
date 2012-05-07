@@ -3,7 +3,7 @@
 		color:#1b78bb;
 		margin:auto;
 		font-family:"Warnock Pro", "Palatino", "Rosarivo", serif;
-		font-size:12px;
+		font-size:11px;
 		letter-spacing:.5px;
 		border:0;
 	}
@@ -19,11 +19,25 @@
 	a{
 		text-decoration:none;
 		color:#1b78bb;
+		-webkit-transition: all .5s ease-in-out;
+		-moz-transition: all  .5s ease-in-out;
+		-o-transition: all  .5s ease-in-out;
+		-ms-transition: all  .5s ease-in-out;	
+		transition: all  .5s ease-in-out;
 	}
 	a:visited{
 		text-decoration: none;
 	}
+	a:hover{
+		color:	#41383C;
+	}
+	a:focus{
+		outline: none;
+	}
+	a:active{
+		outline: none;
 
+	}
 	hr {
 		margin:1px;
 		height:1px;
@@ -120,7 +134,7 @@
 	    outline: thin dotted 9;
 	    background:#fffee0;
 	}
-	.leftDiv, .rightDiv {
+	.leftDiv, .rightDiv, .backgroundColor {
 		background-color: #f5f5f5;
 		width:100%; 
 		border: 1px solid #eee;
@@ -132,7 +146,7 @@
  	 	box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);
 	}
 	.addMessage{
-		width:99%; 
+		width:97%; 
 		margin:auto;
 		padding:6px;
 	}
@@ -159,9 +173,13 @@
 		border-radius: 6px;
 	}
 		
-	.leftDiv{ padding: 10px;  }
+	.leftDiv{ 
+		padding: 10px;  
+	}
 
-	.leftColumnTop{margin-bottom:15px;}
+	.leftColumnTop{
+		margin-bottom:15px;
+	}
 
 	.dropClass{
 		display:none;
@@ -171,11 +189,13 @@
 	}
 
 	#searchBox{
-	  	width:95%;
+	  	width:97%;
 		height:30px;
 		margin:4px;
 	}
-
+	#semesterTwo{
+		top:25px;
+	}
 	.selectedDiv{
 		background:#FFFFD4;
 	}
@@ -270,9 +290,7 @@
 	.semOne, .semBoth{
 		display:inline-block;
 	}
-	{
 
-	}
 	.semTwo{
 		display:block;
 		top:25px;
@@ -388,7 +406,7 @@
 	}
 	.center{
 		position:absolute;
-		left:44%;
+		left:50%;
 	}
 	.header > .slide:hover{ 	
 		margin-top:-5px;
@@ -433,8 +451,8 @@
 		-o-transition: opacity .2s ease-in-out;
 		-ms-transition: opacity .2s ease-in-out;	
 		transition: opacity .2s ease-in-out;
-
 	}
+
 
 	.discipline:hover, .required:hover{
 		opacity: 1;
@@ -488,7 +506,7 @@
 		color:#FFFFFF;
 	}
 	#searchElement{
-		padding: 6px;
+		padding: 6px 0px;
 		height:50px;
 		-webkit-transition: background .3s ease-in-out;
 		-moz-transition: background .3s ease-in-out;
@@ -496,10 +514,10 @@
 		-ms-transition: background .3s ease-in-out;	
 		transition: background .3s ease-in-out;
 	}
+
 	#searchElement:hover{
 		background:rgba(212,237,237,.9);
 	}
-
 	.scroll::-webkit-scrollbar {
     	background: transparent;
     	width:13px;
@@ -519,18 +537,6 @@
 	    background-color: rgba(0, 0, 0, 0.3);
 	}​
 
-	::selection {
-		background: #fffee0;
-		color:rgba(0,0,0,.15);
-	}
-	::-moz-selection {
-		background: #fffee0;
-		color:rgba(0,0,0,.15);
-	}
-	::-webkit-selection {
-		background: #fffee0;
-		color:rgba(0,0,0,.15);
-	}
 
 	.dropdown {
 	  position: relative;
@@ -702,4 +708,3 @@
 	  opacity: 1;
 	  filter: alpha(opacity=100);
 	}
-

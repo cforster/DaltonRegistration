@@ -1,6 +1,8 @@
 {% extends "registrationApp/headerBase.html" %}
 {% load registrationApp_extras %}
-
+{% block title %}
+Notifications
+{% endblock %}
 {% block content %}
 <div 
 {% if full %}
@@ -57,4 +59,12 @@ Notifications:
        	
     {% endif %}
 </div>
+{% endblock %}
+{% block script %}
+<script type="text/javascript">
+$( document ).ready( function() {
+      var width = $('#centerHeader').outerWidth();
+      $('#centerHeader').css("margin-left", (-(width)/2));
+  });
+</script>
 {% endblock %}

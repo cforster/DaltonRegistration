@@ -1,11 +1,9 @@
 {% extends "registrationApp/headerBase.html" %}
 
-{% block title %}
-    Pre-Registration | The Dalton School
-{% endblock %}
-
 {% block headerscript %}
 	<link type="text/css" href="/registrationApp/site_media/CSS/jquery-ui-1.8.18.custom.css" rel="stylesheet" />
+        <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+        <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.18/jquery-ui.min.js"></script>
 {% endblock %}
 
 {% block content %}
@@ -47,11 +45,12 @@
                 <input type="text" name="search" id= "searchBox" autocomplete="off" placeholder="Enter a Course, Discipline, or Period" />
         
 <span id="spinner" style="display:inline; height:20px;"><img src="/registrationApp/site_media/Images/spinner.gif"/></span>
-                <div id="results" class="scroll">
-                    <div id = "overlay" > </div>
+      
+                <div id="results" style="width:100%;" class="scroll">
+                    <!--<div id = "overlay" > </div> <!-->
                 </div>
             </div>
-            
+  
             <div id="result" class="leftDiv ">
 
             </div>
@@ -63,17 +62,17 @@
         <div class="span8">
             <div id= "tabs" class="rightDiv" >
                 <ul class="tabs">
-                    <li id = "tab1"><a href="#tabs1">instructions</a></li>
+                    <li id = "tab1"><a href="{% url one %}" title="instructions">instructions</a></li>
                     <li id = "tab2"><a href="#tabs2">schedule</a></li>
-                    <li id = "tab3"><a href="{% url catalog %}">catalog</a></li>
-                    <li id = "tab4"><a href="#tabs4">preferences</a></li>
+                    <li id = "tab3"><a href="{% url catalog %}" title ="catalog">catalog</a></li>
+                    <li id = "tab4"><a href="{% url preferences %}" title"preferences">preferences</a></li>
                 </ul>
-                <div id = "tabs1"> </div> 
+                <div id = "instructions"> </div> 
                 <div id="tabs2">
                     <p>schedule</p>
                 </div>
-                <div id = "tabs3"> </div> 
-                <div id = "tabs4"> </div> 
+                <div id = "catalog"> </div> 
+                <div id = "preferences"> </div> 
 
 
             </div>
@@ -108,6 +107,7 @@ $( document ).ready( function() {
             timer3 = setTimeout(showTip, 1000);
         }
     });
+    var width = $(this).outerWidth();
     $('a[rel=tooltip], #tool').live("mouseleave", function(e){
         mouseHover = false;
         $(this).attr('title',$('#tooltip').html());
@@ -150,87 +150,62 @@ $( document ).ready( function() {
         }
     });
 
-    $('#tabs').tabs();
-    $('#tabs').tabs("select", "#tabs1");
-    $('#tabs1').load('{% url one %}');
-    $('#tabs').tabs();
-    $('#tabs4').load('{% url preferences %}');
-
-	$('#searchBox').focus();	
-	$('#result').load('{% url add %}').hide().fadeIn('slow');
 
   
+	$('#searchBox').focus();	
+    {% if student.submit %}
+
+        $('#result').load('{% url studentSchedule %}', {
+            student: {{student.id}},
+            csrfmiddlewaretoken: '{{ csrf_token }}'
+        }).hide().fadeIn('slow');
+        
+    {% else %}
+    $('#result').load('{% url add %}').hide().fadeIn('slow');
+
+    {% endif %}  
 	{% if student.advisor1Note != " " and student.advisor1NoteRead == 0  or  student.advisor2Note != " " and student.advisor2NoteRead == 0  or  student.parentNote != " " and student.parentNoteRead == 0  %}
 		$('#screen').css({"display": "block", "opacity": 0.7}).hide().fadeIn('slow');    
    		$('#notification').css({"display": "block"}).hide().fadeIn('slow');
 	{% endif %}
 
 
-	function getSearchVal(search){
-		q = search;
-		$( '#results' ).html( '&nbsp;' ).load("{% url searchResults %}",{
-			q : q,
-			csrfmiddlewaretoken: '{{ csrf_token }}'
-		}).hide().fadeIn('1000');
-         
-	}
-    function autoFillVal(){
-        $.post("{% url searchResults %}",{q : $('#searchBox').val(), fromBox: "False", csrfmiddlewaretoken: '{{ csrf_token }}'},
-        function(data) {
-            if (data != ""){
-                autoFill(data)
-            }
-        });
-    }
-	var lastKeyPressCode = null
-	var timer;
-    var timer2;
-	var search = ($("#searchBox").val());
-	$('#searchBox').keyup(function(e){
+    var runningRequest = false;
+    var request;
+	
+    var search = ($("#searchBox").val());
+	
+    $('#searchBox').keyup(function(e){
 		e.preventDefault();
         lastKeyPressCode = e.keyCode;
 		var newVal = ($("#searchBox").val());
 		if (newVal != search) {
-			search = newVal;
+            typewatch(function () {
+    			search = newVal;
+                q = search;
+                if(runningRequest){
+                    request.abort();
+                }
 
-			timer && clearTimeout(timer);
-            timer = setTimeout(autoFillVal, 100);  
-
-            timer2 && clearTimeout(timer2);
-			timer2 = setTimeout(getSearchVal(search), 1000);	
+                runningRequest=true;
+                request =$.post("{% url searchResults %}", { q : q,  csrfmiddlewaretoken: '{{ csrf_token }}'},
+               function(data) {
+                    $( '#results' ).html(data);
+                    runningRequest=false;
+               });
+            }, 300);
 		}
 	});
-    function createSelection(start, end){
-        var field = $("#searchBox").get(0);
-        if( field.createTextRange ){
-            var selRange = field.createTextRange();
-            selRange.collapse(true);
-            selRange.moveStart("character", start);
-            selRange.moveEnd("character", end);
-            selRange.select();
-        } else if( field.setSelectionRange ){
-            field.setSelectionRange(start, end);
-        } else {
-            if( field.selectionStart ){
-                field.selectionStart = start;
-                field.selectionEnd = end;
-            }
-        }
-        field.focus();
-    };
-    function autoFill(sValue){
-        if ((lastKeyPressCode != 8) && (lastKeyPressCode!= 46)){
-            $input = $('#searchBox').val();
-            prev = $input;
-            $('#searchBox').val($input + sValue.substring(prev.length));
-            createSelection(prev.length, sValue.length);
-        }
-    };
-
- 
+    var typewatch = (function(){
+    var timer = 0;
+    return function(callback, ms){
+        clearTimeout (timer);
+        timer = setTimeout(callback, ms);
+    }  
+    })();
 
 	$(' #tabs' ).tabs();
-	$(' #tabs' ).tabs("load", 2);
+	$(' #tabs' ).tabs("load", 0);
 
 	$(document).on("click", "#searchResults>a, #courseNameLink", function(f){
 		f.preventDefault();
@@ -248,10 +223,20 @@ $( document ).ready( function() {
        	}).hide().fadeIn('slow');
     });
     $(document).on("click", "#delete", function(){
-		$( '#result' ).html( '&nbsp;' ).load("{% url delete %}", {
-			studSched : $(this).attr("name"),
-			csrfmiddlewaretoken: '{{ csrf_token }}'
-       	}).hide().fadeIn('slow');
+
+        $.post("{% url delete %}", { 
+            studSched : $(this).attr("name"),
+            csrfmiddlewaretoken: '{{ csrf_token }}'
+        })
+        .success(function(data) {
+            $( '#result' ).html(data).hide().fadeIn('slow');
+            $(' #tabs' ).tabs();
+            $(' #tabs' ).tabs("load", 0);
+            $(' #tabs' ).tabs();
+            $(' #tabs' ).tabs("load", 3);
+
+        });
+
     });
 	
     $(document).on("click", "#searchElement", function(){
@@ -264,26 +249,28 @@ $( document ).ready( function() {
 		});
 	}
 
-
-    $('#results').hover(
-        function () {   
-            $(this).css({"overflow-y": "auto"}); 
-        },
-        function () {
-           $(this).css({"overflow-y": "hidden"});
-        }
-    );
     $(document).on("click", "#submitAll", function(){
         $('#screen').css({"display": "block", "opacity": 0.7}).hide().fadeIn('slow');    
         $('#confirmation').css({"display": "block"}).hide().fadeIn('slow');
+        $( '#warningDiv' ).html( '&nbsp;' ).load("{% url warningOutput %}")
     }); 
 
 	$(document).on("click", "#schedSubmitYes", function(){
-		$(' #tabs' ).tabs();
-		$(' #tabs' ).tabs("select", 0);
-		$( '#ui-tabs-1' ).html( '&nbsp;' ).load('{% url submit %}').hide().fadeIn('slow');
-		$( '#result' ).html( '&nbsp;' ).load('{% url add %}').hide().fadeIn('slow');
-		closeConfirmation($("#screen"));
+        $('#tabs' ).tabs();
+        $('#tabs' ).tabs("select", 0);
+		
+        $.post("{% url submit %}", {
+            studentNote : $('#studentNote').val(), 
+            csrfmiddlewaretoken: '{{ csrf_token }}'
+        })
+        .success(function(data) { 
+            $( '#instructions' ).html(data);
+            $( '#result' ).html( '&nbsp;' ).load('{% url studentSchedule %}',{
+                student : {{student.id}},
+                csrfmiddlewaretoken: '{{ csrf_token }}'
+            }).hide().fadeIn('slow');
+        });
+        closeConfirmation($("#screen"));
         closeConfirmation($("#confirmation"));
 	});
 
@@ -327,6 +314,9 @@ $( document ).ready( function() {
 			}
 		});
 	});
+    var width = $('#centerHeader').outerWidth();
+    $('#centerHeader').css("margin-left", (-(width)/2));
+
 
 	$(document).on("click", "#readNotifications", function(){
         var notes = "";
@@ -347,7 +337,7 @@ $( document ).ready( function() {
             csrfmiddlewaretoken: '{{ csrf_token }}'
         },
         function(data){
-            $('#alert').append(data).effect("highlight", {color:"#fffee0"}, 2000).hide(7000);
+            $('#alert').append(data).effect("highlight", {color:"#fffee0"}, 2000).delay(6000).hide(2000);
         });
 	    closeConfirmation($("#notification"));
         closeConfirmation($("#screen"));

@@ -1,9 +1,12 @@
-{% extends "registrationApp/base.html" %}       
+{% extends "registrationApp/base.html" %}  
 {% load registrationApp_extras %}
 
 {% block content %}
 
 <div id="alert"></div>
+{% if student.submit %}
+<p> You have already submitted your schedule. Please talk to your house advisor if you must change your courses. </p>
+{% else %}
 <h2> Welcome to Pre-Registration!</h2>
 <br />
 <h3> To your left you'll find a search box and a list of courses.</h3>
@@ -23,9 +26,10 @@
                 {% endif %} </p><br />
             </div>
         {% endfor %}
-        <input type = "submit" value = "add all" class="button"/>
     {% endif %}
 </div>
+
+{% endif %}
 
 
 

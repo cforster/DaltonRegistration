@@ -1,0 +1,18 @@
+{% extends "registrationApp/base.html" %}
+
+{% block content %}
+
+{% if reqMessage or not warning|length_is:"0" %}
+<p> Warnings: </p>
+{% endif %}
+
+{% if reqMessage%}
+    {% for req, reqMsg in reqMessage %}
+        <p>{{reqMsg}}</p>
+    {% endfor %}
+{% endif %}
+{% for course, message in warning %}
+<p>{{course}} : {{message}}</p>
+{% endfor %}
+
+{% endblock %}

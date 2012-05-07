@@ -1,21 +1,25 @@
 {% extends "registrationApp/base.html" %}
 
-{% block headerscript %}
-<script type="text/javascript">
-	function login(){
-		$( '#logBackIn' ).html( '&nbsp;' ).load('{% url login %}').hide().fadeIn('slow');
-	}
-</script>
-{%endblock%}
-
+{% block title %}
+Logout |
+{% endblock %}
 {% block content %}
+<div class="container-fluid">
+	<div class="row-fluid">
+		<img src="/registrationApp/site_media/Images/daltonseal150px.png" width="150" height="150" alt="The Dalton School" style="margin-top:20px;" />
 
-You have successfully logged out <br>
-Log Back In: <br> 
-<a href = "#" onclick="login();return false;">Login</a>
-<br> <br>
-<div id= "logBackIn">
+		<h1> The Dalton School <br> 
+		Pre-Registration Website</h1>
+		<div class = "leftDiv" style="width:30%; min-width:450px; margin:auto;">
+			<h2> Logout </h2>
+			<p>You have successfully logged out <br>
+				Log Back In: <br> 
+				<a href = "/registrationApp/login" ><h3>Login</h3></a>
+				<br> <br>
+			</p>
+		</div>
+	</div>
+	</div>		
 
-</div>
 {% endblock %}
 

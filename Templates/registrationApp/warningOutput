@@ -1,0 +1,10 @@
+{% extends "registrationApp/base.html" %}
+
+{% block content %}
+{% for course, message in warning %}
+{{course}} : {{warning}}
+<br />
+<br />
+{% endfor %}
+
+{% endblock %}

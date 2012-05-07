@@ -25,15 +25,21 @@ urlpatterns = patterns('registrationApp.views',
     url(r'^registrationApp/approve/$', 'approve', name = 'approve'),
     url(r'^registrationApp/review/$', 'review', name = 'review'),
 
+
+    url(r'^registrationApp/test/$', 'test', name = 'test'),
+    url(r'^registrationApp/output/$', 'output', name = 'output'),
+    url(r'^registrationApp/warningOutput/$', 'warningOutput', name = 'warningOutput'),
+    url(r'^registrationApp/studentSchedule/$', 'studentSchedule', name = 'studentSchedule'),
+
+
     url(r'^registrationApp/ParentConfirm/(?P<Activation_key>\w+)', 'ParentConfirm', name = 'ParentConfirm'),
+    url(r'^registrationApp/parentReview/$', 'parentReview', name = 'parentReview'),
     url(r'^registrationApp/ParentConfirmYes/$', 'ParentConfirmYes', name = 'ParentConfirmYes'),
 
 )
 urlpatterns += patterns('',
-    (r'^admin/', include(admin.site.urls)),
+    (r'^registrationApp/admin/', include(admin.site.urls)),
 	url(r'^registrationApp/login/$', 'django.contrib.auth.views.login', {'template_name': 'registrationApp/login.html'}, name='login'),
     url(r'^registrationApp/logout/$', 'django.contrib.auth.views.logout',{'template_name': 'registrationApp/logout.html'}),    
-    (r'^registrationApp/site_media/(?P<path>.*)$', 'django.views.static.serve',
-        {'document_root': 'site_media/'}),
 )
 

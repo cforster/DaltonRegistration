@@ -4,33 +4,44 @@
 {% block content %}
 
 {% if courseList|length %}
-
-	<strong> <div  style= "background-color:#fffee0;" >Found {{ courseList|length }} Course{{ courseList|pluralize }} with {{searchTerms|lower}}:</strong></div>
+<div style="width:99.7%;" id="searchResultsOuterDiv">
+	<strong> <div  style= "background-color:#fffee0;" >Found {{ courseList|length }} Course{{ courseList|pluralize }} with {{searchTerms|title}}:</strong></div>
 	<hr />
 
 	{% for course, rank, sections, availForGrade, preApproved, disciplines in courseList %}
-		<div id="searchResults" style="width:97.3%;" >	
+		<div id="searchResults" >	
 
 			<a href ="#{{course.courseName|slugify}}" >
 			
 			{% if not availForGrade or course.preapprovalRequired and not preApproved %} 
-				<div id= "overlay" style = "background:rgba(0,0,0,.15); display:block; position:relative;">
+				<div id= "overlay" style = "background:rgba(0,0,0,.15); display:inline-block; position:relative;">
 			{% endif %}
 				
-			<div id ="searchElement" class="row-fluid" style="margin:auto; ">
+			<div id ="searchElement" class="row-fluid">
 				
 				<span class="span7" id="tool" title="{{course.courseName}}"><b>{{course.courseName|truncatewords_by_chars:60}}</b> <br /> 
 				<i> {% for discipline in disciplines %}{{discipline.discipline.discipline}}{% endfor %} </i>  </span>
 
-				<span style="float:right;" class="span5">
-					<span style = "margin:auto">
-						{% for section, period, day in sections %}
-							
-							<div id="tool" title="{{day|toDays}}">
-							<input type="submit" name ="{{section.id}}" {% if not student.submit %} id = "addSection" {% endif %} class ="{% if not student.submit %} button {% else %} grayButton {% endif %}" value="{{period}}"  />
-						</div>
-						{% endfor %}
-					</span>
+				<span style="position:relative;margin:auto;" class="span5">
+					<div id="sem1" style="position:absolute;">
+					{% for section, period, day in sections %}
+						{% if section.semesterTwo and section.semesterOne or section.semesterOne %}
+						<span id="tool" title="{{day|toDays:period}}">
+							<input type="submit" name ="{{section.id}}"{% if not student.submit %} id = "addSection" {% endif %} class ="{% if not student.submit %} button {% else %} grayButton {% endif %}" value="{{period}}"  />	
+						</span>
+						{% endif %}
+					{% endfor %}
+					</div>
+
+					<div id ="sem2" style="position:absolute;top:25px;">
+					{% for section, period, day in sections %}
+						{% if section.semesterTwo and not section.semesterOne %}
+						<span id="tool" title="{{day|toDays:period}}">
+							<input type="submit" name ="{{section.id}}" {% if not student.submit %} id = "addSection" {% endif %} class ="{% if not student.submit %} button {% else %} grayButton {% endif %}" value="{{period}}"  />	
+						</span>
+						{% endif %}
+					{% endfor %}
+					</div>	
 				</span>
 			</div>	
 			{% if not availForGrade or course.preapprovalRequired and not preApproved %} 
@@ -43,7 +54,7 @@
 	{% endfor %}
 
 {% else %}
-	No courses found for {{searchTerms|lower}}. Please try a different search term.
+	No courses found for {{searchTerms|title}}. Please try a different search term.
 {% endif %}
-
+</div>
 {% endblock %}

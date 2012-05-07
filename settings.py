@@ -1,9 +1,10 @@
+import ldap
+from django_auth_ldap.config import LDAPSearch
 
 # Django settings for registration project.
 
 DEBUG = True
-TEMPLATE_DEBUG = DEBUG
-
+TEMPLATE_DEBUG = True
 ADMINS = (
      ('Darshan Desai', 'darshandesai17@gmail.com'),
 )
@@ -13,11 +14,11 @@ MANAGERS = ADMINS
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': 'registration', # Or path to database file if using sqlite3.
-        'USER': 'root',                      # Not used with sqlite3.
+        'NAME': 'registrationTest', # Or path to database file if using sqlite3.
+        'USER': 'darshan',                      # Not used with sqlite3.
         'PASSWORD': 'kti316gu',                  # Not used with sqlite3.
-        'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
-        'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
+        'HOST': 'compsci.dalton.org',                      # Set to empty string for localhost. Not used with sqlite3.
+        'PORT': '3306',                      # Set to empty string for default. Not used with sqlite3.
         
     }
 }
@@ -29,11 +30,6 @@ DATABASES = {
 # If running in a Windows environment this must be set to the same as your
 # system time zone.
 TIME_ZONE = 'America/Chicago'
-
-
-#current year?
-
-
 
 # Language code for this installation. All choices can be found here:
 # http://www.i18nguy.com/unicode/language-identifiers.html
@@ -64,20 +60,20 @@ MEDIA_URL = ''
 # Don't put anything in this directory yourself; store your static files
 # in apps' "static/" subdirectories and in STATICFILES_DIRS.
 # Example: "/home/media/media.lawrence.com/static/"
-STATIC_ROOT = ''
+STATIC_ROOT = '/home/ddesai/registration/site_media/'
 
 # URL prefix for static files.
 # Example: "http://media.lawrence.com/static/"
-STATIC_URL = '/static/'
+STATIC_URL = 'http://compsci.dalton.org/registrationApp/site_media/'
 
 # URL prefix for admin static files -- CSS, JavaScript and images.
 # Make sure to use a trailing slash.
 # Examples: "http://foo.com/static/admin/", "/static/admin/".
-ADMIN_MEDIA_PREFIX = '/static/admin/'
+ADMIN_MEDIA_PREFIX ='/media/'
 
 # Additional locations of static files
 STATICFILES_DIRS = (
-    'C:/Users/Darshan/Desktop/registration/registrationApp/static/',
+    '',
 )
 
 # List of finder classes that know how to find static files in
@@ -87,6 +83,7 @@ STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
 #    'django.contrib.staticfiles.finders.DefaultStorageFinder',
 )
+
 FIXTURE_DIRS = (
    'registrationApp/static/fixtures/',
 )
@@ -105,17 +102,18 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.messages.middleware.MessageMiddleware'
+    'django.contrib.messages.middleware.MessageMiddleware',
 )
 
-ROOT_URLCONF = 'registration.urls'
+ROOT_URLCONF = 'urls'
 
 TEMPLATE_DIRS = (
-    "Templates"
+    "/home/ddesai/registration/Templates/"
     # Don't forget to use absolute paths, not relative paths.
 )
 
 LOGIN_URL = '/registrationApp/login/'
+LOGIN_REDIRECT_URL = '/registrationApp'
 
 INSTALLED_APPS = (
     'django.contrib.auth',
@@ -125,24 +123,17 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.admin',
-    'registrationApp'
+    'registrationApp',
     # 'django.contrib.admindocs',
 )
 
-#import logging
-#logging.basicConfig(
- #   level = logging.DEBUG,
-  #  format = '%(asctime)s %(levelname)s %(message)s',
-  #  filename = 'registrationApp/myapp.log',
-  #  filemode = 'w'
-#)
 
 EMAIL_USE_TLS = True
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_HOST_USER = 'darshandesai17@gmail.com'
 EMAIL_HOST_PASSWORD = 'kti316gu'
 EMAIL_PORT = 587
-LOGIN_REDIRECT_URL = '/registrationApp'
+
 PASSWORD_HASHERS = (
     'django.contrib.auth.hashers.PBKDF2PasswordHasher',
     'django.contrib.auth.hashers.PBKDF2SHA1PasswordHasher',
@@ -151,28 +142,8 @@ PASSWORD_HASHERS = (
     'django.contrib.auth.hashers.MD5PasswordHasher',
     'django.contrib.auth.hashers.CryptPasswordHasher',
 )
-
+CUSTOM_USER_MODEL = 'registrationApp.Student'
 AUTHENTICATION_BACKENDS = (
+    'registrationApp.customBackend.customBackend',
     'django.contrib.auth.backends.ModelBackend',
 )
-
-AUTH_LDAP_SERVER_URI = 'ldap://directory89.dalton.org'                       # Hostname
-#AUTH_LDAP_BASE_USER = "ou=Students,ou=Dalton Users,dc=dalton,dc=org"   # Administrative User's Username
-
-
-
-#AUTH_LDAP_BASE_PASS = "password"                     # Administrative User's Password 
-#AUTH_LDAP_BASE_DN = "dc=example,dc=com"              # Base DN (also accepts o=example.com format)
-#AUTH_LDAP_FIELD_DOMAIN = "example.com"               # Domain from which users will take the domain for dummy e-mail generation (it keeps Django happy!)
-#AUTH_LDAP_GROUP_NAME = "ldap_people"                 # Django group for LDAP users (helps us manage them for password changing, etc.)
-#AUTH_LDAP_VERSION = 3                                # LDAP version
-#AUTH_LDAP_OLDPW = False                              # Can the server take the old password? True/False
-
-# Optional
-#AUTH_LDAP_FIELD_USERAUTH = "uid"                     # The field from which the user authentication shall be done.
-#AUTH_LDAP_FIELD_AUTHUNIT = "People"                  # The organisational unit in which your users shall be found.
-#AUTH_LDAP_FIELD_USERNAME = "uid"                     # The field from which to draw the username (Default 'uid'). (Allows non-uid/non-dn custom fields to be used for login.)
-#AUTH_LDAP_WITHDRAW_EMAIL = False                     # Should django try the directory for the user's email ('mail')? True/False.
-DEBUG_TOOLBAR_CONFIG = {
-    'INTERCEPT_REDIRECTS': False,
-}
