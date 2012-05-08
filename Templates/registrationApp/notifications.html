@@ -12,36 +12,21 @@ style="width:40%; margin:auto; min-width:500px;" class="leftDiv">
 style="width:99%; max-height:500px; overflow:auto;">
 Notifications:
 {% endif %}
-{% if not student.advisor1Note and not student.advisor2Note and not student.parentNote %}
+{% if not student.advisorNote and not student.parentNote %}
   <p> You have no notifications </p>
 {% endif %}
-	{% if student.advisor1Note %}
+	{% if student.advisorNote %}
     	{% if not full %}<a href="/registrationApp/notifications" target="_blank"> {% endif %}
-    		<p>{{student.houseID.houseAdvisorOneID.first_name}} {{student.houseID.houseAdvisorOneID.last_name}}'s Note: 
+    		<p>House Advisor's Note: 
         	<br />
 	        {% if full %}
-	       		{{student.advisor1Note}}
+	       		{{student.advisorNote}}
 	       	{% else %}
-	       		{{student.advisor1Note|truncatewords_by_chars:75}}
+	       		{{student.advisorNote|truncatewords_by_chars:75}}
 	        {% endif %}
        		</p>
         {% if not full %}</a>{% endif %}
        	<hr style="height:1px; border:0; background-color:#CCCCCC" />
-    {% endif %}
-
-    {% if student.advisor2Note  %} 
-        {% if not full %}<a href="/registrationApp/notifications" target="_blank"> {% endif %}
-  			<p> {{student.houseID.houseAdvisorTwoID.first_Name}} {{student.houseID.houseAdvisorTwoID.last_name}}'s Note: 
-            <br />
-           	{% if full %}
-	       		{{student.advisor2Note}}
-	       	{% else %}
-	       		{{student.advisor2Note|truncatewords_by_chars:75}}
-	        {% endif %}
-            </p>
-        {% if not full %}</a>{% endif %}
-       	<hr style="height:1px; border:0; background-color:#CCCCCC" />
-        
     {% endif %}
        
     {% if student.parentNote %}  

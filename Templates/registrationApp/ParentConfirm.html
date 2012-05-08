@@ -27,6 +27,7 @@
 	</div>
 
  	<div class="row-fluid">
+ 		<br />
 		We, {{parents}}, approve of this schedule
 		<br />
 		<input type="submit" class = "button" value="Yes" name="{{student.id}}" id="parentConfirmYes"/>
@@ -48,6 +49,8 @@
     <div id = "submitConfirmationHeader" class="confirmationHeader" >
         <h1 style="display:inline; position:relative;">Submit Confirmation</h1>
     </div>
+<span id="spinner2" style="display:inline; height:20px;"><img src="/registrationApp/site_media/Images/spinner.gif"/></span>
+
     <div class="confirmationBody">
 	    <p>Please write a message for {{ student.first_name }} {{student.last_name}} to review here. This will send them an email notification and let them see it on their schedule page</p> 
 		<textarea id="reviewText" cols="50" rows="15"></textarea>	
@@ -68,7 +71,6 @@
 <script type="text/javascript">
 
 $( document ).ready( function() {
-	{% if student.submit and not student.parentApproval %}
 	$( '#parentViewCourseList' ).html( '&nbsp;' ).load("{% url studentSchedule %}", {
 			student: {{student.id}},
 			fromOther: 1,
@@ -82,10 +84,6 @@ $( document ).ready( function() {
 
 	
 	$(document).on("click",  "#parentConfirmYes", function(){
-
-		
-
-
 		$.post("{% url ParentConfirmYes %}", { 
 			student: $(this).attr("name"),
 			csrfmiddlewaretoken: '{{ csrf_token }}'
@@ -95,16 +93,8 @@ $( document ).ready( function() {
 			location.reload();
 			//$( '#parentSubmit' ).html(data);
 			//$('#parentSubmit').delay(500).effect("highlight", {color:"#fffee0"}, 5000);
-
     	 });
-
-
 	});
-
-
-
-
-
 	function closeConfirmation(){
 		$('#revTextDiv, #screen').fadeOut('slow',function(){
 			$(this).css({"display": "none"})
@@ -120,27 +110,39 @@ $( document ).ready( function() {
    		$('#revTextDiv').css({"display": "block"}).hide().fadeIn('slow');
 	});
 
-
+	{% if student.submit and not student.parentApproval %}
 	$(document).on("click", "#parentSubmit", function(){
-        $( '#parentSubmit' ).html( '&nbsp;' ).load("{% url parentReview %}", {
-            student : $(this).attr("name"),
+		$.post("{% url parentReview %}", { 
+			student: $(this).attr("name"),
             message : $('#reviewText').val(),
             csrfmiddlewaretoken: '{{ csrf_token }}'
-        }).hide().fadeIn('slow');
-		closeConfirmation();
-		$('#parentSubmit').delay(500).effect("highlight", {color:"#fffee0"}, 5000);
-
+    	})
+    	.success(function(data) { 
+			closeConfirmation();
+			alert(data)
+			location.reload();
+    	 });
     });
+    {% endif %}
 
-	{% else %}
-	$( '#parentViewSchedule' ).html("Sorry, your child has not submitted yet, or you have already approved your child!")
+	{% if not student.submit or student.parentApproval %}
+
+   		$('#screen').css({"display": "block", "opacity": 0.7}).hide().fadeIn('slow'); 
+   		$('#revTextDiv').html("<br /><br />	Sorry, your child has not submitted yet, or you have already approved your child! <br /><br />")
+   		$('#revTextDiv').css({"display": "block"}).hide().fadeIn('slow');
+		
 	{% endif %}
+	$('#spinner,#spinner2')
+    .hide()
+    .ajaxStart(function() {
+        $(this).show();
+    })
+    .ajaxStop(function() {
+        $(this).hide();
+	});
 });
-$(document).ajaxStart( function() {
-	$( '#spinner' ).show();
-}).ajaxStop( function() {
-	$( '#spinner' ).hide();
-});
+
+
 </script>
 
 {%endblock%}

@@ -3,10 +3,11 @@
 Advisor |
 {% endblock %}
 {% block headerscript%}
-
+	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.18/jquery-ui.min.js"></script>
 <script type="text/javascript">
 	function getStudSched(studentID){
-		$( '#courseList' ).html( '&nbsp;' ).load('{% url add %}',{
+		$( '#courseList' ).html( '&nbsp;' ).load('{% url studentSchedule %}',{
 			student: studentID,
 			fromOther : 1,
 			csrfmiddlewaretoken: '{{ csrf_token }}'
@@ -35,6 +36,8 @@ Advisor |
 					    <div id = "submitConfirmationHeader" class="confirmationHeader" >
 					        <h1 style="display:inline; position:relative;">Submit Confirmation</h1>
 					    </div>
+						<span id="spinner2" style="display:inline; height:20px;"><img src="/registrationApp/site_media/Images/spinner.gif"/></span>
+
 					    <div class="confirmationBody">
 						    <p>Please write a message for {{ student.first_name }} {{student.last_name}} to review here. This will send them an email notification and let them see it on their schedule page</p> 
 							<textarea id="reviewText" cols="50" rows="15"></textarea>	
@@ -68,7 +71,11 @@ Advisor |
 				{% endfor %}
 			</div>
 		</div>
-		<div class= "span8" id = "courseList"></div>
+		<span id="spinner" style="display:inline; height:20px;"><img src="/registrationApp/site_media/Images/spinner.gif"/></span>
+		<div class= "span4" id = "courseList">
+		</div>
+		<div class= "span8" id = "schedule"></div>
+
 	</div>
 </div>
 		 
@@ -79,7 +86,8 @@ Advisor |
 
 <script type="text/javascript">
 $( document ).ready( function() {
-	
+	var width = $('#centerHeader').outerWidth();
+    $('#centerHeader').css("margin-left", (-(width)/2));
 	function closeConfirmation(){
 		$('#revTextDiv, #screen').fadeOut('slow',function(){
 			$(this).css({"display": "none"})
@@ -96,27 +104,40 @@ $( document ).ready( function() {
 
 
 	$(document).on("click", "#approve", function(){
-		$( '#courseList' ).html( '&nbsp;' ).load('{% url approve %}',{
+		$.post("{% url approve %}", { 
 			student: $(this).attr("name"),
-			csrfmiddlewaretoken: '{{ csrf_token }}'
-		}).hide().fadeIn('slow');
+            csrfmiddlewaretoken: '{{ csrf_token }}'
+    	})
+    	.success(function(data) { 
+			alert(data)
+			location.reload();
+    	 });
 	});
 
 	$(document).on("click", "#submit", function(){
-        $( '#courseList' ).html( '&nbsp;' ).load("{% url review %}", {
+
+		$.post("{% url review %}", { 
             student : $(this).attr("name"),
             message : $('#reviewText').val(),
             csrfmiddlewaretoken: '{{ csrf_token }}'
-        }).hide().fadeIn('slow');
-		closeConfirmation();
+    	})
+    	.success(function(data) { 
+			alert(data)
+			closeConfirmation();
+			$('#reviewText').val("")
+			location.reload();
+    	 });
     });
+	$('#spinner,#spinner2')
+    .hide()
+    .ajaxStart(function() {
+        $(this).show();
+    })
+    .ajaxStop(function() {
+        $(this).hide();
+	});
+});
 
-});
-$(document).ajaxStart( function() {
-	$( '#spinner' ).show();
-}).ajaxStop( function() {
-	$( '#spinner' ).hide();
-});
 </script>
 
 {%endblock%}

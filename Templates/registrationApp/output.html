@@ -1,10 +1,95 @@
 {% extends "registrationApp/base.html" %}
 
 {% block content %}
-{% for out in studOut %}
-{{out}}
-<br />
-<br />
+
+{% for key,value in studentInfo.items %}
+{{key}}:{{value}}<br />
 {% endfor %}
 
+<br />
+{% if not fullYearCourses|length_is:"0" %}
+
+<p> Full Year Courses: </p>
+<table>
+<tr>
+	<th>Discipline</th><th>Course #</th><th>Course Name</th><th>Period</th><th>Approval</th>
+</tr>
+{% for disciplines, courseNumber, courseName, period, preApproved in fullYearCourses %}
+	<tr>
+		<td>{% for discipline in disciplines %}{{discipline.discipline.discipline}}{% endfor %} </td>
+		<td>{{courseNumber}} </td>
+		<td>{{courseName}}</td>
+		<td>{{period}} </td>
+		<td>{{preApproved}} </td>
+	</tr>
+{% endfor %}
+</table>
+{% endif %}
+<br />
+
+{% if not rankedCourses|length_is:"0" %}
+
+<p> Ranked Courses: </p>
+<table>
+<tr>
+	<th>Semester</th><th>Rank</th><th>Course #</th><th>Course Name</th><th>Period</th>
+</tr>
+{% for rank, courseNumber, courseName, period, semester  in rankedCourses %}
+	<tr>
+		<td>{{semester}}</td>
+		<td>{{rank}} </td>
+		<td>{{courseNumber}}</td>
+		<td>{{courseName}} </td>
+		<td>{{period}}</td>
+	</tr>
+{% endfor %}
+</table>
+
+{% endif %}
+<br />
+
+{% if not alternateCourses|length_is:"0" %}
+
+<p> Alternate Courses: </p>
+<table >
+<tr>
+	<th>Alternate For</th><th>Semester</th><th>Rank</th><th>Course #</th><th>Course Name</th><th>Period</th>
+</tr>
+{% for rank, courseNumber, courseName, period, alternateFor, semester  in alternateCourses %}
+	<tr>
+		<td>{{alternateFor}}</td>
+		<td>{{semester}}</td>
+		<td>{{rank}} </td>
+		<td>{{courseNumber}}</td>
+		<td>{{courseName}} </td>
+		<td>{{period}}</td>
+	</tr>
+{% endfor %}
+</table>
+{% endif %}
+
+<br />
+{% if not otherCourses|length_is:"0" %}
+
+<p> Elective/Single Semester Courses: </p>
+<table>
+<tr>
+	<th>Semester</th><th>Discipline</th><th>Course #</th><th>Course Name</th><th>Period</th><th>Approval</th>
+</tr>
+{% for disciplines, courseNumber, courseName, period, preApproved, semester in otherCourses %}
+	<tr>
+		<td>{{semester}}</td>
+		<td>{% for discipline in disciplines %}{{discipline.discipline.discipline}}{% endfor %} </td>
+		<td>{{courseNumber}}</td>
+		<td>{{courseName}} </td>
+		<td>{{period}}</td>
+		<td>{{preApproved}}</td>
+
+	</tr>
+{% endfor %}
+</table>
+{% endif %}
+{% if student.studentNote %}
+{{student.studentNote}}
+{% endif %}
 {% endblock %}

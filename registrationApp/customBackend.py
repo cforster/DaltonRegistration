@@ -3,7 +3,7 @@ from django.contrib.auth.models import User, Group
 from django.conf import settings
 from django.contrib.auth.backends import ModelBackend
 from django.db.models import get_model
-from registrationApp.models import Student, DepartmentChair
+from registrationApp.models import Student
 import os
 
    
@@ -102,12 +102,12 @@ class customBackend:
                
                     l.unbind_s()
 
-                    user = Student(username=username,id=studentID,first_name=first_name,last_name=last_name,email=mail,graduationYear=gradYear,houseID_id=1,parentStudentID_id= 1)
+                    user = Student(username=username,id=studentID,first_name=first_name,last_name=last_name,email=mail,graduationYear=gradYear)
                     
                 elif faculty:
                     l.unbind_s()
 
-                    user = DepartmentChair(username=username,first_name=first_name,last_name=last_name,email=mail)
+                    user = User(username=username,first_name=first_name,last_name=last_name,email=mail)
 
 
             except Exception, e:

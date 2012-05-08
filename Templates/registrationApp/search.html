@@ -8,7 +8,7 @@
 
 {% block content %}
 
-{% if student.advisor1Note and not student.advisor1NoteRead or student.advisor2Note and not student.advisor2NoteRead or student.parentNote and not student.parentNoteRead %}
+{% if student.advisorNote and not student.advisorNoteRead or student.parentNote and not student.parentNoteRead %}
     <div id= "screen"></div>
     <div id ="notification" class = "confirmationDiv">
     <input type="image" id = "close2" class="roundButton deleteCloseButton" src="/registrationApp/site_media/Images/delete.png"/>            
@@ -16,12 +16,8 @@
             <h1 style="display:inline; position:relative;"> Notifications </h1>
         </div>
         <div class= "confirmationBody">
-            {% if student.advisor1Note and not student.advisor1NoteRead %}
-                Advisor 1's Note:  <br />{{student.advisor1Note}}<br /> <br />
-            {% endif %}
-
-            {% if student.advisor2Note and not student.advisor2NoteRead %}  
-                Advisor 2's Note:  <br />{{student.advisor2Note}} <br /> <br />
+            {% if student.advisorNote and not student.advisorNoteRead %}
+                Advisor's Note:  <br />{{student.advisorNote}}<br /> <br />
             {% endif %}
                
             {% if student.parentNote and not student.parentNoteRead  %}   
@@ -113,14 +109,7 @@ $( document ).ready( function() {
         $(this).attr('title',$('#tooltip').html());
         $(this).children('div#tooltip').remove();
     });
-    $('#tabs').tabs({
-        ajaxOptions: {
-          timeout: 100000,
-          error: function() {
-            $('#tabs').tabs('abort');
-            }
-        }
-    });
+
     $(document).on("click","#notif", function(e){
         e.stopPropagation(); 
         $('#notif').toggleClass("slide");
@@ -164,7 +153,7 @@ $( document ).ready( function() {
     $('#result').load('{% url add %}').hide().fadeIn('slow');
 
     {% endif %}  
-	{% if student.advisor1Note != " " and student.advisor1NoteRead == 0  or  student.advisor2Note != " " and student.advisor2NoteRead == 0  or  student.parentNote != " " and student.parentNoteRead == 0  %}
+	{% if student.advisorNote != " " and student.advisorNoteRead == 0 or  student.parentNote != " " and student.parentNoteRead == 0  %}
 		$('#screen').css({"display": "block", "opacity": 0.7}).hide().fadeIn('slow');    
    		$('#notification').css({"display": "block"}).hide().fadeIn('slow');
 	{% endif %}
@@ -206,6 +195,7 @@ $( document ).ready( function() {
 
 	$(' #tabs' ).tabs();
 	$(' #tabs' ).tabs("load", 0);
+
 
 	$(document).on("click", "#searchResults>a, #courseNameLink", function(f){
 		f.preventDefault();
@@ -320,12 +310,8 @@ $( document ).ready( function() {
 
 	$(document).on("click", "#readNotifications", function(){
         var notes = "";
-		{% if student.advisor1Note and not student.advisor1NoteRead %}
-			notes += "advisor1Note,";
-	   	{% endif %}
-
-	   	{% if student.advisor2Note and not student.advisor2NoteRead %}	
-            notes += "advisor2Note,";
+		{% if student.advisorNote and not student.advisorNoteRead %}
+			notes += "advisorNote,";
 	   	{% endif %}
 		   
         {% if student.parentNote and not student.parentNoteRead %} 
@@ -342,7 +328,8 @@ $( document ).ready( function() {
 	    closeConfirmation($("#notification"));
         closeConfirmation($("#screen"));
 	});
-
+    $(' #tabs' ).tabs();
+    $(' #tabs' ).tabs("load", 2);
 });
 
 $(document).ajaxStart( function() {

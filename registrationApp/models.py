@@ -7,7 +7,7 @@ class House (models.Model):
 	houseAdvisorTwoID = models.ForeignKey(User, related_name = 'advisor_two', blank = True, null = True,  limit_choices_to={'groups__in': [3]})
 	roomNumber = models.IntegerField()
         def __unicode__(self):
-	        return u'%s %s' % (self.houseAdvisorOneID.first_name,self.houseAdvisorOneID.last_name )
+	        return u'%s %s House' % (self.houseAdvisorOneID.first_name, self.houseAdvisorOneID.last_name )
 
 class Parent (models.Model):
 	parentFirstName= models.CharField(max_length=128)
@@ -15,13 +15,13 @@ class Parent (models.Model):
 	parentEmail = models.EmailField(max_length=256)
 	parentPhoneNumber = models.IntegerField()
         def __unicode__(self):
-	        return self.parentFirstName
+	        return u'%s %s' % (self.parentFirstName, self.parentLastName)
 
 class ParentStudent (models.Model):
 	parentOneID = models.ForeignKey(Parent, related_name =' parent_one')
 	parentTwoID = models.ForeignKey(Parent, related_name =' parent_two', blank = True, null = True)
         def __unicode__(self):
-	        return u'%s %s' % (self.parentOneID.parentFirstName, self.parentOneID.parentLastName)
+	        return u'%s' % (self.parentOneID)
 
 class Student (User):
 	graduationYear= models.IntegerField()
@@ -36,12 +36,14 @@ class Student (User):
 	activation_key = models.CharField(max_length=40, blank = True, null = True)
 	objects = UserManager()
         def __unicode__(self):
-	        return u'%s %s' %(self.first_name, self.last_name)
+	        return u'%s %s %s' %(self.first_name, self.last_name, self.username)
 
 class StudentHouseParent (models.Model):
 	studentID = models.ForeignKey(Student)
 	houseID = models.ForeignKey(House)
 	parentStudentID = models.ForeignKey(ParentStudent)
+        def __unicode__(self):
+	        return u'%s %s %s' %(self.studentID, self.houseID, self.parentStudentID)
 
 class Discipline (models.Model):
 	discipline_Choices= (
@@ -51,17 +53,17 @@ class Discipline (models.Model):
 		('History', 'History'),
 		('Language', 'Language'),
 		('PE', 'PE'),
-		('Art', 'Art'),
+		('Visual-Art','Visual-Art'),
 		('Dance','Dance'),
 		('Computer-Science','Computer-Science'),
 		('Music','Music'),
 		('Misc','Misc'),
-		('Visual-Art','Visual-Art')
+		('Theater', 'Theater')
 	)
 	discipline = models.CharField(max_length=16, choices= discipline_Choices)
 	departmentChair = models.ForeignKey(User, limit_choices_to={'groups__in': [1]})
         def __unicode__(self):
-	        return self.discipline
+	        return u'%s %s %s' %(self.discipline, self.departmentChair.first_name, self.departmentChair.last_name)
 
 class Course (models.Model):
 	courseNumber = models.IntegerField(db_index=True, max_length=9, primary_key=True)
@@ -72,19 +74,21 @@ class Course (models.Model):
 	prerequisite = models.CharField(max_length = 2000, blank = True, null = True)
 	corequisite = models.CharField(max_length = 2000, blank = True, null = True)
 	courseCredit = models.CharField(max_length = 200, blank = True, null = True)
+	level = models.IntegerField(blank = True, null = True)
 	rankChoices = (
 		('EngHist', 'EngHist'),
 		('English', 'English'),
 	)
+	#Level
 	rankType = models.CharField(max_length=10, choices = rankChoices, blank = True, null = True)
         def __unicode__(self):
-	        return self.courseName
+	        return u'%s #%s' %(self.courseName, self.courseNumber)
 
 class CourseDiscipline (models.Model):
 	courseID = models.ForeignKey(Course)
 	discipline = models.ForeignKey(Discipline)
         def __unicode__(self):
-	        return u'%s' % (self.id)
+	        return u'%s %s' % (self.courseID, self.discipline.discipline)
 
 class Section (models.Model):
 	courseID = models.ForeignKey(Course, db_index=True)
@@ -103,7 +107,7 @@ class Section (models.Model):
 	ZPeriodDays = models.CommaSeparatedIntegerField(max_length=15, null=True, blank=True)
 	#RoomNumber
         def __unicode__(self):
-	        return u'%s %s' % (self.courseID.courseName, self.id)
+	        return u'%s %s' % (self.courseID, self.id)
 
 
 class StudentSchedule (models.Model):
@@ -113,13 +117,13 @@ class StudentSchedule (models.Model):
 	alternateFor = models.ForeignKey(Course, null=True, blank=True)#studSched
 	conflictMessage = models.CharField(max_length = 10000, blank = True, null = True)
         def __unicode__(self):
-	        return u'%s' % (self.id)
+	        return u'%s %s' % (self.studentID, self.sectionID)
 	        	
 class PreApproval (models.Model):
 	studentID = models.ForeignKey(Student)
 	courseID = models.ForeignKey(Course)
         def __unicode__(self):
-	        return u'%s %s' % (self.studentID.firstName, self.courseID.courseName)
+	        return u'%s %s' % (self.studentID, self.courseID)
 
 gradeChoices= (
 		('9', '9'),
@@ -134,10 +138,10 @@ class RequiredObjects(models.Model):
 	grade = models.CharField(max_length=16, choices= gradeChoices)
 	message = models.CharField(max_length=2048)
 	def __unicode__(self):
-		return u'%s %s' % (self.grade, self.courseID)
+		return u'%s %s' % (self.grade, self.courseID, self.discipline.discipline)
 
 class AlternateCourse(models.Model):
 	courseID = models.ForeignKey(Course)
 	grade = models.CharField(max_length=16, choices= gradeChoices)
 	def __unicode__(self):
-		return u'%s %s' % (self.grade, self.courseID)
+		return u'%sth Grade %s' % (self.grade, self.courseID)

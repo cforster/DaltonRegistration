@@ -6,17 +6,14 @@ admin.site.register(Student)
 from registrationApp.models import House
 admin.site.register(House)
 
-from registrationApp.models import HouseAdvisor
-admin.site.register(HouseAdvisor)
-
 from registrationApp.models import Parent
 admin.site.register(Parent)
 
 from registrationApp.models import ParentStudent 
 admin.site.register(ParentStudent)
 
-from registrationApp.models import DepartmentChair
-admin.site.register(DepartmentChair)
+from registrationApp.models import StudentHouseParent
+admin.site.register(StudentHouseParent)
 
 from registrationApp.models import Discipline 
 admin.site.register(Discipline)

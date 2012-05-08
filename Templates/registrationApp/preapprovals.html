@@ -2,10 +2,11 @@
 {% block title %}
 Preapprovals |
 {% endblock %}
-{% block title %}
-PreApprovals | The Dalton School
-{% endblock %}
+{% block headerscript %}
 
+        <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+        <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.18/jquery-ui.min.js"></script>
+{% endblock %}
 {% block content %}
 <div class="container-fluid">
     <div class="row-fluid">
@@ -13,6 +14,11 @@ PreApprovals | The Dalton School
 				{% for course in courses %}
 					<input type = "submit" id = "preAppCourse"  class= "button" style="margin-right:15px; padding:6px;" name = "{{course.courseNumber}}" value = "{{course.courseName}}"/>
 				{% endfor %}
+				<br />
+				<br />
+				
+		<span id="spinner" style="display:inline; height:20px;"><img src="/registrationApp/site_media/Images/spinner.gif"/></span>
+
 				<div id = "textBoxArea">
 
 				</div>
@@ -24,7 +30,8 @@ PreApprovals | The Dalton School
 {% block script %}
 <script type="text/javascript">
 $( document ).ready( function() {
-
+	var width = $('#centerHeader').outerWidth();
+    $('#centerHeader').css("margin-left", (-(width)/2));
     $(document).on("click", "#preAppCourse", function(){
 		$( '#textBoxArea' ).html( '&nbsp;' ).load("{% url preappContainer %}", {
 			courseNumber: $(this).attr("name"),
@@ -38,6 +45,14 @@ $( document ).ready( function() {
 			csrfmiddlewaretoken: '{{ csrf_token }}'
 	   	}).hide().fadeIn('slow');
     });
+    $('#spinner')
+    .hide()
+    .ajaxStart(function() {
+        $(this).show();
+    })
+    .ajaxStop(function() {
+        $(this).hide();
+	});
 });
 </script>
 {% endblock %}

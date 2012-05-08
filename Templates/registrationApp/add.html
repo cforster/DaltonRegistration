@@ -60,7 +60,7 @@
 	    				$('#preRank').html(data);
 			    		$('#preRank').css("display", "block");
 			            $('#preRank').effect("highlight", {color:"#fffee0"}, 5000);
-			            $("#preRank").delay(10000).slideUp();
+			            $("#preRank").stop().delay(10000).slideUp();
 					}, 500);
 
 
@@ -177,7 +177,7 @@ $( document ).ready( function() {
 	$('.dropdown-toggle').dropdown();
 	
 	{% if msg %}
-		$('#msg').delay(500).effect("highlight", {color:"#fffee0"}, 5000);
+		$('#msg').stop().delay(500).effect("highlight", {color:"#fffee0"}, 5000);
 	{% endif %}
 
 	$('.engHistRank').click(function() {
@@ -211,12 +211,12 @@ $( document ).ready( function() {
 		$(' #tabs' ).tabs("select", 0);
 	});
 
-	$('#No').click(function(){
-		$("#msg").slideUp();
+    $(document).on("click", "#No", function(){
+		$("#msg").stop().slideUp('slow');
 	});
 
 	{% if messageType != "warning" %}
-		$("#msg").delay(10000).slideUp();
+		$("#msg").stop().delay(10000).slideUp();
 	{% endif %}
 });
 </script>

@@ -4,7 +4,8 @@
 	{% for course in courses %}
 		<div id = "{{course.courseName|slugify}}" class = "courseCatalogDiv" style= "width:95%; background:#f5f5f5; margin:auto" >
 			<br />
-			<b>{{course.courseName}}</b>
+			<b>{{course.courseName}}</b> <br />
+			Course #: {{course.courseNumber}}
 			<br /> 
 			<br /> 
 			{{course.courseDescription}}

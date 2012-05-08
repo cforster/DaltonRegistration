@@ -8,7 +8,7 @@ Login |
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.18/jquery-ui.min.js"></script>
 {% endblock %}
-    
+
 {% block content %}
 <div class="container-fluid">
 	<div class="row-fluid">
@@ -16,7 +16,7 @@ Login |
 
 		<h1> The Dalton School <br> 
 		Pre-Registration Website</h1>
-		<div class = "leftDiv" style="width:30%; min-width:450px; margin:auto;">
+		<div class = "leftDiv" style="width:35%; min-width:450px; margin:auto;">
 			<h2> Login </h2>
 			{% if form.errors %}
 			<div class="error roundBorder">
@@ -26,7 +26,7 @@ Login |
 			{% endif %}
 			
 			<div style = "margin:auto; width:50%; margin-bottom:20px;">
-				<form method="post" action="{% url 'django.contrib.auth.views.login' %}">
+				<form method="post" action="{% url 'login' %}">
 				{% csrf_token %}
 		
 				<div id="usernameRow" class= "login">
