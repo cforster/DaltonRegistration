@@ -1,5 +1,4 @@
 import ldap
-from django_auth_ldap.config import LDAPSearch
 
 # Django settings for registration project.
 
@@ -8,13 +7,13 @@ TEMPLATE_DEBUG = True
 ADMINS = (
      ('Darshan Desai', 'darshandesai17@gmail.com'),
 )
-DEFAULT_FROM_EMAIL = 'darshandesai17@gmail.com'
+DEFAULT_FROM_EMAIL = 'DaltonCourseReg@gmail.com'
 MANAGERS = ADMINS
 
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': 'registrationTest', # Or path to database file if using sqlite3.
+        'NAME': 'registration', # Or path to database file if using sqlite3.
         'USER': 'darshan',                      # Not used with sqlite3.
         'PASSWORD': 'kti316gu',                  # Not used with sqlite3.
         'HOST': 'compsci.dalton.org',                      # Set to empty string for localhost. Not used with sqlite3.
@@ -96,7 +95,7 @@ TEMPLATE_LOADERS = (
     'django.template.loaders.app_directories.Loader',
 #     'django.template.loaders.eggs.Loader',
 )
-
+SESSION_COOKIE_AGE = 1209600
 MIDDLEWARE_CLASSES = (
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -130,8 +129,8 @@ INSTALLED_APPS = (
 
 EMAIL_USE_TLS = True
 EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_USER = 'darshandesai17@gmail.com'
-EMAIL_HOST_PASSWORD = 'kti316gu'
+EMAIL_HOST_USER = 'DaltonCourseReg@gmail.com'
+EMAIL_HOST_PASSWORD = 'kti316daltonu'
 EMAIL_PORT = 587
 
 PASSWORD_HASHERS = (
@@ -142,7 +141,8 @@ PASSWORD_HASHERS = (
     'django.contrib.auth.hashers.MD5PasswordHasher',
     'django.contrib.auth.hashers.CryptPasswordHasher',
 )
-CUSTOM_USER_MODEL = 'registrationApp.Student'
+
+
 AUTHENTICATION_BACKENDS = (
     'registrationApp.customBackend.customBackend',
     'django.contrib.auth.backends.ModelBackend',

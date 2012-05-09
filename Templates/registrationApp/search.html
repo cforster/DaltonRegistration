@@ -4,6 +4,9 @@
 	<link type="text/css" href="/registrationApp/site_media/CSS/jquery-ui-1.8.18.custom.css" rel="stylesheet" />
         <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
         <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.18/jquery-ui.min.js"></script>
+        <script type="text/javascript" src="/registrationApp/site_media/Scripts/jquery.min.js"></script>
+
+        <script type="text/javascript" src="/registrationApp/site_media/Scripts/jqueryui.min.js"></script>
 {% endblock %}
 
 {% block content %}
@@ -73,7 +76,7 @@
 
             </div>
         </div>
-              
+        <br /><br /><br />
     </div><!--/row-->
 </div>
  
@@ -109,6 +112,17 @@ $( document ).ready( function() {
         $(this).attr('title',$('#tooltip').html());
         $(this).children('div#tooltip').remove();
     });
+    var indexesToLoad = [2];
+
+    var loadNextTab = function() {
+        if (indexesToLoad.length == 0) return;
+        var index = indexesToLoad.shift();
+        $("#tabs").tabs("load",index);
+    };
+
+    $("#tabs").tabs({
+        load: loadNextTab
+    });
 
     $(document).on("click","#notif", function(e){
         e.stopPropagation(); 
@@ -140,8 +154,6 @@ $( document ).ready( function() {
     });
 
 
-  
-	$('#searchBox').focus();	
     {% if student.submit %}
 
         $('#result').load('{% url studentSchedule %}', {
@@ -193,9 +205,6 @@ $( document ).ready( function() {
     }  
     })();
 
-	$(' #tabs' ).tabs();
-	$(' #tabs' ).tabs("load", 0);
-
 
 	$(document).on("click", "#searchResults>a, #courseNameLink", function(f){
 		f.preventDefault();
@@ -220,10 +229,18 @@ $( document ).ready( function() {
         })
         .success(function(data) {
             $( '#result' ).html(data).hide().fadeIn('slow');
-            $(' #tabs' ).tabs();
-            $(' #tabs' ).tabs("load", 0);
-            $(' #tabs' ).tabs();
-            $(' #tabs' ).tabs("load", 3);
+            var $tabs = $('#tabs').tabs();
+            var selected = $tabs.tabs('option', 'selected'); // => 0
+
+            if (selected == 0){
+                $(' #tabs' ).tabs();
+                $(' #tabs' ).tabs("load", 0);
+            }
+            if (selected == 3){
+                $(' #tabs' ).tabs();
+                $(' #tabs' ).tabs("load", 3);      
+            }
+
 
         });
 
@@ -304,9 +321,6 @@ $( document ).ready( function() {
 			}
 		});
 	});
-    var width = $('#centerHeader').outerWidth();
-    $('#centerHeader').css("margin-left", (-(width)/2));
-
 
 	$(document).on("click", "#readNotifications", function(){
         var notes = "";
@@ -328,8 +342,11 @@ $( document ).ready( function() {
 	    closeConfirmation($("#notification"));
         closeConfirmation($("#screen"));
 	});
-    $(' #tabs' ).tabs();
-    $(' #tabs' ).tabs("load", 2);
+    var width = $('#centerHeader').outerWidth();
+    $('#centerHeader').css("margin-left", (-(width)/2));
+
+
+
 });
 
 $(document).ajaxStart( function() {

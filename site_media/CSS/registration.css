@@ -2,7 +2,7 @@
 		text-align:center;
 		color:#1b78bb;
 		margin:auto;
-		font-family:"Warnock Pro", "Palatino", "Palatino", serif;
+		font-family: 'Palatino Linotype', 'Book Antiqua', 'Palatino', serif;
 		font-size:11px;
 		letter-spacing:.5px;
 		border:0;
@@ -258,7 +258,7 @@
 		background:#CCCCCC;
 	}
 	.reqDisc{
-		margin:3px auto;
+		margin:auto;
 	}
 	.required{
 		width:99%;
@@ -480,6 +480,7 @@
 		opacity: 0.7;
 		padding: 1px;
 		z-index:1;
+		line-height: 25px;
 		-webkit-transition: opacity .2s ease-in-out;
 		-moz-transition: opacity .2s ease-in-out;
 		-o-transition: opacity .2s ease-in-out;
@@ -673,7 +674,7 @@
 	  text-decoration: none;
 	}
 	.dd >li > a:hover{
-	  background-color: #eeeeee;
+	  background-color: rgba(0, 0, 0, .3);
 
 	}
 	.nav .dropdownFalse > a:hover{

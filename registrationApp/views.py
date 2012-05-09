@@ -34,7 +34,7 @@ def group_required(*group_names):
         return False
     return user_passes_test(in_groups)
 
-
+@login_required
 def test(request):
 	response = HttpResponse(mimetype='text/csv')
 	response['Content-Disposition'] = 'attachment; filename=somefilename.csv'
@@ -68,16 +68,19 @@ def preApprovalCheck(student, course, preApprovals):
 			preApproved = True
 	return preApproved
 
-def output(request):
+@login_required
+@group_required('student')
+def printSchedule(request):
 	student = get_object_or_404(Student, pk= request.user.id)
 
 	#for student in students:
 	fullYearCourses = []
 	rankedCourses = []
 	alternateCourses = []
+	alternateRankedCourses = []
 	otherCourses = []
 	grade = abs(student.graduationYear - datetime.now().year - 13)
-	studentInfo = {'First Name':student.first_name, 'Last Name': student.last_name, 'ID #':student.id, 'grade':grade}
+	studentInfo = {'First Name':student.first_name, 'Last Name': student.last_name, 'ID #':student.id, 'Grade':grade}
 
 	preApprovals = PreApproval.objects.filter(studentID = student.id)
 	studentSchedule = StudentSchedule.objects.filter(studentID = student)
@@ -95,22 +98,31 @@ def output(request):
 			semester = "First Semester"
 		elif studSched.sectionID.semesterTwo and not studSched.sectionID.semesterOne:
 			semester = "Second Semester"
-
-		if studSched.sectionID.semesterOne and studSched.sectionID.semesterTwo:
+		else:
+			semester = "Year"
+		if studSched.sectionID.semesterOne and studSched.sectionID.semesterTwo and not studSched.alternateFor and not course.rankType=="English" and not course.rankType=="EngHist":
 			fullYearCourses.append((disciplines, course.courseNumber, course.courseName, period, preApproved))
+
 		elif not course.rankType=="EngHist" and not course.rankType=="English" and not studSched.alternateFor:
 			otherCourses.append((disciplines, course.courseNumber, course.courseName, period, preApproved, semester))
 
 		if grade == 12 and course.rankType == "EngHist" and not studSched.alternateFor:
 			rankedCourses.append((studSched.rank, course.courseNumber, course.courseName, period, semester))
-		if grade == 12 and course.rankType == "EngHist" and studSched.alternateFor:
-			alternateCourses.append((studSched.rank, course.courseNumber, course.courseName, period, studSched.alternateFor, semester))
+				
 		if grade == 11 and course.rankType == "English" and not studSched.alternateFor:
 			rankedCourses.append((studSched.rank, course.courseNumber, course.courseName, period, semester))
-		if grade == 11 and course.rankType == "English" and studSched.alternateFor:
-			alternateCourses.append((studSched.rank, course.courseNumber, course.courseName, period, studSched.alternateFor, semester))
+		
+		if grade == 12 and course.rankType == "EngHist" and studSched.alternateFor:
+			alternateRankedCourses.append((studSched.rank, course.courseNumber, course.courseName, period, studSched.alternateFor, semester))
 
-	return render_to_response('registrationApp/output.html', {'studentInfo': studentInfo, 'fullYearCourses': fullYearCourses, 'rankedCourses':rankedCourses, 'alternateCourses': alternateCourses, 'otherCourses':otherCourses},
+		elif grade == 11 and course.rankType == "English" and studSched.alternateFor:
+			alternateRankedCourses.append((studSched.rank, course.courseNumber, course.courseName, period, studSched.alternateFor, semester))
+		
+		elif studSched.alternateFor:
+			alternateCourses.append((course.courseNumber, course.courseName, period, studSched.alternateFor, semester))
+	
+	rankedCourses.sort(key=itemgetter(0))
+	return render_to_response('registrationApp/output.html', {'studentInfo': studentInfo, 'fullYearCourses': fullYearCourses, 'rankedCourses':rankedCourses, 'alternateCourses': alternateCourses, 'alternateRankedCourses': alternateRankedCourses, 'otherCourses':otherCourses},
 							    context_instance=RequestContext(request))
 
 
@@ -285,13 +297,6 @@ def gradeCheck(student, course):
 			availForGrade = False	
 	return availForGrade
 
-def preApprovalCheck(student, course, preApprovals):
-	preApproved = False
-	for preApp in preApprovals:
-		if preApp.courseID == course:
-			preApproved = True
-	return preApproved
-
 def alreadyEnrolledCourse(student, course, studentSections):
 	alreadyEnrolledCourse = False
 	sectionEnrolled = []
@@ -318,20 +323,16 @@ def searchResults(request):
 		rank = []
 		courseList = []                                        
 		preApproved = True
-
     	#cursor = connection.cursor()
        	#cursor.execute('SELECT courseNumber FROM registrationApp_course where MATCH(courseName, courseDescription) AGAINST ("c*" in boolean mode)')
        	#found = cursor.fetchall()
    		#found = Course.objects.raw('SELECT courseNumber FROM registrationApp_course where MATCH(courseName, courseDescription) AGAINST ("c*" in boolean mode)')
 		found = get_query((searchTerms), ['courseNumber','courseName', 'courseDescription', 'coursediscipline__discipline__discipline'])
-        
         if found is not None:
         	
         	if onlyDisciplineSearch == "1":
-        		courseDisc = CourseDiscipline.objects.filter(discipline__discipline = str(searchTerms))
-        		for cd in courseDisc:
-        			cObj = Course.objects.get(courseNumber = cd.courseID.courseNumber)
-        			courseOptions.append(cObj)
+        		courseOptions = Course.objects.filter(coursediscipline__discipline__discipline = str(searchTerms))
+        		
         	else:
         		courseOptions = Course.objects.select_related().filter(found).distinct() #select related would be more helpful with foreign keys
         	studentSections = StudentSchedule.objects.filter(studentID = t.id)
@@ -367,7 +368,7 @@ def searchResults(request):
 				if course.preapprovalRequired:
 					preApproved = preApprovalCheck(t, course, preApprovals)
 					if preApproved:
-						rankScore += 10
+						rankScore += 30
 					else:
 						rankScore -= 300
 
@@ -751,7 +752,12 @@ def one (request):
 	for req, reqPass in requiredBoolList:
 		requiredList.append((req, reqPass, req.message))
 	sections = studentScheduleAddView(studentSchedule, student)
-	return render_to_response('registrationApp/one.html', {'student': student, 'grade': grade, 'sections'  : sections, 'requiredList': requiredList},
+	preApprovals = []
+	preApproval = PreApproval.objects.filter(studentID = student.id)
+	for preApp in preApproval:
+		disciplines = CourseDiscipline.objects.filter(courseID = preApp.courseID)
+		preApprovals.append((preApp,disciplines))
+	return render_to_response('registrationApp/one.html', {'student': student, 'grade': grade, 'sections'  : sections, 'requiredList': requiredList, 'preApprovals': preApprovals},
 								context_instance=RequestContext(request))
 
 @login_required
@@ -759,7 +765,7 @@ def one (request):
 def preferences (request):
 	student = get_object_or_404(Student, id= request.user.id)
 	grade = abs(student.graduationYear - datetime.now().year - 13) #TODO: This Should Be System Property 
-	studentSchedule = StudentSchedule.objects.filter(studentID = student)
+	studentSchedule = StudentSchedule.objects.filter(studentID = student).order_by('rank')
 	alternateRequired = AlternateCourse.objects.filter(grade = grade)
 	alternateCourseRequired = []
 	for alternate in alternateRequired:
@@ -833,10 +839,12 @@ def schedule(request): #this goes to the schedule view
 def warnings(student, studentSchedule):
 	warnings = []
 	for studSched in studentSchedule:
+		#ALTERNATES/RANKINGS
+
 		conflictMessage = ""
 		availForGrade = gradeCheck(student, studSched.sectionID.courseID)
 		if not availForGrade:
-			conflictMessage += studSched.sectionID.courseID.courseName + "is not available for " + str(abs(student.graduationYear - datetime.now().year - 13)) +"th grade."
+			conflictMessage += studSched.sectionID.courseID.courseName + " is not available for " + str(abs(student.graduationYear - datetime.now().year - 13)) +"th grade."
 		sSched = StudentSchedule.objects.filter(studentID = student.id).exclude(pk = studSched.id)
 
 		alreadyEnrolledC, sectionEnrolled = alreadyEnrolledCourse(student, studSched.sectionID.courseID, sSched)
@@ -888,17 +896,18 @@ def parentNamesandEmails(studentHouseParent):
 	return (parents, parentEmails)
 
 def advisorNamesandEmails(studentHouseParent):
-	advisors = studentHouseParent.houseID.houseAdvisorOneID.first_name + " " + studentHouseParent.houseID.houseAdvisorOneID.last_name
+	house = House.objects.get(pk = studentHouseParent.houseID)
+	advisors = house.houseAdvisorOneID.first_name + " " + house.houseAdvisorOneID.last_name
 	advisorEmails = []
-	advisorOneEmail = studentHouseParent.houseID.houseAdvisorOneID.email
+	advisorOneEmail = house.houseAdvisorOneID.email
 	advisorEmails.append(advisorOneEmail)
-	if studentHouseParent.houseID.houseAdvisorTwoID:
-		advisors += " and " + studentHouseParent.houseID.houseAdvisorTwoID.first_name + " " + studentHouseParent.houseID.houseAdvisorTwoID.last_name
-		advisorTwoEmail = studentHouseParent.houseID.houseAdvisorTwoID.email
+	if house.houseAdvisorTwoID:
+		advisors += " and " + house.houseAdvisorTwoID.first_name + " " + house.houseAdvisorTwoID.last_name
+		advisorTwoEmail = house.houseAdvisorTwoID.email
 		advisorEmails.append(advisorTwoEmail)
 	return (advisors, advisorEmails)
 
-@login_required(login_url='/registrationApp/login/')
+@login_required
 @group_required('student')
 def submit(request):	
 	student = get_object_or_404(Student, id=request.user.id)
@@ -919,34 +928,35 @@ def submit(request):
     	activation_key = sha.new(salt+student.first_name).hexdigest()
     	student.activation_key = activation_key
     	student.save()
-    	studentHouseParent = StudentHouseParent.objects.get(studentID = student)
-    	parents, parentEmails = parentNamesandEmails(studentHouseParent)
-    	advisors, advisorEmails = advisorNamesandEmails(studentHouseParent)
-    	parEmailBody = "Hello %s,\n \tYour child, %s %s, has submitted his/her schedule for your approval. Please follow this link to their schedule: http://compsci.dalton.org/registrationApp/ParentConfirm/%s" % (parents, student.first_name, student.last_name, student.activation_key)
-    	parentMessage = ("Your child has submitted his/her schedule. ", parEmailBody, '', parentEmails)
-    	advEmailBody = "Hello %s,\n \tYour advisee, %s %s, has submitted his/her schedule for your approval. Please log onto http://compsci.dalton.org/registrationApp/advisor/ to approve or to ask your advisee to make changes." % (advisors, student.first_name, student.last_name)
-    	advisorMessage =("Your advisee has submitted his/her schedule. ", advEmailBody, '', advisorEmails)
-    	send_mass_mail((parentMessage, advisorMessage), fail_silently=False)
-    	msg = "Submitted for House Advisor and Parent Approval"
+    	try:
+    		studentHouseParent = StudentHouseParent.objects.get(studentIDNumber = student.id)
+	    	parents, parentEmails = parentNamesandEmails(studentHouseParent)
+	    	advisors, advisorEmails = advisorNamesandEmails(studentHouseParent)
+	    	parEmailBody = "Hello %s,\n \tYour child, %s %s, has submitted his/her schedule for your approval. Please follow this link to their schedule: http://compsci.dalton.org/registrationApp/ParentConfirm/%s" % (parents, student.first_name, student.last_name, student.activation_key)
+	    	parentMessage = ("Your child has submitted his/her schedule. ", parEmailBody, '', parentEmails)
+	    	advEmailBody = "Hello %s,\n \tYour advisee, %s %s, has submitted his/her schedule for your approval. Please log onto http://compsci.dalton.org/registrationApp/advisor/ to approve or to ask your advisee to make changes." % (advisors, student.first_name, student.last_name)
+	    	advisorMessage =("Your advisee has submitted his/her schedule. ", advEmailBody, '', advisorEmails)
+	    	send_mass_mail((parentMessage, advisorMessage), fail_silently=False)
+	    	msg = "Submitted for House Advisor and Parent Approval"
+    	except StudentHouseParent.DoesNotExist:
+    		msg = "Submitted, but you have no parents and House Advisors in the database. "
+
+
 	return HttpResponse(msg)
 
-@login_required(login_url='/registrationApp/login/')
+@login_required
 @group_required('departmentChair')
 def preapprovals(request):
 	courses = []
-	courseDisc = []
 	departmentChair = get_object_or_404(User, id = request.user.id)
 	disciplines = Discipline.objects.filter(departmentChair = departmentChair)
 	for discipline in disciplines:
-		c = CourseDiscipline.objects.filter(discipline = discipline, courseID__preapprovalRequired = True)
-		courseDisc.append(c)	
-		for courseDisciplines in courseDisc:
-			for a in courseDisciplines:
-				courses.append(a.courseID)
+		courseOptions = Course.objects.filter(coursediscipline__discipline__discipline = discipline.discipline, preapprovalRequired = True)
+		courses.append(courseOptions)
 	return render_to_response('registrationApp/preapprovals.html', {'departmentChair': departmentChair, 'courses': courses},
 								context_instance=RequestContext(request))
 
-@login_required(login_url='/registrationApp/login/')
+@login_required
 @group_required('departmentChair')
 def preappContainer(request):
 	departmentChair = get_object_or_404(User,  id = request.user.id)
@@ -956,7 +966,7 @@ def preappContainer(request):
 	return render_to_response('registrationApp/preAppContainer.html', {'departmentChair': departmentChair, 'courseObj': courseObj},
 								context_instance=RequestContext(request))
 
-@login_required(login_url='/registrationApp/login/')
+@login_required
 @group_required('departmentChair')
 def preappAdd(request):
 	departmentChair = get_object_or_404(User,  id = request.user.id)
@@ -966,26 +976,38 @@ def preappAdd(request):
 		courseID = request.POST.get('courseNumber')
 		courseObj = Course.objects.get(pk = courseID)
 		preAppName = request.POST.get('preappName')
-		preAppNames = str(preAppName).split(',')
+
+		preAppNames = [x.strip() for x in str(preAppName).split(',')]
+		studentsAdded = []
+		studentsNotAdded = []
 		for preAppN in preAppNames:
-			preAppN = str(preAppN).strip('_')
 			preAppSplitN = str(preAppN).split(' ')
-			student = Student.objects.get(first_name__iexact = str(preAppSplitN[0]), last_name__iexact = str(preAppSplitN[1]))
-			preApp, created= PreApproval.objects.get_or_create(
-			studentID = student, courseID=courseObj)
-			subject = "You were preapproved for " + courseObj.courseName
-			message = "Hello " + student.first_name + "; you were preapproved for " + courseObj.courseName + "."
-			if created == True:
-				msg += student.first_name + " preapproval added <br> "
-				send_mail(subject, message, 'darshandesai17@gmail.com', [student.email])
-			elif created == False:
-				msg += student.first_name + " is already preapproved <br> "
-				allCreated = False
+			students = Student.objects.filter(first_name__iexact = str(preAppSplitN[0]), last_name__iexact = str(preAppSplitN[1]))
+			if len(students) == 1:
+				for studentz in students:
+					student = Student.objects.get(id = studentz.id)
+					preApp, created= PreApproval.objects.get_or_create(
+					studentID = student, courseID=courseObj)
+					subject = "You were preapproved for " + courseObj.courseName
+					message = "Hello " + student.first_name + "; you were preapproved for " + courseObj.courseName + "."
+					if created == True:
+						msg += student.first_name + " preapproval added <br> "
+						send_mail(subject, message, '', [student.email])
+						msg += "Added " + student.first_name +  " " + student.last_name + " "
+						studentsAdded.append(student)
+					elif created == False:
+						msg += student.first_name + " is already preapproved <br> "
+						allCreated = False
+						msg += "Not Added " + student.first_name +  " " +student.last_name + " "
+			elif len(students) ==0:
+				msg += "No student found for " + preAppN + " "
+			else:
+				msg += "Multiple students found for " + preAppN + " "
 		if allCreated == True:
-			msg = "All Added Successfully"
+			msg += "All Added Successfully"
 	return HttpResponse(msg)
 
-@login_required(login_url='/registrationApp/login/')
+@login_required
 @group_required('houseAdvisor')
 def advisor(request):
 	houseAdvisor = get_object_or_404(User, id = request.user.id)
@@ -993,22 +1015,24 @@ def advisor(request):
 	if house is None:
 		house = House.objects.filter(houseAdvisorTwoID = houseAdvisor)
 	house = House.objects.get(id = house)
-	studentHouseParent = StudentHouseParent.objects.filter(houseID = house)
+	studentHouseParent = StudentHouseParent.objects.filter(houseID = house.id)
+
 	students= []
 	advisorApproved = []
 	for studParHouse in studentHouseParent:
-		if studParHouse.studentID.parentApproval:
-			students.append((studParHouse.studentID, True))
-		elif not studParHouse.studentID.parentApproval:
-			students.append((studParHouse.studentID, False))
-		if studParHouse.studentID.advisorApproval:
-			advisorApproved.append(studParHouse.studentID)
+		student = Student.objects.get(pk = studParHouse.studentIDNumber)
+		if student.parentApproval:
+			students.append((student, True))
+		elif not student.parentApproval:
+			students.append((student, False))
+		if student.advisorApproval:
+			advisorApproved.append(student)
 
 	students.sort(key=itemgetter(1), reverse = True)
 	return render_to_response('registrationApp/advisor.html', {'house': house, 'students': students, 'advisorApproved':advisorApproved},
 								context_instance=RequestContext(request))
 
-@login_required(login_url='/registrationApp/login/')
+@login_required
 @group_required('houseAdvisor')
 def approve(request):
 	if request.is_ajax():
@@ -1018,7 +1042,7 @@ def approve(request):
 		if student.submit:
 			student.advisorApproval = True
 			student.save()
-			studentHouseParent = StudentHouseParent.objects.get(studentID = student)
+			studentHouseParent = StudentHouseParent.objects.get(studentIDNumber = student.id)
 	    	parents, parentEmails = parentNamesandEmails(studentHouseParent)
 	    	parentEmails.append(student.email)
 	    	emailSubject = "Advisor Approval of %s %s's Schedule" % (student.first_name, student.last_name)
@@ -1031,7 +1055,7 @@ def approve(request):
 	else:
 		raise Http404
 
-@login_required(login_url='/registrationApp/login/')
+@login_required
 @group_required('houseAdvisor')
 def review(request):
 	if request.is_ajax():
@@ -1072,7 +1096,7 @@ def parentReview(request):
 
 def ParentConfirm(request, Activation_key):
 	student = get_object_or_404(Student, activation_key=Activation_key)
-	studentHouseParent = StudentHouseParent.objects.get(studentID = student)
+	studentHouseParent = StudentHouseParent.objects.get(studentIDNumber = student.id)
 	parents, parentEmails = parentNamesandEmails(studentHouseParent)
 	return render_to_response('registrationApp/ParentConfirm.html', {'student':student, 'parents': parents},
 								context_instance=RequestContext(request))
@@ -1089,7 +1113,7 @@ def ParentConfirmYes(request):
 				student.parentApproval = True
 				student.save()
 				msg="Thanks for your approval!"
-				studentHouseParent = StudentHouseParent.objects.get(studentID = student)
+				studentHouseParent = StudentHouseParent.objects.get(studentIDNumber = student.id)
 	    		advisor, emails = advisorNamesandEmails(studentHouseParent)
 	    		emails.append(student.email)
 	    		send_mail("Parent Approval of Schedule", "Hello; your parent has approved your schedule! ", '', emails)

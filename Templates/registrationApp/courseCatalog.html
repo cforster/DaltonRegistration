@@ -11,7 +11,10 @@
 			{{course.courseDescription}}
 			<br />
 			<br />
-
+			{% if not course.level == 0 and not course.level == 1%}
+			Level: {{course.level}}
+			{% endif %}
+			<br />
 			{{course.prerequisite}}
 			<br />
 			

@@ -81,7 +81,8 @@
 		<div id = "msg" class="addMessage {{messageType}} roundBorder6">
 		{% for m in msg%}
 			{% if forloop.counter != msg|length %}
-				{{m}}<br /> In addition, 
+				1:{{m}}<br /> <br />
+				2: In addition, 
 			{% else %}
 				{{m}}	
 			{% endif %}
@@ -134,8 +135,8 @@
 </div>
 {% if reqMessage %}
 	{% for req, reqMsg in reqMessage %}
-		<div id = "{{req.courseID}}{{req.discipline|slugify}}" style= "clear:both;" class = "required roundBorder6"><p style="line-height:5px"><i>{{reqMsg}}</i></p>
-			<input type="image" {%if req.courseID %} name="{{req.courseID.courseNumber}}" id="addRequiredCourse"{% else %} name= "{{req.discipline|slugify}}" id="addRequiredDiscipline"{% endif %} class="roundButton deleteCloseButton" src="/registrationApp/site_media/Images/add.png" style="float: right;"/>
+		<div id = "{{req.courseID}}{{req.discipline.discipline|slugify}}" style= "clear:both;" class = "required roundBorder6"><p style="line-height:5px"><i>{{reqMsg}}</i></p>
+			<input type="image" {%if req.courseID %} name="{{req.courseID.courseNumber}}" id="addRequiredCourse"{% else %} name= "{{req.discipline.discipline|slugify}}" id="addRequiredDiscipline"{% endif %} class="roundButton deleteCloseButton" src="/registrationApp/site_media/Images/add.png" style="float: right;"/>
 		</div>
 	{% endfor %}
 {% endif %}
@@ -148,7 +149,7 @@
 
 
 	<div id = "screen"> </div>
-    <div id ="confirmation" class = "confirmationDiv">
+    <div id ="confirmation" class = "confirmationDiv scroll">
        	<input type="image" id = "close" src="/registrationApp/site_media/Images/delete.png" class= "roundButton deleteCloseButton"/>         
         <div id = "submitConfirmationHeader" class="confirmationHeader" >
             <h1 style="display:inline; position:relative;">Submit Confirmation</h1>

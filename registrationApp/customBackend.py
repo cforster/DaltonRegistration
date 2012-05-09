@@ -6,7 +6,6 @@ from django.db.models import get_model
 from registrationApp.models import Student
 import os
 
-   
 class customBackend:
     AD_LDAP_URL = 'ldap://directory89.dalton.org';
     AD_SEARCH_DN = 'OU=Dalton Users,DC=dalton,DC=org';
@@ -35,20 +34,15 @@ class customBackend:
             user = User.objects.get(username=username)
         except User.DoesNotExist:
             try:
-
-
                 ldap.set_option(ldap.OPT_REFERRALS,0) # DO NOT TURN THIS OFF OR SEARCH WON'T WORK!      
                 l = ldap.initialize(self.AD_LDAP_URL)
                 l.set_option(ldap.OPT_PROTOCOL_VERSION, 3)
                 binddn = "%s@%s" % (username,self.AD_NT4_DOMAIN)
                 l.bind_s(binddn,password)
                 debug= open(('/home/ddesai/registration/registrationApp/open/ldap3.txt'), 'w')
-
-
                 result = l.search_ext_s(self.AD_SEARCH_DN,ldap.SCOPE_SUBTREE,"sAMAccountName=%s" % username,self.AD_SEARCH_FIELDS)[0][1]
                 student = False
                 faculty = False
-
                 if result.has_key('memberOf'):
                     memberGroups = result['memberOf']
                 else:
@@ -85,7 +79,6 @@ class customBackend:
                 else:
                     first_name = None
 
-
                 if student:                
                     # get graduation year
                     if result.has_key('description'):
@@ -99,7 +92,6 @@ class customBackend:
                     else:
                         studentID = None
 
-               
                     l.unbind_s()
 
                     user = Student(username=username,id=studentID,first_name=first_name,last_name=last_name,email=mail,graduationYear=gradYear)
@@ -108,7 +100,6 @@ class customBackend:
                     l.unbind_s()
 
                     user = User(username=username,first_name=first_name,last_name=last_name,email=mail)
-
 
             except Exception, e:
                 return None

@@ -9,7 +9,7 @@
 
     <br />
 
-    <div id = "preRank" class="addMessage success roundBorder6" style="width:60%;display:none;"></div>
+    <div id = "preRank" class="addMessage success roundBorder6" style="width:55%;display:none;"></div>
 
     <div id ="rank" class="oneView" style="padding-bottom:80px">
         <h3> Ranking Courses: </h3>
@@ -19,9 +19,9 @@
                 <ul id= "sortable"> 
                     <br />
                     {% for studSched, prd, disciplines, rank in engHist %}
-                        <li class=" {% for discipline in disciplines %}{{discipline.discipline.discipline|slugify}}{% endfor %} discipline roundBorder6" id = "rank_{{studSched.id}}" style="clear:both;{% if studSched.sectionID.semesterOne != studSched.sectionID.semesterTwo %}width:49%;{% if studSched.sectionID.semesterTwo %}float:right; {% endif %}{% else %}width:99%;{% endif %}" >
+                        <li class=" {% for discipline in disciplines %}{{discipline.discipline.discipline|slugify}}{% endfor %} discipline roundBorder6" id = "rank_{{studSched.id}}" style="clear:both;opacity:1;" >
 
-                        <p class="reqDisc"> <span style="float:left; position:relative; left:5px;"id = "rankValue" >{{rank}}</span> {{ studSched.sectionID.courseID.courseName|truncatewords_by_chars:25 }} | {{ prd }} </p>  
+                        <p class="reqDisc"> <span  style="float:left; position:relative; left:5px;" id = "rankValue" >{{rank}}</span> <div style="float:left; position:relative; left:20px; display:inline;">{% if studSched.sectionID.semesterOne and not studSched.sectionID.semesterTwo %}Sem1{% endif %}{% if studSched.sectionID.semesterTwo and not studSched.sectionID.semesterOne %}Sem2{% endif %}</div> {{ studSched.sectionID.courseID.courseName|truncatewords_by_chars:25 }} | {{ prd }} </p>  
                         </li>
                     {% endfor %}
                     <br />
@@ -36,24 +36,27 @@
         {% endif %}
 
         {% if grade == 11 %}
-            {% if not engHist|length_is:"1" and not engHist|length_is:"0" %}
+            {% if not english|length_is:"1" and not english|length_is:"0" %}
                 Please rank the following courses; drag them in the order in which you want to rank them:
                 <ul id= "sortable"> 
                     <br />
-                    {% for studSched, prd, disciplines, rank in english %}
-                        <li class=" {% for discipline in disciplines %}{{discipline.discipline.discipline|slugify}}{% endfor %} discipline roundBorder6" id = "rank_{{studSched.id}}" style="clear:both;{% if studSched.sectionID.semesterOne != studSched.sectionID.semesterTwo %}width:49%;{% if studSched.sectionID.semesterTwo %}float:right; {% endif %}{% else %}width:99%;{% endif %}" >
+                    {% for studSched, prd, disciplines, rank in engHist %}
+                        <li class=" {% for discipline in disciplines %}{{discipline.discipline.discipline|slugify}}{% endfor %} discipline roundBorder6" id = "rank_{{studSched.id}}" style="clear:both;opacity:1;" >
 
-                        <p class="reqDisc"> <span style="float:left; position:relative; left:5px;"id = "rankValue" >{{rank}}</span> {{ studSched.sectionID.courseID.courseName|truncatewords_by_chars:25 }} | {{ prd }} </p>  
+                        <p class="reqDisc"> <span  style="float:left; position:relative; left:5px;" id = "rankValue" >{{rank}}</span> <div style="float:left; position:relative; left:20px; display:inline;">{% if studSched.sectionID.semesterOne and not studSched.sectionID.semesterTwo %}Sem1{% endif %}{% if studSched.sectionID.semesterTwo and not studSched.sectionID.semesterOne %}Sem2{% endif %}</div> {{ studSched.sectionID.courseID.courseName|truncatewords_by_chars:25 }} | {{ prd }} </p>  
                         </li>
                     {% endfor %}
                     <br />
                     <br />
                 </ul>
+
                 <input type = "submit" value = "save" id="rankSave" class="button" style="clear:both;"/>
             {% else %}
                 <p> Once you add more than one course that requires a rank (English Courses for 11th grade), you can rank them here.</p>
             {% endif %}
+
         {% endif %}
+
 
         <br />
         <br />
@@ -64,17 +67,24 @@
                 {{ section.sectionID.courseID }}
             </div>
             Alternates:
-                {% for alternate, disciplinez in alternates %}
-                 <div class="{% for discipline in disciplinez %} {{discipline.discipline.discipline|slugify}} {% endfor %} discipline roundBorder6" >
-                        {{alternate.sectionID.courseID}}
-                        <input type="image" name= "{{alternate.id}}" id = "delete" class="roundButton deleteCloseButton" src="/registrationApp/site_media/Images/delete.png" />
-                </div> 
-                {% endfor %}
+                <ul id= "sortableAltRank"> 
+
+                    {% for alternate, disciplinez in alternates %}
+                     <li class="{% for discipline in disciplinez %} {{discipline.discipline.discipline|slugify}} {% endfor %} discipline roundBorder6" id = "rank_{{alternate.id}}">
+                            <span  style="float:left; position:relative; left:5px;" id = "AltRankValue" >{{alternate.rank}}</span>
+                            {{alternate.sectionID.courseID}}
+                            <input type="image" name= "{{alternate.id}}" id = "delete" class="roundButton deleteCloseButton" src="/registrationApp/site_media/Images/delete.png" />
+                    </li> 
+                    {% endfor %}
+                    <br />
+                    <br />
+                </ul>
+                <input type = "submit" value = "save" id="alternateRankSave" class="button" style="clear:both;"/>
 
             {% endfor %}
-        {% else %}
-            <p> To add an alternate course, just drag and drop it onto the course for which it is an alternate. Only courses whose name is highlighted when you drag accept alternates. </p>
         {% endif %}
+            <p> To add an alternate course, just drag and drop it onto the course for which it is an alternate. Only courses whose name is highlighted when you drag accept alternates. </p>
+        
 
         
 </div>
@@ -84,41 +94,47 @@
 {% block script %}
 <script>
 $( document ).ready( function() {
-    function updateIndexes(){
-        $('li span').each(function(i){
-            $(this).html(i+1);
-        });
-    }
+
     $(function() {
-        $( '#sortable' ).sortable({
+        $( '#sortable, #sortableAltRank' ).sortable({
             placeholder: "placeholder",
             opacity : "0.6", 
             update: function(event, ui){
-                updateIndexes()
+                $(this).find('span').each(function(i){
+                    $(this).html(i+1);
+                });
             }
         });
-        $( "#sortable" ).disableSelection();
+        $( "#sortable, #sortableAltRank" ).disableSelection();
     });
-
+    function addAlert(data){
+        $('#preRank').html(data);
+        $('#preRank').css("display", "block");
+        $('#preRank').effect("highlight", {color:"#fffee0"}, 5000);
+        $("#preRank").delay(10000).slideUp();
+    }
     $(document).on("click", "#rankSave", function(){
         $( '#sortable' ).sortable();
-
         var s =$("#sortable").sortable( "serialize");
-
         $.post("{% url rankChange %}", { 
             rankOrder: s,
             csrfmiddlewaretoken: '{{ csrf_token }}'
         })
         .success(function(data) { 
-            $( '#preRank' ).html(data);
-             $('#preRank').css("display", "block");
-            $('#preRank').effect("highlight", {color:"#fffee0"}, 5000);
-            $("#preRank").delay(10000).slideUp();
-
+            addAlert(data);
         });
-
     });
-
+    $(document).on("click", "#alternateRankSave", function(){
+        $( '#sortableAltRank' ).sortable();
+        var j =$("#sortableAltRank").sortable( "serialize");
+        $.post("{% url rankChange %}", { 
+            rankOrder: j,
+            csrfmiddlewaretoken: '{{ csrf_token }}'
+        })
+        .success(function(data) { 
+            addAlert(data);
+        });
+    });
     
   
 });

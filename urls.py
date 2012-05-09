@@ -27,7 +27,7 @@ urlpatterns = patterns('registrationApp.views',
 
 
     url(r'^registrationApp/test/$', 'test', name = 'test'),
-    url(r'^registrationApp/output/$', 'output', name = 'output'),
+    url(r'^registrationApp/printSchedule/$', 'printSchedule', name = 'printSchedule'),
     url(r'^registrationApp/warningOutput/$', 'warningOutput', name = 'warningOutput'),
     url(r'^registrationApp/studentSchedule/$', 'studentSchedule', name = 'studentSchedule'),
 

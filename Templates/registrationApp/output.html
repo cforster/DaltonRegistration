@@ -47,19 +47,37 @@
 
 {% endif %}
 <br />
+{% if not alternateRankedCourses|length_is:"0" %}
+
+<p> Alternate Ranked Courses: </p>
+<table >
+<tr>
+	<th>Alternate For</th><th>Semester</th><th>Rank</th><th>Course #</th><th>Course Name</th><th>Period</th>
+</tr>
+{% for rank, courseNumber, courseName, period, alternateFor, semester  in alternateRankedCourses %}
+	<tr>
+		<td>{{alternateFor}}</td>
+		<td>{{semester}}</td>
+		<td>{{rank}} </td>
+		<td>{{courseNumber}}</td>
+		<td>{{courseName}} </td>
+		<td>{{period}}</td>
+	</tr>
+{% endfor %}
+</table>
+{% endif %}
 
 {% if not alternateCourses|length_is:"0" %}
 
 <p> Alternate Courses: </p>
 <table >
 <tr>
-	<th>Alternate For</th><th>Semester</th><th>Rank</th><th>Course #</th><th>Course Name</th><th>Period</th>
+	<th>Alternate For</th><th>Semester</th><th>Course #</th><th>Course Name</th><th>Period</th>
 </tr>
-{% for rank, courseNumber, courseName, period, alternateFor, semester  in alternateCourses %}
+{% for courseNumber, courseName, period, alternateFor, semester  in alternateCourses %}
 	<tr>
 		<td>{{alternateFor}}</td>
 		<td>{{semester}}</td>
-		<td>{{rank}} </td>
 		<td>{{courseNumber}}</td>
 		<td>{{courseName}} </td>
 		<td>{{period}}</td>

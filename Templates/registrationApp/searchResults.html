@@ -32,7 +32,7 @@
 						{% endif %}
 					{% endfor %}
 					</div>
-
+					
 					<div id ="sem2" style="position:absolute;top:25px;">
 					{% for section, period, day in sections %}
 						{% if section.semesterTwo and not section.semesterOne %}
@@ -59,10 +59,5 @@
 </div>
 {% endblock %}
 {% block script %}
-<script type="text/javascript">
-$( document ).ready( function() {
-    $(' #tabs' ).tabs();
-    $(' #tabs' ).tabs("load", 2);
-});
-</script>
+
 {% endblock %}

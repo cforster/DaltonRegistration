@@ -22,14 +22,24 @@
                     (Completed!) 
                 {% else %}
                 <input type="image" {%if req.courseID %} name="{{req.courseID.courseNumber}}" id="addRequiredCourse"{% else %}
-                name= "{{req.discipline|slugify}}" id="addRequiredDiscipline"{% endif %} style="display:inline"class="roundButton deleteCloseButton" src="/registrationApp/site_media/Images/add.png" />
+                name= "{{req.discipline.discipline|slugify}}" id="addRequiredDiscipline"{% endif %} style="display:inline"class="roundButton deleteCloseButton" src="/registrationApp/site_media/Images/add.png" />
                 {% endif %} </p><br />
             </div>
         {% endfor %}
     {% endif %}
 </div>
-
+<div id = "preapprovals">
+{% if not preApprovals|length_is:"0"%}
+You are preapproved for the following course(s):
+<br /><br />
+{% for preapproval, disciplines in preApprovals %}
+    <div class= "discipline roundBorder6 {% for discipline in disciplines %} {{discipline.discipline.discipline|slugify}} {% endfor %}" style="width:55%;margin:auto;"> {{ preapproval.courseID.courseName }}<br /> </div>
+{% endfor %} 
+<br />
 {% endif %}
+</div>
+{% endif %}
+        <input type="button" id = "print" class="button" value = "print" onclick="window.open('/registrationApp/printSchedule')"        
 
 
 

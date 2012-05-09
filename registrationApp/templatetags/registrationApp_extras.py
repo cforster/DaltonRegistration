@@ -38,22 +38,47 @@ def toDays(value,prd):
             lists = [x.strip() for x in num.split(',')]
             output += period +": "
             for day in lists:
-                if int(day) == 1:
-                    output += "M, "
-                if int(day) == 2:
-                    output += "T, "
-                if int(day) == 3:
-                    output += "W, "
-                if int(day) == 4:
-                    output += "R, "
-                if int(day) == 5:
-                    output += "F1, "
-                if int(day) == 6:
-                    output += "F2, "
-                if int(day) == 7:
-                    output += "F3, "
-                if int(day) == 8:
-                    output += "F4, "
+                try:
+                    if int(day) == 1:
+                        output += "M, "
+                except ValueError:
+                    return Value
+                try:
+                    if int(day) == 2:
+                        output += "T, "
+                except ValueError:
+                    return Value
+                try:
+                    if int(day) == 3:
+                        output += "W, "
+                except ValueError:
+                    return Value
+                try:
+                    if int(day) == 4:
+                        output += "R, "
+                except ValueError:
+                    return Value
+                try:
+                    if int(day) == 5:
+                        output += "F1, "
+                except ValueError:
+                    return Value
+                try:
+                    if int(day) == 6:
+                        output += "F2, "
+                except ValueError:
+                    return Value
+                try:
+                    if int(day) == 7:
+                        output += "F3, "
+                except ValueError:
+                    return Value
+                try:
+                    if int(day) == 8:
+                        output += "F4, "
+                except ValueError:
+                    return Value
+
             output = output[:-2] + "<br /><br />"
         return output[:-12]
     else:

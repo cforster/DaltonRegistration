@@ -3,7 +3,6 @@
 Preapprovals |
 {% endblock %}
 {% block headerscript %}
-
         <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
         <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.18/jquery-ui.min.js"></script>
 {% endblock %}
@@ -11,9 +10,13 @@ Preapprovals |
 <div class="container-fluid">
     <div class="row-fluid">
 			<div class="leftDiv" style="width:75%; margin:auto;">
-				{% for course in courses %}
+				{% for courseList in courses %}
+				{% for course in courseList %}
+
 					<input type = "submit" id = "preAppCourse"  class= "button" style="margin-right:15px; padding:6px;" name = "{{course.courseNumber}}" value = "{{course.courseName}}"/>
 				{% endfor %}
+				{% endfor %}
+
 				<br />
 				<br />
 				
@@ -38,12 +41,19 @@ $( document ).ready( function() {
 			csrfmiddlewaretoken: '{{ csrf_token }}'
 	   	}).hide().fadeIn('slow');
     });
+
+
+
     $(document).on("click", "#preAppNames", function(){
-		$( '#textBoxArea' ).html( '&nbsp;' ).load("{% url preappAdd %}", {
-			courseNumber: $(this).attr("name"),
-			preappName : $('#comments').val(),
-			csrfmiddlewaretoken: '{{ csrf_token }}'
-	   	}).hide().fadeIn('slow');
+		$.post("{% url preappAdd %}", {
+		courseNumber: $(this).attr("name"),
+		preappName : $('#comments').val(),
+		csrfmiddlewaretoken: '{{ csrf_token }}'
+	    })
+	    .success(function(data) { 
+	        $( '#textBoxArea' ).html(data);
+	    });
+	
     });
     $('#spinner')
     .hide()

@@ -8,6 +8,7 @@
                 <ul class="header nav" style="text-align:center">
                     <li class="slide" style="float:left"><a href="http://dalton.org" target="_blank" rel="tooltip" title="dalton.org">The Dalton School</a></li> 
                     <li class = "slide center" id = "centerHeader"> <a href="#"> <h3>{% if student %}{{student.first_name}} {{student.last_name}}'s Schedule {% endif %} {% if departmentChair %}{{departmentChair.first_name}} {{departmentChair.last_name}}{% endif %}{% if house %} {{house.houseAdvisorOneID.last_name}} {{house.houseAdvisorTwoID.last_name}} House{% endif %}</h3> </a>
+                    <li class="slide" style="float:right"> <a href="mailto:darshandesai17@gmail.com"> Email Darshan </a>
                     <li class="slide" style="float:right"> <a href = "/registrationApp/logout"> Logout</a></li>
                     {% if student  %}   
                 	
@@ -16,6 +17,7 @@
                 	{% else %}
                 	<li class="sel" style="float:right;" id= "notif"> <a href ="#" id="notifA" class="notifButtonSelected"> </a></li>
                 	{% endif %}
+
                     {% endif %}
                     
                 </ul> 
