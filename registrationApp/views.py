@@ -10,6 +10,7 @@ from django.contrib.auth.decorators import login_required, user_passes_test
 from django.core.mail import send_mail
 from django.core.mail import send_mass_mail
 from django.http import Http404
+import ldap
 
 from operator import itemgetter
 import re, random, sha, csv
@@ -976,35 +977,72 @@ def preappAdd(request):
 		courseID = request.POST.get('courseNumber')
 		courseObj = Course.objects.get(pk = courseID)
 		preAppName = request.POST.get('preappName')
-
-		preAppNames = [x.strip() for x in str(preAppName).split(',')]
-		studentsAdded = []
-		studentsNotAdded = []
-		for preAppN in preAppNames:
+		
+		AD_LDAP_URL = 'ldap://directory89.dalton.org'
+		AD_SEARCH_DN = 'OU=Dalton Users,DC=dalton,DC=org'
+		AD_SEARCH_FIELDS = ['cn','mail','givenName','sn','sAMAccountName','description','employeeID','memberOf']
+		AD_NT4_DOMAIN = 'dalton.org'
+		ldap.set_option(ldap.OPT_REFERRALS,0) # DO NOT TURN THIS OFF OR SEARCH WON'T WORK!      
+        l = ldap.initialize(AD_LDAP_URL)
+        l.set_option(ldap.OPT_PROTOCOL_VERSION, 3)
+        binddn = "%s@%s" % ('c12dd', 'dalton.org')
+        l.bind_s(binddn,'kti316u')
+        preAppNames = [x.strip() for x in str(preAppName).split(',')]
+        studentsAdded = []
+        studentsNotAdded = []
+        for preAppN in preAppNames:
 			preAppSplitN = str(preAppN).split(' ')
-			students = Student.objects.filter(first_name__iexact = str(preAppSplitN[0]), last_name__iexact = str(preAppSplitN[1]))
-			if len(students) == 1:
-				for studentz in students:
-					student = Student.objects.get(id = studentz.id)
-					preApp, created= PreApproval.objects.get_or_create(
-					studentID = student, courseID=courseObj)
-					subject = "You were preapproved for " + courseObj.courseName
-					message = "Hello " + student.first_name + "; you were preapproved for " + courseObj.courseName + "."
-					if created == True:
-						msg += student.first_name + " preapproval added <br> "
-						send_mail(subject, message, '', [student.email])
-						msg += "Added " + student.first_name +  " " + student.last_name + " "
-						studentsAdded.append(student)
-					elif created == False:
-						msg += student.first_name + " is already preapproved <br> "
-						allCreated = False
-						msg += "Not Added " + student.first_name +  " " +student.last_name + " "
-			elif len(students) ==0:
-				msg += "No student found for " + preAppN + " "
+			#students = Student.objects.filter(first_name__iexact = str(preAppSplitN[0]), last_name__iexact = str(preAppSplitN[1]))
+			#if len(students) == 1:
+				#for studentz in students:
+					#student = Student.objects.get(id = studentz.id)
+			baseDN = "OU=Dalton Users,DC=dalton,DC=org"
+			searchScope = ldap.SCOPE_SUBTREE
+			retrieveAttributes = None 
+			a = ldap.initialize("ldap://directory89.dalton.org")
+			a.protocol_version = ldap.VERSION3
+
+			a.simple_bind('CN=Darshan Desai,OU=Students,OU=Dalton Users,DC=dalton,DC=org','kti316u')
+			searchFilter = "(&(givenName=%s)(sn=%s))" % (str(preAppSplitN[0]), str(preAppSplitN[1]))
+
+			result=a.search_s(baseDN,ldap.SCOPE_SUBTREE, searchFilter)[0][1]
+
+			if result.has_key('mail'):
+ 				mail = result['mail'][0]
 			else:
-				msg += "Multiple students found for " + preAppN + " "
-		if allCreated == True:
-			msg += "All Added Successfully"
+			    mail = None
+			if result.has_key('employeeID'):
+			    studID = result['employeeID'][0]
+			else:
+			    studID = None
+			if result.has_key('sn'):
+			    lastName = result['sn'][0]
+			else:
+			    lastName = None
+			if result.has_key('givenName'):
+			    firstName = result['givenName'][0]
+			else:
+			    firstName = None
+
+			#preApp, created= PreApproval.objects.get_or_create(
+			#studentID = studID, courseID=courseObj)
+			subject = "You were preapproved for " + courseObj.courseName
+			message = "Hello " + firstName + "; you were preapproved for " + courseObj.courseName + "."
+			#if created == True:
+			msg += firstName + " preapproval added <br> "
+			send_mail(subject, message, '', [mail])
+			msg += "Added " + firstName +  " " + lastName + " "
+			studentsAdded.append((firstName, lastName))
+			#elif created == False:
+			#	msg += firstName + " is already preapproved <br> "
+			#	allCreated = False
+			#	msg += "Not Added " + firstName +  " " + lastName + " "
+			#elif len(students) ==0:
+			#	msg += "No student found for " + preAppN + " "
+			#else:
+			#	msg += "Multiple students found for " + preAppN + " "
+			#if allCreated == True:
+			#	msg += "All Added Successfully"
 	return HttpResponse(msg)
 
 @login_required

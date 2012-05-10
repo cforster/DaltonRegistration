@@ -14,8 +14,8 @@ class customBackend:
 
     def authenticate(self,username=None,password=None):
         try:
-            debug= open(('/home/ddesai/registration/registrationApp/open/ldap.txt'), 'w')
-            print >>debug, "create user %s" % username
+            #debug= open(('/home/ddesai/registration/registrationApp/open/ldap.txt'), 'w')
+            #print >>debug, "create user %s" % username
             if len(password) == 0:
                 return None
             l = ldap.initialize(self.AD_LDAP_URL)
@@ -47,14 +47,12 @@ class customBackend:
                     memberGroups = result['memberOf']
                 else:
                     memberGroups = None
-                   #can be both student and faculty? 
-                   #all groups formatted the same?
                 if memberGroups is not None:
 
                     for groups in memberGroups:
 
                         group = groups.split(",")
-                        print >>debug, "g: %s" % group
+                        #print >>debug, "g: %s" % group
 
                         for grp in group:
                             if "CN=Students" == grp:
