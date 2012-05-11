@@ -108,7 +108,7 @@
 		<!-- {% ifchanged prd %}clear:both{% else %}{% endifchanged %}-->
 		<ul id="disciplineProperties"class="nav dd" style= "max-width:80%; margin:auto;" >
 			
-			<li id="courseName" ><a rel ="tooltip" href = "#{{studSched.sectionID.courseID.courseName|slugify}}" id = "courseNameLink" title = "{{studSched.sectionID.courseID.courseName}}">{% if studSched.sectionID.semesterOne != studSched.sectionID.semesterTwo %}{{studSched.sectionID.courseID.courseName|truncatewords_by_chars:15}}{% else %}{{studSched.sectionID.courseID.courseName|truncatewords_by_chars:50}}{% endif %}</a></li>
+			<li id="courseName" ><a rel ="tooltip" href = "#{{studSched.sectionID.courseID.courseName|slugify}}" id = "courseNameLink" title = "{{studSched.sectionID.courseID.courseName}}">{% if studSched.sectionID.semesterOne != studSched.sectionID.semesterTwo %}{{studSched.sectionID.courseID.courseName|truncatewords_by_chars:15}}{% else %}{{studSched.sectionID.courseID.courseName|truncatewords_by_chars:30}}{% endif %}</a></li>
 
 			<li class="{% if sectionOptions|length != 0 %}dropdown{% else %}dropdownFalse{% endif %}" >
 				<a rel = "tooltip" class="dropdown-toggle"  data-toggle="dropdown" title= "{{dayz|toDays:prd}}" {% if sectionOptions|length != 0 %}href="#"{% endif %} > {{prd}} {% if sectionOptions|length != 0 %} <b class="caret"></b> {% endif %}</a> 			
@@ -123,11 +123,7 @@
 				{% endif %}
 			</li>
 		</ul>
-
-
 				<input type="image" name= "{{studSched.id}}" id = "delete" class="roundButton deleteCloseButton" src="/registrationApp/site_media/Images/delete.png" />
-
-
 		</div>
 	{% endif %}
 	{% endfor %}
@@ -141,12 +137,13 @@
 	{% endfor %}
 {% endif %}
 </div>
-
+{% for key,value in labCountDict.items %}
+<div class="labCount success" style="width:49.8%;{% if 'Second Semester Labs' in key %}float:right;{% endif %}" >{{key}} : {{value}}</div>
+{% endfor %}
 
 <div style="width:99%; clear:both;">
 	<input type = "submit" id = "submitAll" class = "button" value ="submit" style="margin:auto"/>
 </div>
-
 
 	<div id = "screen"> </div>
     <div id ="confirmation" class = "confirmationDiv scroll">
@@ -166,7 +163,6 @@
             <input type = "submit" value = "Yes" class = "button" id ="schedSubmitYes" />
         </div>
     </div>
-
 
 {%endblock%}
 

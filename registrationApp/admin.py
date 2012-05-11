@@ -19,13 +19,19 @@ from registrationApp.models import Discipline
 admin.site.register(Discipline)
 
 from registrationApp.models import Course
-admin.site.register(Course)
+class CourseAdmin(admin.ModelAdmin):
+    search_fields = ['courseName']
+
+admin.site.register(Course, CourseAdmin)
 
 from registrationApp.models import Section 
 admin.site.register(Section)
 
 from registrationApp.models import StudentSchedule
-admin.site.register(StudentSchedule)
+class StudentScheduleAdmin(admin.ModelAdmin):
+    search_fields = ['studentID.first_name','studentID.last_name']
+
+admin.site.register(StudentSchedule, StudentScheduleAdmin)
 
 from registrationApp.models import PreApproval 
 admin.site.register(PreApproval)

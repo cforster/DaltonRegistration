@@ -3,7 +3,13 @@
 {% block content %}
 
 {% for key,value in studentInfo.items %}
-{{key}}:{{value}}<br />
+{% if 'Name' in key %}
+<h2>
+{% endif %}
+{{key}} : {{value}}<br />
+{% if 'Name' in key %}
+</h2>
+{% endif %}
 {% endfor %}
 
 <br />
@@ -14,13 +20,13 @@
 <tr>
 	<th>Discipline</th><th>Course #</th><th>Course Name</th><th>Period</th><th>Approval</th>
 </tr>
-{% for disciplines, courseNumber, courseName, period, preApproved in fullYearCourses %}
+{% for disciplines, courseNumber, courseName, period, preApproved, course in fullYearCourses %}
 	<tr>
 		<td>{% for discipline in disciplines %}{{discipline.discipline.discipline}}{% endfor %} </td>
 		<td>{{courseNumber}} </td>
 		<td>{{courseName}}</td>
 		<td>{{period}} </td>
-		<td>{{preApproved}} </td>
+		{% if course.preapprovalRequired %}<td>{{preApproved}}</td> {% endif %}
 	</tr>
 {% endfor %}
 </table>
@@ -32,15 +38,15 @@
 <p> Ranked Courses: </p>
 <table>
 <tr>
-	<th>Semester</th><th>Rank</th><th>Course #</th><th>Course Name</th><th>Period</th>
+	<th>Course #</th><th>Course Name</th><th>Period</th><th>Semester</th><th>Rank</th>
 </tr>
-{% for rank, courseNumber, courseName, period, semester  in rankedCourses %}
+{% for rank, courseNumber, courseName, period, semester, course  in rankedCourses %}
 	<tr>
-		<td>{{semester}}</td>
-		<td>{{rank}} </td>
 		<td>{{courseNumber}}</td>
 		<td>{{courseName}} </td>
 		<td>{{period}}</td>
+		<td>{{semester}}</td>
+		<td>{{rank}} </td>
 	</tr>
 {% endfor %}
 </table>
@@ -52,16 +58,16 @@
 <p> Alternate Ranked Courses: </p>
 <table >
 <tr>
-	<th>Alternate For</th><th>Semester</th><th>Rank</th><th>Course #</th><th>Course Name</th><th>Period</th>
+	<th>Course #</th><th>Course Name</th><th>Period</th><th>Alternate For</th><th>Semester</th><th>Rank</th>
 </tr>
-{% for rank, courseNumber, courseName, period, alternateFor, semester  in alternateRankedCourses %}
+{% for rank, courseNumber, courseName, period, alternateFor, semester, course  in alternateRankedCourses %}
 	<tr>
-		<td>{{alternateFor}}</td>
-		<td>{{semester}}</td>
-		<td>{{rank}} </td>
 		<td>{{courseNumber}}</td>
 		<td>{{courseName}} </td>
 		<td>{{period}}</td>
+		<td>{{alternateFor}}</td>
+		<td>{{semester}}</td>
+		<td>{{rank}} </td>
 	</tr>
 {% endfor %}
 </table>
@@ -72,15 +78,15 @@
 <p> Alternate Courses: </p>
 <table >
 <tr>
-	<th>Alternate For</th><th>Semester</th><th>Course #</th><th>Course Name</th><th>Period</th>
+	<th>Course #</th><th>Course Name</th><th>Period</th><th>Alternate For</th><th>Semester</th> 
 </tr>
-{% for courseNumber, courseName, period, alternateFor, semester  in alternateCourses %}
+{% for courseNumber, courseName, period, alternateFor, semester, course  in alternateCourses %}
 	<tr>
-		<td>{{alternateFor}}</td>
-		<td>{{semester}}</td>
 		<td>{{courseNumber}}</td>
 		<td>{{courseName}} </td>
 		<td>{{period}}</td>
+		<td>{{alternateFor}}</td>
+		<td>{{semester}}</td>
 	</tr>
 {% endfor %}
 </table>
@@ -92,17 +98,16 @@
 <p> Elective/Single Semester Courses: </p>
 <table>
 <tr>
-	<th>Semester</th><th>Discipline</th><th>Course #</th><th>Course Name</th><th>Period</th><th>Approval</th>
+	<th>Discipline</th><th>Course #</th><th>Course Name</th><th>Period</th><th>Semester</th><th>Approval</th>
 </tr>
-{% for disciplines, courseNumber, courseName, period, preApproved, semester in otherCourses %}
+{% for disciplines, courseNumber, courseName, period, preApproved, semester, course in otherCourses %}
 	<tr>
-		<td>{{semester}}</td>
 		<td>{% for discipline in disciplines %}{{discipline.discipline.discipline}}{% endfor %} </td>
 		<td>{{courseNumber}}</td>
 		<td>{{courseName}} </td>
 		<td>{{period}}</td>
-		<td>{{preApproved}}</td>
-
+		<td>{{semester}}</td>
+		{% if course.preapprovalRequired %}<td>{{preApproved}} </td> {% endif %}
 	</tr>
 {% endfor %}
 </table>

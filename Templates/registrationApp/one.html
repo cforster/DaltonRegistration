@@ -39,8 +39,17 @@ You are preapproved for the following course(s):
 {% endif %}
 </div>
 {% endif %}
-        <input type="button" id = "print" class="button" value = "print" onclick="window.open('/registrationApp/printSchedule')"        
 
-
-
+{% if not altWarnings|length_is:"0"%}
+<h2> You must add alternates for these courses in the preferences view </h2>
+{% for studSched, grade in altWarnings %}
+    <div class="required roundBorder6" style="width:55%;margin:auto"> You Must Add an Alternate Course for {{studSched.sectionID.courseID.courseName|truncatewords_by_chars:30 }} in {{grade}}th Grade </div>
+{% endfor %}
+{% endif %}
+{% for studSchedule in studentSchedule %}
+{% if studSchedule.sectionID.courseID.rankType and not studSchedule.rank %}
+    <div class="required roundBorder6"style="width:55%;margin:auto">  You Must Rank {{studSchedule.sectionID.courseID.courseName|truncatewords_by_chars:30 }} in the Preferences View. </div>
+{% endif %}
+{% endfor %}
+<br /><br />
 {% endblock %}

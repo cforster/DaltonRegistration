@@ -2,8 +2,8 @@ import ldap
 
 # Django settings for registration project.
 
-DEBUG = True
-TEMPLATE_DEBUG = True
+DEBUG = False
+TEMPLATE_DEBUG = False
 ADMINS = (
      ('Darshan Desai', 'darshandesai17@gmail.com'),
 )
@@ -12,12 +12,12 @@ MANAGERS = ADMINS
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': 'registration.db', # Or path to database file if using sqlite3.
-        'USER': '',                      # Not used with sqlite3.
-        'PASSWORD': '',                  # Not used with sqlite3.
-        'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
-        'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
+        'ENGINE': 'django.db.backends.mysql', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
+        'NAME': 'registration2012-2013', # Or path to database file if using sqlite3.
+        'USER': 'darshan',                      # Not used with sqlite3.
+        'PASSWORD': 'kti316gu',                  # Not used with sqlite3.
+        'HOST': 'compsci.dalton.org',                      # Set to empty string for localhost. Not used with sqlite3.
+        'PORT': '3306',                      # Set to empty string for default. Not used with sqlite3.
         
     }
 }
@@ -59,8 +59,8 @@ MEDIA_URL = ''
 # Don't put anything in this directory yourself; store your static files
 # in apps' "static/" subdirectories and in STATICFILES_DIRS.
 # Example: "/home/media/media.lawrence.com/static/"
-#STATIC_ROOT = '/home/ddesai/registration/site_media/'
-STATIC_ROOT = 'C:/Users/Darshan/Desktop/registration/site_media/'
+STATIC_ROOT = '/home/ddesai/registration/site_media/'
+#STATIC_ROOT = 'C:/Users/Darshan/Desktop/registration/site_media/'
 
 
 # URL prefix for static files.
@@ -109,13 +109,13 @@ MIDDLEWARE_CLASSES = (
 ROOT_URLCONF = 'urls'
 
 TEMPLATE_DIRS = (
-    #"/home/ddesai/registration/Templates/"
-    "C:/Users/Darshan/Desktop/registration/Templates"
+    "/home/ddesai/registration/Templates/"
+    #"C:/Users/Darshan/Desktop/registration/Templates"
     # Don't forget to use absolute paths, not relative paths.
 )
 
-LOGIN_URL = '/registrationApp/login/'
-LOGIN_REDIRECT_URL = '/registrationApp'
+LOGIN_URL = 'login'
+LOGIN_REDIRECT_URL = '/'
 
 INSTALLED_APPS = (
     'django.contrib.auth',

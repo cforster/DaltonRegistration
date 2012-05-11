@@ -8962,8 +8962,296 @@
         "pk": null, 
         "model": "registrationApp.courseDiscipline", 
         "fields": {
+            "courseID": 106, 
+            "discipline": 3
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.courseDiscipline", 
+        "fields": {
+            "courseID": 111, 
+            "discipline": 3
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.courseDiscipline", 
+        "fields": {
+            "courseID": 112, 
+            "discipline": 3
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.courseDiscipline", 
+        "fields": {
+            "courseID": 117, 
+            "discipline": 3
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.courseDiscipline", 
+        "fields": {
+            "courseID": 118, 
+            "discipline": 3
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.courseDiscipline", 
+        "fields": {
+            "courseID": 127, 
+            "discipline": 3
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.courseDiscipline", 
+        "fields": {
+            "courseID": 134, 
+            "discipline": 3
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.courseDiscipline", 
+        "fields": {
+            "courseID": 139, 
+            "discipline": 3
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.courseDiscipline", 
+        "fields": {
+            "courseID": 141, 
+            "discipline": 3
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.courseDiscipline", 
+        "fields": {
+            "courseID": 142, 
+            "discipline": 3
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.courseDiscipline", 
+        "fields": {
+            "courseID": 144, 
+            "discipline": 3
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.courseDiscipline", 
+        "fields": {
+            "courseID": 145, 
+            "discipline": 3
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.courseDiscipline", 
+        "fields": {
+            "courseID": 147, 
+            "discipline": 3
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.courseDiscipline", 
+        "fields": {
+            "courseID": 153, 
+            "discipline": 3
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.courseDiscipline", 
+        "fields": {
+            "courseID": 162, 
+            "discipline": 3
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.courseDiscipline", 
+        "fields": {
+            "courseID": 167, 
+            "discipline": 3
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.courseDiscipline", 
+        "fields": {
+            "courseID": 172, 
+            "discipline": 3
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.courseDiscipline", 
+        "fields": {
+            "courseID": 173, 
+            "discipline": 3
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.courseDiscipline", 
+        "fields": {
+            "courseID": 176, 
+            "discipline": 3
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.courseDiscipline", 
+        "fields": {
             "courseID": 180, 
             "discipline": 11
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.courseDiscipline", 
+        "fields": {
+            "courseID": 185, 
+            "discipline": 3
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.courseDiscipline", 
+        "fields": {
+            "courseID": 187, 
+            "discipline": 3
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.courseDiscipline", 
+        "fields": {
+            "courseID": 189, 
+            "discipline": 3
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.courseDiscipline", 
+        "fields": {
+            "courseID": 190, 
+            "discipline": 3
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.courseDiscipline", 
+        "fields": {
+            "courseID": 192, 
+            "discipline": 3
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.courseDiscipline", 
+        "fields": {
+            "courseID": 202, 
+            "discipline": 3
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.courseDiscipline", 
+        "fields": {
+            "courseID": 205, 
+            "discipline": 3
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.courseDiscipline", 
+        "fields": {
+            "courseID": 206, 
+            "discipline": 3
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.courseDiscipline", 
+        "fields": {
+            "courseID": 208, 
+            "discipline": 3
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.courseDiscipline", 
+        "fields": {
+            "courseID": 209, 
+            "discipline": 3
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.courseDiscipline", 
+        "fields": {
+            "courseID": 219, 
+            "discipline": 3
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.courseDiscipline", 
+        "fields": {
+            "courseID": 223, 
+            "discipline": 3
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.courseDiscipline", 
+        "fields": {
+            "courseID": 228, 
+            "discipline": 3
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.courseDiscipline", 
+        "fields": {
+            "courseID": 235, 
+            "discipline": 3
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.courseDiscipline", 
+        "fields": {
+            "courseID": 260, 
+            "discipline": 3
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.courseDiscipline", 
+        "fields": {
+            "courseID": 270, 
+            "discipline": 3
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.courseDiscipline", 
+        "fields": {
+            "courseID": 271, 
+            "discipline": 3
         }
     }, 
     {
@@ -9876,6 +10164,1646 @@
         "fields": {
             "courseID": 948, 
             "discipline": 7
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.preApproval", 
+        "fields": {
+            "courseID": 332, 
+            "studentID": 1517202
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.preApproval", 
+        "fields": {
+            "courseID": 332, 
+            "studentID": 1956502
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.preApproval", 
+        "fields": {
+            "courseID": 332, 
+            "studentID": 2001001
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.preApproval", 
+        "fields": {
+            "courseID": 332, 
+            "studentID": 2326002
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.preApproval", 
+        "fields": {
+            "courseID": 332, 
+            "studentID": 2325501
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.preApproval", 
+        "fields": {
+            "courseID": 332, 
+            "studentID": 3730501
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.preApproval", 
+        "fields": {
+            "courseID": 332, 
+            "studentID": 3918752
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.preApproval", 
+        "fields": {
+            "courseID": 332, 
+            "studentID": 4311501
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.preApproval", 
+        "fields": {
+            "courseID": 332, 
+            "studentID": 5051002
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.preApproval", 
+        "fields": {
+            "courseID": 332, 
+            "studentID": 5051001
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.preApproval", 
+        "fields": {
+            "courseID": 332, 
+            "studentID": 5073501
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.preApproval", 
+        "fields": {
+            "courseID": 332, 
+            "studentID": 5191001
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.preApproval", 
+        "fields": {
+            "courseID": 332, 
+            "studentID": 5554502
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.preApproval", 
+        "fields": {
+            "courseID": 332, 
+            "studentID": 6296002
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.preApproval", 
+        "fields": {
+            "courseID": 332, 
+            "studentID": 6399002
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.preApproval", 
+        "fields": {
+            "courseID": 332, 
+            "studentID": 6407001
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.preApproval", 
+        "fields": {
+            "courseID": 332, 
+            "studentID": 7512002
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.preApproval", 
+        "fields": {
+            "courseID": 332, 
+            "studentID": 7752752
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.preApproval", 
+        "fields": {
+            "courseID": 332, 
+            "studentID": 7865253
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.preApproval", 
+        "fields": {
+            "courseID": 332, 
+            "studentID": 8034001
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.preApproval", 
+        "fields": {
+            "courseID": 332, 
+            "studentID": 8142001
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.preApproval", 
+        "fields": {
+            "courseID": 332, 
+            "studentID": 8259002
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.preApproval", 
+        "fields": {
+            "courseID": 332, 
+            "studentID": 8566251
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.preApproval", 
+        "fields": {
+            "courseID": 332, 
+            "studentID": 9103002
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.preApproval", 
+        "fields": {
+            "courseID": 332, 
+            "studentID": 9494501
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.preApproval", 
+        "fields": {
+            "courseID": 332, 
+            "studentID": 9806851
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.preApproval", 
+        "fields": {
+            "courseID": 332, 
+            "studentID": 7197501
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.preApproval", 
+        "fields": {
+            "courseID": 306, 
+            "studentID": 1481001
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.preApproval", 
+        "fields": {
+            "courseID": 306, 
+            "studentID": 1979001
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.preApproval", 
+        "fields": {
+            "courseID": 306, 
+            "studentID": 2296251
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.preApproval", 
+        "fields": {
+            "courseID": 306, 
+            "studentID": 2501501
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.preApproval", 
+        "fields": {
+            "courseID": 306, 
+            "studentID": 3072501
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.preApproval", 
+        "fields": {
+            "courseID": 306, 
+            "studentID": 3938003
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.preApproval", 
+        "fields": {
+            "courseID": 306, 
+            "studentID": 4053501
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.preApproval", 
+        "fields": {
+            "courseID": 306, 
+            "studentID": 4187002
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.preApproval", 
+        "fields": {
+            "courseID": 306, 
+            "studentID": 4451501
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.preApproval", 
+        "fields": {
+            "courseID": 306, 
+            "studentID": 5019801
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.preApproval", 
+        "fields": {
+            "courseID": 306, 
+            "studentID": 5051003
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.preApproval", 
+        "fields": {
+            "courseID": 306, 
+            "studentID": 5082002
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.preApproval", 
+        "fields": {
+            "courseID": 306, 
+            "studentID": 5554002
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.preApproval", 
+        "fields": {
+            "courseID": 306, 
+            "studentID": 6301001
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.preApproval", 
+        "fields": {
+            "courseID": 306, 
+            "studentID": 6309001
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.preApproval", 
+        "fields": {
+            "courseID": 306, 
+            "studentID": 6665751
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.preApproval", 
+        "fields": {
+            "courseID": 306, 
+            "studentID": 6670501
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.preApproval", 
+        "fields": {
+            "courseID": 306, 
+            "studentID": 6860501
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.preApproval", 
+        "fields": {
+            "courseID": 306, 
+            "studentID": 7614501
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.preApproval", 
+        "fields": {
+            "courseID": 306, 
+            "studentID": 7789501
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.preApproval", 
+        "fields": {
+            "courseID": 306, 
+            "studentID": 8095251
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.preApproval", 
+        "fields": {
+            "courseID": 306, 
+            "studentID": 8519251
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.preApproval", 
+        "fields": {
+            "courseID": 6, 
+            "studentID": 1637001
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.preApproval", 
+        "fields": {
+            "courseID": 6, 
+            "studentID": 5554502
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.preApproval", 
+        "fields": {
+            "courseID": 6, 
+            "studentID": 5626101
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.preApproval", 
+        "fields": {
+            "courseID": 6, 
+            "studentID": 6009002
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.preApproval", 
+        "fields": {
+            "courseID": 6, 
+            "studentID": 6018251
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.preApproval", 
+        "fields": {
+            "courseID": 6, 
+            "studentID": 6046002
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.preApproval", 
+        "fields": {
+            "courseID": 6, 
+            "studentID": 6091501
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.preApproval", 
+        "fields": {
+            "courseID": 6, 
+            "studentID": 6296002
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.preApproval", 
+        "fields": {
+            "courseID": 6, 
+            "studentID": 6399002
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.preApproval", 
+        "fields": {
+            "courseID": 6, 
+            "studentID": 6845502
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.preApproval", 
+        "fields": {
+            "courseID": 6, 
+            "studentID": 6998002
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.preApproval", 
+        "fields": {
+            "courseID": 6, 
+            "studentID": 7599751
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.preApproval", 
+        "fields": {
+            "courseID": 6, 
+            "studentID": 7752752
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.preApproval", 
+        "fields": {
+            "courseID": 6, 
+            "studentID": 7865253
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.preApproval", 
+        "fields": {
+            "courseID": 6, 
+            "studentID": 8126001
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.preApproval", 
+        "fields": {
+            "courseID": 6, 
+            "studentID": 8405003
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.preApproval", 
+        "fields": {
+            "courseID": 6, 
+            "studentID": 8405502
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.preApproval", 
+        "fields": {
+            "courseID": 6, 
+            "studentID": 8416001
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.preApproval", 
+        "fields": {
+            "courseID": 6, 
+            "studentID": 8544502
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.preApproval", 
+        "fields": {
+            "courseID": 6, 
+            "studentID": 8557802
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.preApproval", 
+        "fields": {
+            "courseID": 6, 
+            "studentID": 9145301
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.preApproval", 
+        "fields": {
+            "courseID": 6, 
+            "studentID": 9186001
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.preApproval", 
+        "fields": {
+            "courseID": 6, 
+            "studentID": 9452001
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.preApproval", 
+        "fields": {
+            "courseID": 6, 
+            "studentID": 8360001
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.preApproval", 
+        "fields": {
+            "courseID": 6, 
+            "studentID": 2460001
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.preApproval", 
+        "fields": {
+            "courseID": 6, 
+            "studentID": 4062501
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.preApproval", 
+        "fields": {
+            "courseID": 6, 
+            "studentID": 4261501
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.preApproval", 
+        "fields": {
+            "courseID": 6, 
+            "studentID": 4590502
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.preApproval", 
+        "fields": {
+            "courseID": 6, 
+            "studentID": 4801151
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.preApproval", 
+        "fields": {
+            "courseID": 6, 
+            "studentID": 6135002
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.preApproval", 
+        "fields": {
+            "courseID": 6, 
+            "studentID": 7028001
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.preApproval", 
+        "fields": {
+            "courseID": 6, 
+            "studentID": 7440501
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.preApproval", 
+        "fields": {
+            "courseID": 6, 
+            "studentID": 7639001
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.preApproval", 
+        "fields": {
+            "courseID": 6, 
+            "studentID": 7725001
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.preApproval", 
+        "fields": {
+            "courseID": 6, 
+            "studentID": 8007251
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.preApproval", 
+        "fields": {
+            "courseID": 6, 
+            "studentID": 8022251
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.preApproval", 
+        "fields": {
+            "courseID": 6, 
+            "studentID": 1491001
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.preApproval", 
+        "fields": {
+            "courseID": 6, 
+            "studentID": 1514501
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.preApproval", 
+        "fields": {
+            "courseID": 6, 
+            "studentID": 1937001
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.preApproval", 
+        "fields": {
+            "courseID": 6, 
+            "studentID": 1815001
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.preApproval", 
+        "fields": {
+            "courseID": 6, 
+            "studentID": 2206001
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.preApproval", 
+        "fields": {
+            "courseID": 3, 
+            "studentID": 2296251
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.preApproval", 
+        "fields": {
+            "courseID": 3, 
+            "studentID": 2362002
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.preApproval", 
+        "fields": {
+            "courseID": 3, 
+            "studentID": 2501501
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.preApproval", 
+        "fields": {
+            "courseID": 3, 
+            "studentID": 2581001
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.preApproval", 
+        "fields": {
+            "courseID": 3, 
+            "studentID": 3042002
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.preApproval", 
+        "fields": {
+            "courseID": 3, 
+            "studentID": 3525551
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.preApproval", 
+        "fields": {
+            "courseID": 3, 
+            "studentID": 3542251
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.preApproval", 
+        "fields": {
+            "courseID": 3, 
+            "studentID": 3544003
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.preApproval", 
+        "fields": {
+            "courseID": 3, 
+            "studentID": 4353002
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.preApproval", 
+        "fields": {
+            "courseID": 3, 
+            "studentID": 4589001
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.preApproval", 
+        "fields": {
+            "courseID": 3, 
+            "studentID": 4820002
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.preApproval", 
+        "fields": {
+            "courseID": 3, 
+            "studentID": 5001001
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.preApproval", 
+        "fields": {
+            "courseID": 3, 
+            "studentID": 5327501
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.preApproval", 
+        "fields": {
+            "courseID": 3, 
+            "studentID": 5520751
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.preApproval", 
+        "fields": {
+            "courseID": 3, 
+            "studentID": 5660421
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.preApproval", 
+        "fields": {
+            "courseID": 3, 
+            "studentID": 5740003
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.preApproval", 
+        "fields": {
+            "courseID": 3, 
+            "studentID": 6067751
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.preApproval", 
+        "fields": {
+            "courseID": 11, 
+            "studentID": 5328001
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.preApproval", 
+        "fields": {
+            "courseID": 11, 
+            "studentID": 5502751
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.preApproval", 
+        "fields": {
+            "courseID": 11, 
+            "studentID": 5561002
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.preApproval", 
+        "fields": {
+            "courseID": 11, 
+            "studentID": 6100002
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.preApproval", 
+        "fields": {
+            "courseID": 11, 
+            "studentID": 6309001
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.preApproval", 
+        "fields": {
+            "courseID": 11, 
+            "studentID": 6375001
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.preApproval", 
+        "fields": {
+            "courseID": 11, 
+            "studentID": 6660502
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.preApproval", 
+        "fields": {
+            "courseID": 11, 
+            "studentID": 7081001
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.preApproval", 
+        "fields": {
+            "courseID": 11, 
+            "studentID": 7415001
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.preApproval", 
+        "fields": {
+            "courseID": 11, 
+            "studentID": 7928751
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.preApproval", 
+        "fields": {
+            "courseID": 11, 
+            "studentID": 8142501
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.preApproval", 
+        "fields": {
+            "courseID": 11, 
+            "studentID": 8565502
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.preApproval", 
+        "fields": {
+            "courseID": 11, 
+            "studentID": 8597521
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.preApproval", 
+        "fields": {
+            "courseID": 11, 
+            "studentID": 8711002
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.preApproval", 
+        "fields": {
+            "courseID": 11, 
+            "studentID": 8851251
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.preApproval", 
+        "fields": {
+            "courseID": 11, 
+            "studentID": 9400002
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.preApproval", 
+        "fields": {
+            "courseID": 11, 
+            "studentID": 9411001
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.preApproval", 
+        "fields": {
+            "courseID": 11, 
+            "studentID": 9421001
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.preApproval", 
+        "fields": {
+            "courseID": 11, 
+            "studentID": 1525801
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.preApproval", 
+        "fields": {
+            "courseID": 11, 
+            "studentID": 1561502
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.preApproval", 
+        "fields": {
+            "courseID": 11, 
+            "studentID": 1909501
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.preApproval", 
+        "fields": {
+            "courseID": 11, 
+            "studentID": 2004001
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.preApproval", 
+        "fields": {
+            "courseID": 11, 
+            "studentID": 2150252
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.preApproval", 
+        "fields": {
+            "courseID": 11, 
+            "studentID": 2225752
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.preApproval", 
+        "fields": {
+            "courseID": 8, 
+            "studentID": 2235752
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.preApproval", 
+        "fields": {
+            "courseID": 8, 
+            "studentID": 2259002
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.preApproval", 
+        "fields": {
+            "courseID": 8, 
+            "studentID": 2326001
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.preApproval", 
+        "fields": {
+            "courseID": 8, 
+            "studentID": 2965802
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.preApproval", 
+        "fields": {
+            "courseID": 8, 
+            "studentID": 3507301
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.preApproval", 
+        "fields": {
+            "courseID": 8, 
+            "studentID": 3542501
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.preApproval", 
+        "fields": {
+            "courseID": 8, 
+            "studentID": 4335002
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.preApproval", 
+        "fields": {
+            "courseID": 8, 
+            "studentID": 4198351
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.preApproval", 
+        "fields": {
+            "courseID": 8, 
+            "studentID": 6095501
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.preApproval", 
+        "fields": {
+            "courseID": 8, 
+            "studentID": 6860751
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.preApproval", 
+        "fields": {
+            "courseID": 8, 
+            "studentID": 7852001
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.preApproval", 
+        "fields": {
+            "courseID": 8, 
+            "studentID": 7888001
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.preApproval", 
+        "fields": {
+            "courseID": 8, 
+            "studentID": 9805601
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.preApproval", 
+        "fields": {
+            "courseID": 51, 
+            "studentID": 7197501
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.preApproval", 
+        "fields": {
+            "courseID": 51, 
+            "studentID": 7512002
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.preApproval", 
+        "fields": {
+            "courseID": 51, 
+            "studentID": 6488001
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.preApproval", 
+        "fields": {
+            "courseID": 51, 
+            "studentID": 6795252
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.preApproval", 
+        "fields": {
+            "courseID": 51, 
+            "studentID": 6986251
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.preApproval", 
+        "fields": {
+            "courseID": 51, 
+            "studentID": 7398501
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.preApproval", 
+        "fields": {
+            "courseID": 51, 
+            "studentID": 7398502
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.preApproval", 
+        "fields": {
+            "courseID": 51, 
+            "studentID": 7422001
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.preApproval", 
+        "fields": {
+            "courseID": 51, 
+            "studentID": 7733503
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.preApproval", 
+        "fields": {
+            "courseID": 51, 
+            "studentID": 7975601
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.preApproval", 
+        "fields": {
+            "courseID": 51, 
+            "studentID": 8020101
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.preApproval", 
+        "fields": {
+            "courseID": 51, 
+            "studentID": 8115251
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.preApproval", 
+        "fields": {
+            "courseID": 51, 
+            "studentID": 9263501
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.preApproval", 
+        "fields": {
+            "courseID": 51, 
+            "studentID": 9555001
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.preApproval", 
+        "fields": {
+            "courseID": 51, 
+            "studentID": 4187002
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.preApproval", 
+        "fields": {
+            "courseID": 51, 
+            "studentID": 5019801
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.preApproval", 
+        "fields": {
+            "courseID": 51, 
+            "studentID": 5082002
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.preApproval", 
+        "fields": {
+            "courseID": 51, 
+            "studentID": 6155001
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.preApproval", 
+        "fields": {
+            "courseID": 51, 
+            "studentID": 6261501
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.preApproval", 
+        "fields": {
+            "courseID": 51, 
+            "studentID": 6665751
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.preApproval", 
+        "fields": {
+            "courseID": 51, 
+            "studentID": 6670501
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.preApproval", 
+        "fields": {
+            "courseID": 51, 
+            "studentID": 6860501
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.preApproval", 
+        "fields": {
+            "courseID": 51, 
+            "studentID": 8095251
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.preApproval", 
+        "fields": {
+            "courseID": 51, 
+            "studentID": 8272001
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.preApproval", 
+        "fields": {
+            "courseID": 51, 
+            "studentID": 9320003
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.preApproval", 
+        "fields": {
+            "courseID": 50, 
+            "studentID": 7764501
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.preApproval", 
+        "fields": {
+            "courseID": 50, 
+            "studentID": 8258251
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.preApproval", 
+        "fields": {
+            "courseID": 50, 
+            "studentID": 8259002
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.preApproval", 
+        "fields": {
+            "courseID": 50, 
+            "studentID": 8566251
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.preApproval", 
+        "fields": {
+            "courseID": 50, 
+            "studentID": 9494501
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.preApproval", 
+        "fields": {
+            "courseID": 50, 
+            "studentID": 9806851
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.preApproval", 
+        "fields": {
+            "courseID": 50, 
+            "studentID": 5073502
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.preApproval", 
+        "fields": {
+            "courseID": 50, 
+            "studentID": 1740002
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.preApproval", 
+        "fields": {
+            "courseID": 50, 
+            "studentID": 1969501
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.preApproval", 
+        "fields": {
+            "courseID": 50, 
+            "studentID": 2338001
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.preApproval", 
+        "fields": {
+            "courseID": 50, 
+            "studentID": 2346751
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.preApproval", 
+        "fields": {
+            "courseID": 50, 
+            "studentID": 2822002
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.preApproval", 
+        "fields": {
+            "courseID": 50, 
+            "studentID": 2965501
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.preApproval", 
+        "fields": {
+            "courseID": 50, 
+            "studentID": 3185003
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.preApproval", 
+        "fields": {
+            "courseID": 50, 
+            "studentID": 3475301
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.preApproval", 
+        "fields": {
+            "courseID": 50, 
+            "studentID": 3865001
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.preApproval", 
+        "fields": {
+            "courseID": 50, 
+            "studentID": 4005001
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.preApproval", 
+        "fields": {
+            "courseID": 50, 
+            "studentID": 4310502
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.preApproval", 
+        "fields": {
+            "courseID": 50, 
+            "studentID": 4754001
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.preApproval", 
+        "fields": {
+            "courseID": 50, 
+            "studentID": 5906001
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.preApproval", 
+        "fields": {
+            "courseID": 50, 
+            "studentID": 5721001
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.preApproval", 
+        "fields": {
+            "courseID": 50, 
+            "studentID": 5807502
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.preApproval", 
+        "fields": {
+            "courseID": 50, 
+            "studentID": 6165001
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.preApproval", 
+        "fields": {
+            "courseID": 50, 
+            "studentID": 6478651
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.preApproval", 
+        "fields": {
+            "courseID": 50, 
+            "studentID": 9806811
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.preApproval", 
+        "fields": {
+            "courseID": 50, 
+            "studentID": 1440002
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.preApproval", 
+        "fields": {
+            "courseID": 50, 
+            "studentID": 2247502
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.preApproval", 
+        "fields": {
+            "courseID": 50, 
+            "studentID": 2362502
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.preApproval", 
+        "fields": {
+            "courseID": 50, 
+            "studentID": 2820251
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.preApproval", 
+        "fields": {
+            "courseID": 50, 
+            "studentID": 3540301
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.preApproval", 
+        "fields": {
+            "courseID": 50, 
+            "studentID": 3544002
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.preApproval", 
+        "fields": {
+            "courseID": 50, 
+            "studentID": 3794003
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.preApproval", 
+        "fields": {
+            "courseID": 50, 
+            "studentID": 4732001
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.preApproval", 
+        "fields": {
+            "courseID": 50, 
+            "studentID": 5513102
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.preApproval", 
+        "fields": {
+            "courseID": 50, 
+            "studentID": 5624001
+        }
+    }, 
+    {
+        "pk": null, 
+        "model": "registrationApp.preApproval", 
+        "fields": {
+            "courseID": 50, 
+            "studentID": 2691002
         }
     }
 ]

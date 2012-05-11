@@ -19,7 +19,7 @@
 				<li id="rankStudentScheduleView"> {{rank}} </li>
 			{% endif %}
 			<li id="courseName" ><a rel ="tooltip" id = "courseNameLink" title = "{{studSched.sectionID.courseID.courseName}}">
-				{% if studSched.sectionID.semesterOne != studSched.sectionID.semesterTwo %}{{studSched.sectionID.courseID.courseName|truncatewords_by_chars:15}}{% else %}{{studSched.sectionID.courseID.courseName|truncatewords_by_chars:50}}{% endif %}</a></li>
+				{% if studSched.sectionID.semesterOne != studSched.sectionID.semesterTwo %}{{studSched.sectionID.courseID.courseName|truncatewords_by_chars:15}}{% else %}{{studSched.sectionID.courseID.courseName|truncatewords_by_chars:30}}{% endif %}</a></li>
 
 			<li class="{% if sectionOptions|length != 0 %}dropdown{% else %}dropdownFalse{% endif %}" >
 				<a rel = "tooltip" class="dropdown-toggle"  data-toggle="dropdown" title= "{{dayz|toDays:prd}}" {% if sectionOptions|length != 0 %}href="#"{% endif %} > {{prd}} {% if sectionOptions|length != 0 %} <b class="caret"></b> {% endif %}</a> 			

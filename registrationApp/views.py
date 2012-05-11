@@ -65,7 +65,7 @@ def daysToPeriod(section):
 def preApprovalCheck(student, course, preApprovals):
 	preApproved = False
 	for preApp in preApprovals:
-		if preApp.courseID == course:
+		if preApp.courseID.courseNumber == course.courseNumber:
 			preApproved = True
 	return preApproved
 
@@ -102,25 +102,25 @@ def printSchedule(request):
 		else:
 			semester = "Year"
 		if studSched.sectionID.semesterOne and studSched.sectionID.semesterTwo and not studSched.alternateFor and not course.rankType=="English" and not course.rankType=="EngHist":
-			fullYearCourses.append((disciplines, course.courseNumber, course.courseName, period, preApproved))
+			fullYearCourses.append((disciplines, studSched.sectionID.sectionNumber, course.courseName, period, preApproved, course))
 
 		elif not course.rankType=="EngHist" and not course.rankType=="English" and not studSched.alternateFor:
-			otherCourses.append((disciplines, course.courseNumber, course.courseName, period, preApproved, semester))
+			otherCourses.append((disciplines, studSched.sectionID.sectionNumber, course.courseName, period, preApproved, semester, course))
 
 		if grade == 12 and course.rankType == "EngHist" and not studSched.alternateFor:
-			rankedCourses.append((studSched.rank, course.courseNumber, course.courseName, period, semester))
+			rankedCourses.append((studSched.rank, studSched.sectionID.sectionNumber, course.courseName, period, semester, course))
 				
 		if grade == 11 and course.rankType == "English" and not studSched.alternateFor:
-			rankedCourses.append((studSched.rank, course.courseNumber, course.courseName, period, semester))
+			rankedCourses.append((studSched.rank, studSched.sectionID.sectionNumber, course.courseName, period, semester, course))
 		
 		if grade == 12 and course.rankType == "EngHist" and studSched.alternateFor:
-			alternateRankedCourses.append((studSched.rank, course.courseNumber, course.courseName, period, studSched.alternateFor, semester))
+			alternateRankedCourses.append((studSched.rank, studSched.sectionID.sectionNumber, course.courseName, period, studSched.alternateFor, semester, course))
 
 		elif grade == 11 and course.rankType == "English" and studSched.alternateFor:
-			alternateRankedCourses.append((studSched.rank, course.courseNumber, course.courseName, period, studSched.alternateFor, semester))
+			alternateRankedCourses.append((studSched.rank, studSched.sectionID.sectionNumber, course.courseName, period, studSched.alternateFor, semester, course))
 		
 		elif studSched.alternateFor:
-			alternateCourses.append((course.courseNumber, course.courseName, period, studSched.alternateFor, semester))
+			alternateCourses.append((course.courseNumber, course.courseName, period, studSched.alternateFor, semester, course))
 	
 	rankedCourses.sort(key=itemgetter(0))
 	return render_to_response('registrationApp/output.html', {'studentInfo': studentInfo, 'fullYearCourses': fullYearCourses, 'rankedCourses':rankedCourses, 'alternateCourses': alternateCourses, 'alternateRankedCourses': alternateRankedCourses, 'otherCourses':otherCourses},
@@ -484,6 +484,22 @@ def addSection(student, section):
 		msg = "Could not add "
 	return msg
 
+def labCount(studentSchedule):
+	semOneCount = semTwoCount = 0
+	for studSched in studentSchedule:
+		if studSched.sectionID.semesterOne and not studSched.alternateFor:
+			semOneCount += 1
+		if studSched.sectionID.semesterTwo and not studSched.alternateFor:
+			semTwoCount += 1
+	semOneLabs = 9-semOneCount
+	semTwoLabs = 9-semTwoCount
+	if semOneLabs < 0:
+		semOneLabs = 0
+	if semTwoLabs < 0:
+		semTwoLabs = 0
+	labs = {'First Semester Labs': semOneLabs, 'Second Semester Labs': semTwoLabs}
+	return labs
+
 @login_required
 @group_required('student')
 def add(request):
@@ -541,19 +557,24 @@ def add(request):
 					continues = False
 					messageType = "error"
 
-				elif section.courseID.preapprovalRequired:
-					preApprovals = PreApproval.objects.filter(studentID = u.id)
 
-					preApproved = preApprovalCheck(u, section.courseID, preApprovals)
-					if not preApproved:
-						msg.append("You are not preapproved for " + str(section.courseID.courseName) +".")
-						continues = False
-						messageType = "error"
 				if continues:
-					
+					if section.courseID.preapprovalRequired:
+						preApprovals = PreApproval.objects.filter(studentID = u.id)
+
+						preApproved = preApprovalCheck(u, section.courseID, preApprovals)
+						if preApproved or (not preApproved and confirm == 1):
+							continues = True
+
+						elif not preApproved:
+							msg.append("You are not preapproved for " + section.courseID.courseName +", in the system, but talk to the department chair if you feel this is wrong.")
+							confirmationBox = [[True, ""]]
+							continues = False
+							messageType = "warning"
+
 					availForGrade = gradeCheck(u, section.courseID)
 				
-					if availForGrade or (not availForGrade and confirm == 1):
+					if continues and (availForGrade or (not availForGrade and confirm == 1)):
 						continues = True
 
 					elif not availForGrade and confirm ==0:
@@ -561,6 +582,7 @@ def add(request):
 						confirmationBox = [[True, ""]]
 						continues = False
 						messageType = "warning"
+
 					sSched = StudentSchedule.objects.filter(studentID = u.id)
 					alreadyEnrolledC, sectionEnrolled = alreadyEnrolledCourse(u, section.courseID, sSched)
 
@@ -600,9 +622,9 @@ def add(request):
 		if not reqPass:
 			reqMessage.append((req, req.message))
 
-
+	labCountDict = labCount(studentSchedule)
 	studentSchedules = studentScheduleAddView(studentSchedule, u)
-	return render_to_response('registrationApp/add.html', {'student': u, 'studentSchedules': studentSchedules, 'section': section, 'msg' : msg, 'reqMessage' : reqMessage, 'confirmationBox': confirmationBox, 'messageType' : messageType},
+	return render_to_response('registrationApp/add.html', {'student': u, 'studentSchedules': studentSchedules, 'section': section, 'msg' : msg, 'reqMessage' : reqMessage, 'confirmationBox': confirmationBox, 'messageType' : messageType, "labCountDict":labCountDict},
 								context_instance=RequestContext(request))		
 
 	'''
@@ -693,11 +715,14 @@ def delete(request):
 		fromOtherBool = False
 		requiredBoolList = requiredCheck(z, studentSchedule)
 		reqMessage = []
+		
 		for req, reqPass in requiredBoolList:
 			if not reqPass:
 				reqMessage.append((req, req.message))
 		studentSchedules = studentScheduleAddView(studentSchedule, z)
-		return render_to_response('registrationApp/add.html', {'student': z, 'studentSchedules': studentSchedules, 'msg': msg, 'fromOtherBool' : fromOtherBool,'reqMessage' : reqMessage, 'messageType': messageType},
+		labCountDict = labCount(studentSchedule)
+		
+		return render_to_response('registrationApp/add.html', {'student': z, 'studentSchedules': studentSchedules, 'msg': msg, 'fromOtherBool' : fromOtherBool,'reqMessage' : reqMessage, 'messageType': messageType, 'labCountDict': labCountDict},
 							   			context_instance=RequestContext(request))	
 
 
@@ -741,6 +766,22 @@ def catalog(request):
 		desc.append(c.courseDescription)
 	return render_to_response('registrationApp/courseCatalog.html', {'student': a, 'courses' :courses})
 
+def alternateWarnings(studentSchedule, alternateRequired, grade):
+	alternateWarnings = []
+	warning = True
+	for alt in alternateRequired:
+		for studSched in studentSchedule:
+			if studSched.sectionID.courseID == alt.courseID:
+				for studSchedule in studentSchedule:
+					if studSched.sectionID.courseID == studSchedule.alternateFor:
+						warning = False
+					else:
+						warning = True
+				if warning:
+					alternateWarnings.append((studSched, grade))
+	return alternateWarnings
+
+
 @login_required
 @group_required('student')
 def one (request):
@@ -758,7 +799,9 @@ def one (request):
 	for preApp in preApproval:
 		disciplines = CourseDiscipline.objects.filter(courseID = preApp.courseID)
 		preApprovals.append((preApp,disciplines))
-	return render_to_response('registrationApp/one.html', {'student': student, 'grade': grade, 'sections'  : sections, 'requiredList': requiredList, 'preApprovals': preApprovals},
+	alternateRequired = AlternateCourse.objects.filter(grade = grade)
+	altWarnings = alternateWarnings(studentSchedule, alternateRequired, grade)
+	return render_to_response('registrationApp/one.html', {'student': student, 'grade': grade, 'sections'  : sections, 'requiredList': requiredList, 'preApprovals': preApprovals, 'studentSchedule':studentSchedule, 'altWarnings': altWarnings},
 								context_instance=RequestContext(request))
 
 @login_required
@@ -803,11 +846,18 @@ def alternate(request):
 		alternateForPOST = request.POST.get('alternateFor')
 		alternate = StudentSchedule.objects.get(pk = alternatePOST)
 		alternateForStudSched = StudentSchedule.objects.get(pk = alternateForPOST)
-		alternateFor = Course.objects.get(courseNumber = alternateForStudSched.sectionID.courseID.courseNumber)
-		alternate.alternateFor = alternateFor
-		alternate.save()
-		if alternate.alternateFor == alternateFor:
-			return HttpResponse("Alternate Saved Successfully")
+
+		if alternate.sectionID.semesterOne == alternateForStudSched.sectionID.semesterOne and alternate.sectionID.semesterTwo == alternateForStudSched.sectionID.semesterTwo:
+			alternateFor = Course.objects.get(courseNumber = alternateForStudSched.sectionID.courseID.courseNumber)
+			
+			alternate.alternateFor = alternateFor
+			alternate.save()
+			if alternate.alternateFor == alternateFor:
+				return HttpResponse("Alternate Saved Successfully")
+			else:
+				return HttpResponse("Could not save.")
+		else:
+			return HttpResponse("You must add an alternate with the same semester schedule")
 		
 @login_required
 @group_required('student')

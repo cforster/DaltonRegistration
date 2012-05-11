@@ -28,9 +28,7 @@
 	a:visited{
 		text-decoration: none;
 	}
-	a:hover{
-		color:	#FFF;
-	}
+
 	a:focus{
 		outline: none;
 	}
@@ -178,7 +176,10 @@
 		margin:auto;
 		padding:6px;
 	}
-
+	.ui-state-active{
+		color:#4F8A10;
+		background:#DFF2BF;
+	}
 	.error{
 		background:#FFBABA;
 		color:#D8000C;
@@ -194,6 +195,9 @@
 		color: #9F6000;
 		border-color: #9F6000;
 
+	}
+	.rankCount{
+		width:49%;
 	}
 	.roundBorder6{
 		-webkit-border-radius: 6px;
@@ -674,8 +678,7 @@
 	  text-decoration: none;
 	}
 	.dd >li > a:hover{
-	  background-color: rgba(0, 0, 0, .3);
-
+	  background-color: rgba(0, 0, 0, .1);
 	}
 	.nav .dropdownFalse > a:hover{
 		background:none;
