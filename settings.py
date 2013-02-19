@@ -13,12 +13,7 @@ MANAGERS = ADMINS
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': 'registration2012-2013', # Or path to database file if using sqlite3.
-        'USER': 'darshan',                      # Not used with sqlite3.
-        'PASSWORD': 'kti316gu',                  # Not used with sqlite3.
-        'HOST': 'compsci.dalton.org',                      # Set to empty string for localhost. Not used with sqlite3.
-        'PORT': '3306',                      # Set to empty string for default. Not used with sqlite3.
-        
+      
     }
 }
 # Local time zone for this installation. Choices can be found here:
@@ -88,8 +83,7 @@ STATICFILES_FINDERS = (
 FIXTURE_DIRS = (
    'registrationApp/static/fixtures/',
 )
-# Make this unique, and don't share it with anybody.
-SECRET_KEY = '$l$(8%ln$#921yx1vj3j0hmmu&f-q4=b+w$3mou10^u7v&p82r'
+
 
 # List of callables that know how to import templates from various sourcesself.
 TEMPLATE_LOADERS = (
@@ -130,11 +124,7 @@ INSTALLED_APPS = (
 )
 
 
-EMAIL_USE_TLS = True
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_USER = 'DaltonCourseReg@gmail.com'
-EMAIL_HOST_PASSWORD = 'kti316daltonu'
-EMAIL_PORT = 587
+
 
 PASSWORD_HASHERS = (
     'django.contrib.auth.hashers.PBKDF2PasswordHasher',
