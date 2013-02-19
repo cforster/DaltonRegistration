@@ -80,8 +80,7 @@ STATICFILES_FINDERS = (
 #    'django.contrib.staticfiles.finders.DefaultStorageFinder',
 )
 
-# Make this unique, and don't share it with anybody.
-SECRET_KEY = '$l$(8%ln$#921yx1vj3j0hmmu&f-q4=b+w$3mou10^u7v&p82r'
+
 
 # List of callables that know how to import templates from various sourcesself.
 TEMPLATE_LOADERS = (
@@ -145,9 +144,6 @@ LOGGING = {
         },
     }
 }
-EMAIL_USE_TLS = True
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_USER = 'darshandesai17@gmail.com'
-EMAIL_HOST_PASSWORD = 'kti316gu'
+
 EMAIL_PORT = 587
 LOGIN_REDIRECT_URL = '/registrationApp/search'
